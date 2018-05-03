@@ -1,0 +1,116 @@
+
+\algblock{SampleRule}{EndSampleRule}
+\algnewcommand\algorithmicSampleRule{\textbf{\em Sampling Rule}}
+ \algnewcommand\algorithmicendSampleRule{}
+\algrenewtext{SampleRule}[1]{\algorithmicSampleRule\ #1}
+\algrenewtext{EndSampleRule}{\algorithmicendSampleRule}
+
+\algblock{UpdateRule}{EndUpdateRule}
+\algnewcommand\algorithmicUpdateRule{\textbf{\em Update Rule}}
+ \algnewcommand\algorithmicendUpdateRule{}
+\algrenewtext{UpdateRule}[1]{\algorithmicUpdateRule\ #1}
+\algrenewtext{EndUpdateRule}{\algorithmicendUpdateRule}
+
+
+\algnewcommand\algorithmicforeach{\textbf{for each}}
+\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
+
+
+\algnewcommand\algorithmicWith{\textbf{With}}
+\algdef{S}[FOR]{With}[1]{\algorithmicWith\ #1\ \algorithmicdo}
+
+
+\algnewcommand\algorithmicOrWith{\textbf{Or With}}
+\algdef{S}[FOR]{OrWith}[1]{\algorithmicOrWith\ #1\ \algorithmicdo}
+
+%Without loss of generality, in the noiseless setting we can consider the first $[d] \subseteq [L]$ as the best set of columns. Then the $j$-th best column in $[d]$ is given by the estimation:-
+%\begin{align}
+%\hat{R}_j = \dfrac{1}{K}\max_{j\in[d]}\lbrace \bar{R}(:, j)\rbrace -  \dfrac{1}{K}\max_{j\in[d]}\lbrace\bar{R}(:, j-1) \rbrace
+%\end{align}
+%
+%and $\bar{R}(i, 0) = 0, \forall i\in [K]$.
+
+
+Let $\bar{M} = UV^{\intercal}$, where $U$ is non-negative and $V$ is hott topics. Let $j^\ast_1$ and $j^\ast_2$ be the indices of hott-topics vectors. Then
+ \begin{align*}
+ (j^\ast_1, j^\ast_2) = \arg\max_{j_1, j_2 \in [L]} f(\{j_1, j_2\}),
+ \end{align*}
+  
+ 
+where $f(S) = \dfrac{1}{K}\sum_{i \in [K]} \max_{j \in S} R(i, j)$
+ 
+The key observation is that $f$ is monotone and submodular in S. Therefore, the problem of learning $j_1, j_2$ online is an online submodular maximization problem.
+
+So, when $d=2$, $|\B_t| = 2$ and there are two EXP3 Column-Bandits. 
+
+After observing the reward $r_1, r_2$ for $j_1, j_2 \in \B_t$ we update,
+
+$EXP_1$, $\hat{r}_{1,j_1} = r_1 $.
+
+$EXP_2$, $\hat{r}_{2,j_2} = \max\lbrace r_1, r_2\rbrace  -  r_1$.
+ 
+ 
+
+
+
+
+\begin{algorithm}[!th]
+\caption{Low Rank Bandit Strategy}
+\label{alg:mLRBS}
+\begin{algorithmic}[1]
+\State {\bf Input:} Time horizon $n$, $Rank(\bar{M}) = d$.
+\For{$t=1,..,n$}	
+\State Nature reveals user $i_t$.  \Comment{Nature chooses user}
+\State Column-Bandits suggests $\B_t \subseteq [L]$ items. $|\B_t| = d$
+%\For{$z=1,..,d$}	
+\If{Exploration condition satisfied}
+\State User Bandits suggests each item in $\B_t$, once to user $i_t$ and receive feedback.
+\State Update Column-Bandits and User Bandits on feedback  received.
+%\EndFor
+\Else
+\State Suggest best item in $\B_t$ d times to user $i_t$ and receive feedback.
+\EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[!th]
+\caption{Low Rank Bandit Greedy (LRG)}
+\label{alg:mLRBS1}
+\begin{algorithmic}[1]
+\State {\bf Input:} Time horizon $n$, $Rank(\bar{R}) = d$.
+\State {\bf Explore Parameters:} $\epsilon\in (0,1)$.
+\For{$t=1,..,n$}	
+\State Nature reveals user $i_t$.  \Comment{Nature chooses user}
+\State Column-EXP3 suggests $\B_t\subseteq [L]$ items. $|\B_t| = d$
+\With{$\epsilon$ probability}	 \Comment{Exploration}
+\State User Bandit suggests each arm $j\in\B_t$ once to user $i_t$ and receive feedback.
+\EndFor
+\OrWith{$(1-\epsilon)$ probability} \Comment{Exploitation}
+\State User Bandit suggests arm $j\in \argmax_{j\in\B_t}\left\lbrace \hat{R}(i_t,j)\right\rbrace$, $d$ times to user $i_t$ and receive feedback.
+\EndFor
+\State Update Column-Bandits and User Bandit on feedback received.
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+
+\begin{algorithm}[!th]
+\caption{Low Rank Bandit UCB (LRUCB)}
+\label{alg:mLRBS2}
+\begin{algorithmic}[1]
+\State {\bf Input:} Time horizon $n$, $Rank(\bar{R}) = d$.
+\State {\bf Definition:} $U(i,j) = \sqrt{\dfrac{2\log n}{N_{i,j}}}$.
+\For{$t=1,..,n$}	
+\State Nature reveals user $i_t$.  \Comment{Nature chooses user}
+\State Column-EXP3 suggests $\B_t\subseteq [L]$ items. $|\B_t| = d$
+\If{$\left(\hat{R}(i_t,j) - U(i_t,j) \leq \hat{R}(i_t,j') + U(i_t,j')\right), \forall j,j' \in \B_t$}	 \Comment{Confidence interval overlap, Exploration}
+\State User Bandit suggests each arm $j\in\B_t$ once to user $i_t$ and receive feedback.
+\Else \Comment{Exploitation}
+\State User Bandit suggests arm $j\in \argmax_{j\in\B_t}\left\lbrace \hat{R}(i_t,j) + U(i_t,j)\right\rbrace$, $d$ times to user $i_t$ and receive feedback.
+\EndIf
+\State Update Column-Bandits and User Bandits on feedback received.
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
