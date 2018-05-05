@@ -1,5 +1,23 @@
+
+STORY:
+We address a recommendation problem in the hard setting where no feature is available to the learner.
+Blah blah: recommendation and bandits, major problem, blah blah.
+
+
+We rely on the assumption that the underlying click-through rate matrix has a latent sructure
+that we cannot directly observe but that we propose to leverage nonetheless.
+We formulate a rank-$d$ bandit problem that generalizes previous works on rank-1 and on latent bandits (quote, quote).
+We propose a meta algorithm that uses two layers of bandit algorithms  in order to learn 1/the best set of items overall and 2/ the individual preferences.
+This is a novel and efficient bandit startegy for the latent bandits and an elegant generalization of the rank-1 setting.
+We show a regret bound for our algorithm and run experiments on simulated and real data.
+
+xxxxxxxxxxxxxxxxxxxx
+
+
+\todocla{I haven't changed this section yet, wanted to make sure the story is right before. }
+
+
+
 In this paper, we study the problem of recommending the best items to users who are coming sequentially. The learner has access to very less prior information about the users and it has to adapt quickly to the user preferences and suggest the best item to each user. Furthermore, we consider the setting where users are grouped into clusters and within each cluster the users have the same choice of the best item, even though their quality of preference may be different for the best item. These clusters along with the choice of the best item for each user are unknown to the learner.  Also, we assume that each user has a single best item preference.
 
-	This complex problem can be conceptualized as a low rank stochastic bandit problem where there are $K$ users and $L$ items. The reward matrix, denoted by $\bar{M}\in [0,1]^{K\times L}$,  generating the rewards for user, item pair has a low rank structure. The online learning game proceeds as follows, at every timestep $t$,  nature reveals one user (or row) from $\bar{M}$ where user is denoted by $i_t$. The learner selects some items (or columns) from $\bar{M}$, where an item is denoted by $j_t\in [L]$. Then the learner receives one noisy feedback $r_{t}(i_t,j_t)\sim \D(\bar{M}(i_t,j_t))$, where $\D$ is a distribution over the entries in $\bar{M}$ and $\E[r_{t}(i_t,j_t)] = \bar{M}(i_t,j_t)$. Then the goal of the learner is to minimize the cumulative regret by quickly identifying the best item $j^*$ for each $i\in [K]$ where $\bar{M}(i,j^*) = \argmax _{j\in[L]}\lbrace \bar{M}(i,j) \rbrace$. 
-	
-	
+	This complex problem can be conceptualized as a low rank stochastic bandit problem where there are $K$ users and $L$ items. The reward matrix, denoted by $\bar{M}\in [0,1]^{K\times L}$,  generating the rewards for user, item pair has a low rank structure. The online learning game proceeds as follows, at every timestep $t$,  nature reveals one user (or row) from $\bar{M}$ where user is denoted by $i_t$. The learner selects some items (or columns) from $\bar{M}$, where an item is denoted by $j_t\in [L]$. Then the learner receives one noisy feedback $r_{t}(i_t,j_t)\sim \D(\bar{M}(i_t,j_t))$, where $\D$ is a distribution over the entries in $\bar{M}$ and $\E[r_{t}(i_t,j_t)] = \bar{M}(i_t,j_t)$. Then the goal of the learner is to minimize the cumulative regret by quickly identifying the best item $j^*$ for each $i\in [K]$ where $\bar{M}(i,j^*) = \argmax _{j\in[L]}\lbrace \bar{M}(i,j) \rbrace$.

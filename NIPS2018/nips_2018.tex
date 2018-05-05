@@ -7,15 +7,9 @@
 % ready for submission
 \usepackage{nips_2018}
 
-% to compile a preprint version, e.g., for submission to arXiv, add
-% add the [preprint] option:
-% \usepackage[preprint]{nips_2018}
 
-% to compile a camera-ready version, add the [final] option, e.g.:
-% \usepackage[final]{nips_2018}
+\usepackage[usenames,dvipsnames]{xcolor}
 
-% to avoid loading the natbib package, add option nonatbib:
-% \usepackage[nonatbib]{nips_2018}
 
 \usepackage[utf8]{inputenc} % allow utf-8 input
 \usepackage[T1]{fontenc}    % use 8-bit T1 fonts
@@ -25,7 +19,70 @@
 \usepackage{amsfonts}       % blackboard math symbols
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
-\usepackage{macros}   %user custom packages
+
+%\usepackage[margin=2.4cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm,dsfont,graphicx,xcolor,bm}
+\usepackage[capitalize,noabbrev]{cleveref}
+
+%\definecolor{bittersweet}{rgb}{1.0, 0.44, 0.37}
+\usepackage[lofdepth,lotdepth]{subfig}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+
+\setlength{\marginparwidth}{0.8in}
+\usepackage[backgroundcolor=White,textwidth=0.8in]{todonotes}
+\newcommand{\todob}[2][]{\todo[color=cyan!20,size=\tiny,#1]{Bra: #2}} % Brano's comments
+\newcommand{\todocla}[2][]{\todo[color=black!20,size=\tiny,inline, #1]{Cla: #2}} %
+\newcommand{\todos}[2][]{\todo[color=black!20,size=\tiny,inline, #1]{Sub: #2}} %
+\newcommand{\todocla}[2][]{\todo[color=black!20,size=\tiny,inline, #1]{Anup: #2}} %
+\newcommand{\todoz}[2][]{\todo[color=black!20,size=\tiny,inline, #1]{Zheng: #2}} %
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{claim}{Claim}
+\newtheorem{fact}{Fact}
+\newtheorem{definition}{Definition}
+\newtheorem{assumption}{Assumption}
+\newtheorem{observation}{Observation}
+\newtheorem{example}{Example}
+\newtheorem{remark}{Remark}
+\newtheorem{task}{Task}
+\newtheorem{conjecture}{Conjecture}
+
+\renewcommand{\qed}{\rule{5pt}{5pt}}
+
+
+%Usual Macros
+\DeclareMathOperator*{\argmax}{arg\,max\,}
+\DeclareMathOperator*{\argmin}{arg\,min\,}
+\mathchardef\mhyphen="2D
+
+\newcommand{\etal}{\emph{et al.}}
+
+%% Our algorithm's name:
+\newcommand{\algoname}{\texttt{MetaBand}}
+
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cE}{\mathcal{E}}
+\newcommand{\ccE}{\overline{\cE}}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\cR}{\mathcal{R}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\cB}{\mathcal{B}}
+\newcommand{\cU}{\mathcal{U}}
+\newcommand{\cS}{\mathcal{S}}
+
+\newcommand{\discEG}{{\tt DiscEG}}
+\newcommand{\discLinUCB}{{\tt DiscLinUCB}}
+\newcommand{\oful}{{\tt OFUL}}
+\newcommand{\LinUCB}{{\tt LinUCB}}
+
+\usepackage{dsfont}
+
 
 \title{Stochastic Low-Rank Latent Bandits}
 
@@ -81,25 +138,29 @@ To be written.
 
 
 \section{Introduction}
-\label{intro}
+\label{sec:introduction}
 \input{intro}
 
 
-\subsection{Notations, Problem Formulation and Assumptions}
+\subsection{Notation and Learning Setting}
+\label{se:setting}
 \input{probdef}
 
 %\subsection{Notations and Assumptions}
 %\input{notations}
-	
-\subsection{Related Works}
-\input{related}
-	
 
-\section{Contributions}
-\input{contributions}
+\subsection{Related Works}
+\label{sec:related}
+\input{related}
+
+
+%I don't think contributions should be in a separate section. I prefer to see them in the introduction.
+% \section{Contributions}
+% \input{contributions}
 
 %\newpage
-\section{Proposed Algorithms}
+\section{$\algoname$: learning efficiently on a rank-$d$ matrix.}
+\label{sec:algorithms}
 \input{algo1}
 
 
