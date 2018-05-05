@@ -2,7 +2,7 @@
 
 Throughout the paper, we denote $[n] = \lbrace 1,2,\ldots, n\rbrace$.
 An instance of the \emph{Low-Rank Bandit} problem is a matrix
-$R\in [0,1]^{K\timesL}$ representing the expected click-through rates (CTRs) for each
+$R\in [0,1]^{K\times L}$ representing the expected click-through rates (CTRs) for each
 user $k\in [K]$ on each item $l\in [L]$.
 If, $J\subset [L]$ is a subset of columns, we denote $R(:,J)\in [0,1]^{K,|J|}$ the corresponding
 submatrix containing the $|J|$ columns of $R$.
@@ -18,7 +18,7 @@ This is the key assumption of our model.
 It implies, by definition, the following property.
 
 \begin{observation}
-	Let $M\in \mathbb{R}^{K\timesL}$ be a rank-$d$ matrix. Then,
+	Let $M\in \mathbb{R}^{K\times L}$ be a rank-$d$ matrix. Then,
 	\begin{itemize}
 		\item There exists a basis $J^*$ of $d$ column such that all the $L$ columns' latent features
 		are linear combinations of the vectors in $J^*$;
@@ -51,7 +51,7 @@ For each user $i\in [K]$, there exists one unique best item $j^*(i)\in [L]$
 The objective of the learning agent is to minimize the expected cumulative regret up to horizon $n$. We define the cumulative regret, denoted by $\mathcal{R}_n$ as,
 
 \begin{align*}
-\mathcal{R}_n = \mathds{E}\sum_{t=1}^{n}\bigg\lbrace \sum_{j\in J_t} \left( r_{t}\left(i_{t}, j^*_{t,z} \right) - r_{t}\left( i_{t}, j_{t,z}\right)\bigg)\bigg\rbrace
+%\mathcal{R}_n = \mathds{E}\sum_{t=1}^{n}\bigg\lbrace \sum_{j\in J_t} \left( r_{t}\left(i_{t}, j^*_{t,z} \right) - r_{t}\left( i_{t}, j_{t,z}\right)\bigg)\bigg\rbrace
 \end{align*}
 
 

@@ -26,7 +26,7 @@
 \usepackage[capitalize,noabbrev]{cleveref}
 
 %\definecolor{bittersweet}{rgb}{1.0, 0.44, 0.37}
-\usepackage[lofdepth,lotdepth]{subfig}
+%\usepackage[lofdepth,lotdepth]{subfig}
 \usepackage{algorithm}
 \usepackage{algorithmicx}
 \usepackage[noend]{algpseudocode}
@@ -36,7 +36,7 @@
 \newcommand{\todob}[2][]{\todo[color=cyan!20,size=\tiny,#1]{Bra: #2}} % Brano's comments
 \newcommand{\todocla}[2][]{\todo[color=black!20,size=\tiny,inline, #1]{Cla: #2}} %
 \newcommand{\todos}[2][]{\todo[color=black!20,size=\tiny,inline, #1]{Sub: #2}} %
-\newcommand{\todocla}[2][]{\todo[color=black!20,size=\tiny,inline, #1]{Anup: #2}} %
+\newcommand{\todoan}[2][]{\todo[color=black!20,size=\tiny,inline, #1]{Anup: #2}} %
 \newcommand{\todoz}[2][]{\todo[color=black!20,size=\tiny,inline, #1]{Zheng: #2}} %
 
 \newtheorem{theorem}{Theorem}
@@ -81,8 +81,8 @@
 \newcommand{\oful}{{\tt OFUL}}
 \newcommand{\LinUCB}{{\tt LinUCB}}
 
-\usepackage{dsfont}
-
+%\usepackage{dsfont}
+\usepackage{macros}
 
 \title{Stochastic Low-Rank Latent Bandits}
 
@@ -166,7 +166,7 @@ To be written.
 
 
 
-%\newpage
+\newpage
 \section{Experiments}
 \input{expt}
 
