@@ -1,0 +1,137 @@
+\newcommand\myworries[1]{\textcolor{red}{#1}}
+
+\section{Regret Bound}
+Let us assume that the users are coming in sequentially $i_1,...,i_n \in [K].$ We use the notation $j^*(i)$ to denote the optimal arm for user $i$. When $J =(j_1,...,j_k) \in [L]^k$ is a $k$-tuple, by $J[l]$ we will mean $j_l,$ the $l$'th entry of $J$ and  $\max R(i, J) := \max_l R(i,J[l]).$ %When the rewards $0 \leq R_t(i,j) \leq 1,$ we can assume with out loss of generality that $R_t(i,j) \in \{ 0,1\}$ is a Bernoulli random variable with appropriate parameter.  We will assume this henceforth. 
+%and for a set of columns/arms $J \subset [L]$, by $J^*(i)$ we mean the best arm in $J$ for user $i$. 
+Let $U_t \in \mathbb{R}_{\geq 0}^{K \times d}$ and $V_t \in \mathbb{R}_{\geq 0}^{L \times d}$ to be time varying latent user and item factors.
+ The reward matrix at time step $t \in [n]$ is $R_t = U_t V_t^T.$
+\begin{assumption}[Hott Topics]
+We will assume that there is a $d$-tuple $J^{*} \in [L]^d$ such that for every  $j \in [L],$ there exists $\alpha_1^j,...,\alpha_d^j \geq 0, \sum_k \alpha_k^j \leq 1$ and
+$$ V_t[j,:] = \sum_{k \in J^*} \alpha_k^j V_t[k,:], $$
+for every $t \in [n]$.
+\end{assumption}
+ An important thing to note is that $\alpha_k^j$'s are {\it independent} of time $t.$
+With the above assumption, we have the following theorem.  
+
+\begin{lemma}
+\label{thm:hott}
+For any set of columns $J_t$, we have 
+$$ \max_{j \in [L]} \sum_{t \in [n]} \max R_t(i_t, (J_t,j)) = \max_{l \in [d]} \sum_{t \in [n]} \max R_t(i_t, (J_t,J^*[l])).$$
+\end{lemma}
+\myworries{Todo: What happens with the Bernoulli rounding trick? The above holds when the input is non-stochastic, but I haven't thought about the stochastic case.}
+Without loss of generality, we will also assume that for every $1 \leq k \leq d,$ $\max_{J = (j_1,...,j_k) \in [L]^k} \sum_t \max R_t(i_t,J) = \sum_t \max R_t(i_t,J^*[1:k])$ \todoan{Need to say why this is possible: follows easily from hott topics}.  Let $J_t = (\tilde{j}_{t,1},\tilde{j}_{t,2},...,\tilde{j}_{t,d})$ be the tuple of $d$ columns chosen by column-bandits at time $t$ and $(j_{t,1},...,j_{t,d})$ be the $d$ tuple of columns chosen by $i_t$th row EXP3 at time $t.$ We want to bound the expected regret $R(n)$  
+$$R(n) = \E \left( d\sum_{t } R(i_t,j^*_t(i_t)) - \sum_{t} \sum_k R(i_t,j_{t,k}) \right).$$
+ The row algorithm plays either one arm in $J_t$ $d$ times or plays every arm one time. We will use an indicator function $\mathbbm{1}(j_{t,1} \neq j_{t,2})$ which takes value one only if the row algorithm \todoan{row algorithm? We need a better way to refer to the various EXP3s} plays every arm in $J_t$ one time. Let $p_t = \E \mathbbm{1}(j_{t,1} \neq j_{t,2}).$  We can write the expected regret as 
+$R(n) = R_c(n) + R_r(n),$ where
+$$R_c(n) = \E \left( d\sum_{t = 1}^{n} R(i_t,j^*_t(i_t)) - d\sum_{t} \frac{\max R(i_t,J_t)}{p_t} \mathbbm{1}(j_{t,1} \neq j_{t,2})  \right) $$
+and
+$$R_r(n) = d \E \left( \sum_{t} \frac{ \max R(i_t,J_t)}{p_t} \mathbbm{1}(j_{t,1} \neq j_{t,2}) - \sum_{t} \sum_k R(i_t,j_{t,k}) \right) .$$
+%Note that 
+%$$ \bigcup_k \{ j_{t,k} \} = \{ J^*(i_t)\}$$
+We will show that for every $\gamma > 0,$   
+$R_c(n) =  O \left( \frac{d^2}{\gamma} \sqrt {n L \log n} \right)$
+and $R_r(n) =O \left( \frac{K d\log d}{\gamma} + \gamma n  \right) .$ 
+%For sufficiently big $n$, by optimizing over $\gamma$, we get
+%Optimizing over $\gamma$
+%$$R(n) = O\left( d^{1/2} L^{1/4} n^{3/4}  \log^{1/4} n \right).$$
+\begin{theorem}
+By choosing $\gamma$ appropriately, for all large enough $n$, we have 
+$$R(n) = O\left( d L^{1/4} n^{3/4} \log^{1/4} n\right) .$$
+\end{theorem}
+We now prove the bounds for $R_c(n)$ and $R_r(n)$ separately. \myworries{Todo: Make it clear what the randomness is when using $\E$ throughout.}
+
+
+
+
+\subsection*{Bounding Column Regret}
+To bound $R_c(n)$, we first rewrite it as 
+\begin{align*}
+R_c(n) &=  d \E \left( \sum_{t = 1}^{n} \frac{R(i_t,j^*_t(i_t))}{p_t} \mathbbm{1}(j_{t,1} \neq j_{t,2}) - \sum_{t} \frac{\max R(i_t,J_t)}{p_t} \mathbbm{1}(j_{t,1} \neq j_{t,2})  \right) \\
+&=  d \E \left( \sum_{t = 1}^{n} \frac{\tilde{R}(i_t,j^*_t(i_t))}{p_t}  - \sum_{t} \frac{\max \tilde{R}(i_t,J_t)}{p_t}   \right) \\
+&\leq  \frac{d}{\min_t p_t} \E \left( \sum_{t = 1}^{n} \max \tilde{R}(i_t,J^*)  - \sum_{t} \max \tilde{R}(i_t,J_t)   \right).
+%&\leq  \frac{d}{\min_t p_t}  \left( OPT - \E\sum_{t} \max \tilde{R}(i_t,J_t)   \right).
+\end{align*}
+Here, we define $ \tilde{R_t}(i,j) = R_t(i,j)\mathbbm{1}(j_{t,1} \neq j_{t,2}) .$ 
+%The hott topics assumption we need to impose is the following. We can have $U_t$ and $V_t$ to be time varying latent user and item factors. But for every $t$, we need $V_t[j,:]$ to be a fixed convex combination of optimal arms 
+%$$ V_t[j,:] = \sum_{k \in J^*} \alpha_k V_t[k,:]. $$
+%The key thing to note in the above is that $\alpha_i$'s are {\it independent} of time.
+%
+%With the above assumption, we have the following theorem.
+%
+%\begin{theorem}
+%\label{thm:hott}
+%For any set of (time varying) columns $J_t$ of size $|J_t|=l$ for some $l$, 
+%$$ \max_{j \in [L]} \sum_t \max R_t(i_t, (J_t,j)) = \max_{j \in J^*} \sum_t \max R_t(i_t, (J_t,j)).$$
+%\end{theorem}
+%
+%Now we will prove that chaining of EXP3 achieves near optimal regret. For simplicity, we will assume $d=2$. We have two EXP3s in this case. We want to show 
+%$$ E \sum_t R_t(i_t,J_t) \geq  E \sum_t \max R_t(i_t,J^*) - O(\sqrt{nL}).$$
+%Let us define $OPT_1 = \max_j \sum_t R_t(i_t,j) $ and $OPT_2 = \max_{j_1,j_2} \sum_t \max R_t(i_t,(j_1,j_2)) - OPT_1 .$ We have $OPT_1 + OPT_2 = \sum_t \max R_t(i_t,J^*).$ Let us assume $j_1^*$ be the index that achieves $OPT_1$ and $J^* = (j_1^*,j_2^*)$ be the set that achieves $OPT_2.$
+%We will now show that gain of the first EXP3 is close to $OPT_1$ and gain of the second EXP3 is close to $OPT_2$. The gain of the first EXP3 is $E \sum_t R_t(i_t,J_t[1]) .$ From EXP3 guarantee, it follows that $E \sum_t R_t(i_t,J_t[1]) \geq OPT_1 - O(\sqrt{nL}).$ 
+%Now, let us consider the gain of the second EXP3. We have 
+We are now ready to bound the regret. %For simplicity, let us assume $d=2.$ 
+To avoid carrying tildes, we will denote $\tilde{R_t}$  by $R_t$ from hereon. 
+\begin{lemma}
+For every $ k \in [d],$ we will show that 
+$$ \sum_t \E \max R_t(i_t,J_t[1:k]) \geq  \E \sum_t \max R_t(i_t,J^*[1:k]) - O(k\sqrt{nL}).$$ 
+\end{lemma}
+\begin{proof}
+We will show this by induction. Note that there are $d$ column EXP3s in this case. The base case when $k=1$ follows because of the guarantees of the first col-EXP3.
+Let $J^* = (j_1^*,j_2^*,...,j_d^*).$   We will now assume that the result is true for $k-1$ for some $k>1.$
+We have 
+\begin{align}
+& \E  \sum_t (\max R_t(i_t,J_t[1:k]) - R_t(i_t,J_t[1:k-1])) \\
+&\geq \max_{j_k} \E \sum_t \left( \max R_t(i_t,(J_t[1:k-1],j_k)) - \max R_t(i_t,J_t[1:k-1]) \right) - O\left(\sqrt{nL}\right) \\
+&\geq \max_{j_k} \E \sum_t  \left( \max R_t(i_t,(J^*[1:k-1],j_k))  - \max R_t(i_t,J_t[1:k-1]) \right) - O\left( \sqrt{nL} \right) - O\left( (k-1)\sqrt{nL} \right)   \\
+\label{eq:result}
+& =  \E \sum_t \left( \max R_t(i_t,J^*[1:k]) - \max R_t(i_t,J_t[1:k-1]) \right) - O\left( k\sqrt{nL} \right).
+\end{align}
+The last equality follows from Theorem~\ref{thm:hott}. The first inequality is from the guarantees of $k$th col-EXP3. The crucial step is  the second inequality. It says that we can replace $J_t[1:k-1]$ with $J^*[1:k-1]$ by just losing another additive $O\left( (k-1) \sqrt{nL} \right)$ term. This follows from induction hypothesis and Lemma~\ref{lem:keyinequality}. We note that from Equation~\ref{eq:result}, we have
+$$ \max R_t(i_t,J_t[1:k]) \geq  \E \sum_t \max R_t(i_t,J^*[1:k]) - O\left( k \sqrt{nL} \right),$$
+which concludes the proof.
+\end{proof}
+%Define, for  any fixed $j \in [L],$ 
+%$$f_2(j_t) = E \sum_t \max R_t(i_t,(j_t,j) .$$
+%We have for any $j_1,j_1',j_2$
+%$$ \max R_t(i_t,(j_1,j_2))  - \max R_t(i_t,(j_1',j_2)) \geq R_t(i_t,j_1) - R_t(i_t,j'_1) .$$
+\begin{lemma}
+\label{lem:keyinequality}
+Suppose
+ $$ \E \sum_t (\max R_t(i_t,(J_t[1:k-1]) \geq  \E \sum_t (\max R_t(i_t,(J^*[1:k-1])  - C_k$$
+  and let $j_k \in [L].$ Then,
+$$ \E \sum_t (\max R_t(i_t,(J_t[1:k-1],j_k) \geq \E \sum_t (\max R_t(i_t,(J^*[1:k-1],j_k) - O\left((k-1) \sqrt{nL} \right).$$
+%\myworries{Both Brano and I have confused ourselves over variants of this lemma. Definitely helpful for everyone to verify if the proof is correct.}
+\end{lemma}
+
+\begin{proof}
+ Let $T_1 = \{ t \, | \max R_t(i_t,J^*[1:k-1]) < R_t(i_t,j_k) \}$ and $T_2 = [n] \backslash T_1 .$ We then have 
+\begin{align*}
+\E \sum_t \max R_t(i_t,(J_t[1:k-1],j_k)) &= \E\sum_{t \in T_1} \max R_t(i_t,(J_t[1:k-1],j_k)) + \E\sum_{t \in T_2} \max R_t(i_t,(J_t[1:k-1],j_k)) \\
+&\geq \sum_{t \in T_1} \max R_t(i_t,(J^*[1:k-1],j_k)) + \E\sum_{t \in T_2} \max R_t(i_t,(J_t[1:k-1],j_k)) \\
+&\geq \sum_{t \in T_1} \max R_t(i_t,(J^*[1:k-1],j_k)) + \E\sum_{t \in T_2} \max R_t(i_t,J_t[1:k-1]) \\
+&\geq \sum_{t \in T_1} \max R_t(i_t,(J^*[1:k-1],j_k)) + \sum_{t \in T_2} \max R_t(i_t,J^*[1:k-1]) - C_k \\
+&= \sum_{t \in T_1} \max R_t(i_t,(j_1^*,j_2)) + \sum_{t \in T_2} \max R_t(i_t,(J^*[1:k-1],j_2)) - C_k \\
+&= \sum_{t \in [n]} \max R_t(i_t,(J^*[1:k-1],j_2)) - C_k.
+\end{align*}
+The first inequality is easy because $\max R_t(i_t,(J^*[1:k-1],j_2)) = R_t(i_t,j_2)$ for $t \in T_1$. Second inequality is trivial. Third inequality follows from the assumption. The next equality holds because of the definition of $T_2$.  
+\end{proof}
+\todoan{Define a new slicing operator and a more compressed '-' operator so that the above expressions look a bit nicer?}
+%Therefore, 
+%\begin{align*}
+%E \sum_t \max R_t(i_t,(J_1[t],j))  - & E \sum_t \max R_t(i_t,(j_1^*,j)) \\
+%& \geq E \sum_t R_t(i_t,J_1[t]) - R_t(i_t,j_1^*) \\
+%&\geq -O(\sqrt{nL}),
+%\end{align*}
+%where the last inequality follows from first EXP3 guarantee.
+
+
+\subsection*{Bounding Row Regret}
+To bound $R_r(n)$, we first note that
+$$R_r(n) =  E \left( \sum_{t} d\cdot \max R(i_t,J_t)  - \sum_{t} \sum_k R(i_t,j_{t,k}) \right) .$$ 
+Since there is an EXP3 algorithm on $d+1$ arms for each user, we have
+%$$R_r(n) = \sum_{i \in [K]}O(\sqrt{n_i d} f(\gamma)),$$
+$$R_r(n) = O \left( \frac{K d\log d}{\gamma} + \gamma n  \right),$$
+%where $n_i$ is the number of times user $i\in [K]$ was observed, and
+where $\gamma >0$ is any positive number.
+\todoan{This proof needs to have a bit more details. Also, $\gamma$ should appear in the algorithm and we should refer to that.}
+%\end{document}
