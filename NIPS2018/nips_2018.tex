@@ -16,7 +16,7 @@
 \usepackage{hyperref}       % hyperlinks
 \usepackage{url}            % simple URL typesetting
 \usepackage{booktabs}       % professional-quality tables
-\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{amsfonts,bbm}       % blackboard math symbols
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
 
@@ -65,6 +65,8 @@
 
 %% Our algorithm's name:
 \newcommand{\algoname}{\texttt{MetaBand}}
+
+%\newcommand{\E}{\mathbb{E}}
 
 \newcommand{\cA}{\mathcal{A}}
 \newcommand{\cE}{\mathcal{E}}
@@ -163,8 +165,7 @@ To be written.
 \label{sec:algorithms}
 \input{algo1}
 
-
-
+\input{regret_proof}
 
 \newpage
 \section{Experiments}
