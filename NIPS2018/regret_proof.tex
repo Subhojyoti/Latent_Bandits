@@ -1,9 +1,9 @@
 \newcommand\myworries[1]{\textcolor{red}{#1}}
 
-\section{Regret Bound}
-Let us assume that the users are coming in sequentially $i_1,...,i_n \in [K].$ We use the notation $j^*(i)$ to denote the optimal arm for user $i$. When $J =(j_1,...,j_k) \in [L]^k$ is a $k$-tuple, by $J[l]$ we will mean $j_l,$ the $l$'th entry of $J$ and  $\max R(i, J) := \max_l R(i,J[l]).$ %When the rewards $0 \leq R_t(i,j) \leq 1,$ we can assume with out loss of generality that $R_t(i,j) \in \{ 0,1\}$ is a Bernoulli random variable with appropriate parameter.  We will assume this henceforth. 
-%and for a set of columns/arms $J \subset [L]$, by $J^*(i)$ we mean the best arm in $J$ for user $i$. 
-Let $U_t \in \mathbb{R}_{\geq 0}^{K \times d}$ and $V_t \in \mathbb{R}_{\geq 0}^{L \times d}$ to be time varying latent user and item factors.
+\section{Analysis}
+\label{sec:analysis}
+
+We assume that users come sequentially $i_1, \dots, i_n \in [K]$. We denote by $j^*(i)$ the optimal arm of user $i$. When $J =(j_1,...,j_k) \in [L]^k$ is a $k$-tuple, by $J[l]$ we will mean $j_l,$ the $l$'th entry of $J$ and  $\max R(i, J) := \max_{l \in [k]} R(i,J[l])$. \todob{``l'' is a horrible letter because it looks like many other symbols. What about $\ell$ instead?} Let $U_t \in \mathbb{R}_{\geq 0}^{K \times d}$ and $V_t \in \mathbb{R}_{\geq 0}^{L \times d}$ to be time varying latent user and item factors.
  The reward matrix at time step $t \in [n]$ is $R_t = U_t V_t^T.$
 \begin{assumption}[Hott Topics]
 We will assume that there is a $d$-tuple $J^{*} \in [L]^d$ such that for every  $j \in [L],$ there exists $\alpha_1^j,...,\alpha_d^j \geq 0, \sum_k \alpha_k^j \leq 1$ and
@@ -19,13 +19,19 @@ For any set of columns $J_t$, we have
 $$ \max_{j \in [L]} \sum_{t \in [n]} \max R_t(i_t, (J_t,j)) = \max_{l \in [d]} \sum_{t \in [n]} \max R_t(i_t, (J_t,J^*[l])).$$
 \end{lemma}
 \myworries{Todo: What happens with the Bernoulli rounding trick? The above holds when the input is non-stochastic, but I haven't thought about the stochastic case.}
-Without loss of generality, we will also assume that for every $1 \leq k \leq d,$ $\max_{J = (j_1,...,j_k) \in [L]^k} \sum_t \max R_t(i_t,J) = \sum_t \max R_t(i_t,J^*[1:k])$ \todoan{Need to say why this is possible: follows easily from hott topics}.  Let $J_t = (\tilde{j}_{t,1},\tilde{j}_{t,2},...,\tilde{j}_{t,d})$ be the tuple of $d$ columns chosen by column-bandits at time $t$ and $(j_{t,1},...,j_{t,d})$ be the $d$ tuple of columns chosen by $i_t$th row EXP3 at time $t.$ We want to bound the expected regret $R(n)$  
+Without loss of generality, we will also assume that for every $1 \leq k \leq d,$ $\max_{J \in [L]^k} \sum_t \max R_t(i_t,J) = \sum_t \max R_t(i_t,J^*[1:k])$ \todoan{Need to say why this is possible: follows easily from hott topics}.  Let $J_t = (\tilde{j}_{t,1},\tilde{j}_{t,2},...,\tilde{j}_{t,d})$ be the tuple of $d$ columns chosen by column-bandits at time $t$ and $(j_{t,1},...,j_{t,d})$ be the $d$ tuple of columns chosen by $i_t$th row EXP3 at time $t.$ We want to bound the expected regret $R(n)$  
 $$R(n) = \E \left( d\sum_{t } R(i_t,j^*_t(i_t)) - \sum_{t} \sum_k R(i_t,j_{t,k}) \right).$$
- The row algorithm plays either one arm in $J_t$ $d$ times or plays every arm one time. We will use an indicator function $\mathbbm{1}(j_{t,1} \neq j_{t,2})$ which takes value one only if the row algorithm \todoan{row algorithm? We need a better way to refer to the various EXP3s} plays every arm in $J_t$ one time. Let $p_t = \E \mathbbm{1}(j_{t,1} \neq j_{t,2}).$  We can write the expected regret as 
+ The row algorithm plays either one arm in $J_t$ $d$ times or plays every arm one time. We will use an indicator function $\mathbbm{1}(j_{t,1} \neq j_{t,2})$ which takes value one only if the row algorithm \todoan{row algorithm? We need a better way to refer to the various EXP3s} plays every arm in $J_t$ one time. Let $p_t = P(j_{t, 1} \neq j_{t, 2})$. We can write the expected regret as 
 $R(n) = R_c(n) + R_r(n),$ where
-$$R_c(n) = \E \left( d\sum_{t = 1}^{n} R(i_t,j^*_t(i_t)) - d\sum_{t} \frac{\max R(i_t,J_t)}{p_t} \mathbbm{1}(j_{t,1} \neq j_{t,2})  \right) $$
+\begin{align*}
+  R_c(n) = \E \left( d\sum_{t = 1}^{n} R(i_t,j^*_t(i_t)) - d\sum_{t} \frac{\max R(i_t,J_t)}{p_t} \mathbbm{1}(j_{t,1} \neq j_{t,2})  \right)
+\end{align*}
 and
-$$R_r(n) = d \E \left( \sum_{t} \frac{ \max R(i_t,J_t)}{p_t} \mathbbm{1}(j_{t,1} \neq j_{t,2}) - \sum_{t} \sum_k R(i_t,j_{t,k}) \right) .$$
+\begin{align*}
+  R_r(n) = d \E \left( \sum_{t} \frac{ \max R(i_t,J_t)}{p_t} \mathbbm{1}(j_{t,1} \neq j_{t,2}) - \sum_{t} \sum_k R(i_t,j_{t,k}) \right)\,.
+\end{align*}
+\todob{The factor of $d$ should only appear at the first term, right?}
+  
 %Note that 
 %$$ \bigcup_k \{ j_{t,k} \} = \{ J^*(i_t)\}$$
 We will show that for every $\gamma > 0,$   
@@ -38,12 +44,15 @@ and $R_r(n) =O \left( \frac{K d\log d}{\gamma} + \gamma n  \right) .$
 By choosing $\gamma$ appropriately, for all large enough $n$, we have 
 $$R(n) = O\left( d L^{1/4} n^{3/4} \log^{1/4} n\right) .$$
 \end{theorem}
-We now prove the bounds for $R_c(n)$ and $R_r(n)$ separately. \myworries{Todo: Make it clear what the randomness is when using $\E$ throughout.}
+We now prove the bounds for $R_c(n)$ and $R_r(n)$ separately.
+
+\myworries{Todo: Make it clear what the randomness is when using $\E$ throughout.}
+
+\todob{Given the limited time, let's go with the current setting. This is most natural in the non-stochastic community and nobody will question it. Then the only randomness is with respect to random actions of the algorithm.}
 
 
+\subsection{Bounding Column Regret}
 
-
-\subsection*{Bounding Column Regret}
 To bound $R_c(n)$, we first rewrite it as 
 \begin{align*}
 R_c(n) &=  d \E \left( \sum_{t = 1}^{n} \frac{R(i_t,j^*_t(i_t))}{p_t} \mathbbm{1}(j_{t,1} \neq j_{t,2}) - \sum_{t} \frac{\max R(i_t,J_t)}{p_t} \mathbbm{1}(j_{t,1} \neq j_{t,2})  \right) \\
@@ -51,7 +60,7 @@ R_c(n) &=  d \E \left( \sum_{t = 1}^{n} \frac{R(i_t,j^*_t(i_t))}{p_t} \mathbbm{1
 &\leq  \frac{d}{\min_t p_t} \E \left( \sum_{t = 1}^{n} \max \tilde{R}(i_t,J^*)  - \sum_{t} \max \tilde{R}(i_t,J_t)   \right).
 %&\leq  \frac{d}{\min_t p_t}  \left( OPT - \E\sum_{t} \max \tilde{R}(i_t,J_t)   \right).
 \end{align*}
-Here, we define $ \tilde{R_t}(i,j) = R_t(i,j)\mathbbm{1}(j_{t,1} \neq j_{t,2}) .$ 
+Here, we define $ \tilde{R_t}(i,j) = R_t(i,j)\mathbbm{1}(j_{t,1} \neq j_{t,2})$ .
 %The hott topics assumption we need to impose is the following. We can have $U_t$ and $V_t$ to be time varying latent user and item factors. But for every $t$, we need $V_t[j,:]$ to be a fixed convex combination of optimal arms 
 %$$ V_t[j,:] = \sum_{k \in J^*} \alpha_k V_t[k,:]. $$
 %The key thing to note in the above is that $\alpha_i$'s are {\it independent} of time.
@@ -70,9 +79,9 @@ Here, we define $ \tilde{R_t}(i,j) = R_t(i,j)\mathbbm{1}(j_{t,1} \neq j_{t,2}) .
 %We will now show that gain of the first EXP3 is close to $OPT_1$ and gain of the second EXP3 is close to $OPT_2$. The gain of the first EXP3 is $E \sum_t R_t(i_t,J_t[1]) .$ From EXP3 guarantee, it follows that $E \sum_t R_t(i_t,J_t[1]) \geq OPT_1 - O(\sqrt{nL}).$ 
 %Now, let us consider the gain of the second EXP3. We have 
 We are now ready to bound the regret. %For simplicity, let us assume $d=2.$ 
-To avoid carrying tildes, we will denote $\tilde{R_t}$  by $R_t$ from hereon. 
+To avoid carrying tildes, we denote $\tilde{R}_t$ by $R_t$ in the rest of the proof.
 \begin{lemma}
-For every $ k \in [d],$ we will show that 
+For any $k \in [d]$,
 $$ \sum_t \E \max R_t(i_t,J_t[1:k]) \geq  \E \sum_t \max R_t(i_t,J^*[1:k]) - O(k\sqrt{nL}).$$ 
 \end{lemma}
 \begin{proof}
@@ -86,7 +95,9 @@ We have
 \label{eq:result}
 & =  \E \sum_t \left( \max R_t(i_t,J^*[1:k]) - \max R_t(i_t,J_t[1:k-1]) \right) - O\left( k\sqrt{nL} \right).
 \end{align}
-The last equality follows from Theorem~\ref{thm:hott}. The first inequality is from the guarantees of $k$th col-EXP3. The crucial step is  the second inequality. It says that we can replace $J_t[1:k-1]$ with $J^*[1:k-1]$ by just losing another additive $O\left( (k-1) \sqrt{nL} \right)$ term. This follows from induction hypothesis and Lemma~\ref{lem:keyinequality}. We note that from Equation~\ref{eq:result}, we have
+\todob{The last term in the first line misses $\max$. But a more important question is why do we need that term at all. The term is constant throughout the derivation.}
+
+The last equality follows from Theorem~\ref{thm:hott}. \todob{Which Theorem 1? Definitely not the one in our paper.} The first inequality is from the guarantees of $k$th col-EXP3. \todob{State the regret bound of Exp3 in a lemma.} The crucial step is  the second inequality. It says that we can replace $J_t[1:k-1]$ with $J^*[1:k-1]$ by just losing another additive $O\left( (k-1) \sqrt{nL} \right)$ term. This follows from induction hypothesis and Lemma~\ref{lem:keyinequality}. We note that from Equation~\ref{eq:result}, we have
 $$ \max R_t(i_t,J_t[1:k]) \geq  \E \sum_t \max R_t(i_t,J^*[1:k]) - O\left( k \sqrt{nL} \right),$$
 which concludes the proof.
 \end{proof}
@@ -98,6 +109,7 @@ which concludes the proof.
 \label{lem:keyinequality}
 Suppose
  $$ \E \sum_t (\max R_t(i_t,(J_t[1:k-1]) \geq  \E \sum_t (\max R_t(i_t,(J^*[1:k-1])  - C_k$$
+ \todob{Define $C_k$. Why not just $C$?}
   and let $j_k \in [L].$ Then,
 $$ \E \sum_t (\max R_t(i_t,(J_t[1:k-1],j_k) \geq \E \sum_t (\max R_t(i_t,(J^*[1:k-1],j_k) - O\left((k-1) \sqrt{nL} \right).$$
 %\myworries{Both Brano and I have confused ourselves over variants of this lemma. Definitely helpful for everyone to verify if the proof is correct.}
@@ -106,13 +118,16 @@ $$ \E \sum_t (\max R_t(i_t,(J_t[1:k-1],j_k) \geq \E \sum_t (\max R_t(i_t,(J^*[1:
 \begin{proof}
  Let $T_1 = \{ t \, | \max R_t(i_t,J^*[1:k-1]) < R_t(i_t,j_k) \}$ and $T_2 = [n] \backslash T_1 .$ We then have 
 \begin{align*}
-\E \sum_t \max R_t(i_t,(J_t[1:k-1],j_k)) &= \E\sum_{t \in T_1} \max R_t(i_t,(J_t[1:k-1],j_k)) + \E\sum_{t \in T_2} \max R_t(i_t,(J_t[1:k-1],j_k)) \\
-&\geq \sum_{t \in T_1} \max R_t(i_t,(J^*[1:k-1],j_k)) + \E\sum_{t \in T_2} \max R_t(i_t,(J_t[1:k-1],j_k)) \\
-&\geq \sum_{t \in T_1} \max R_t(i_t,(J^*[1:k-1],j_k)) + \E\sum_{t \in T_2} \max R_t(i_t,J_t[1:k-1]) \\
-&\geq \sum_{t \in T_1} \max R_t(i_t,(J^*[1:k-1],j_k)) + \sum_{t \in T_2} \max R_t(i_t,J^*[1:k-1]) - C_k \\
-&= \sum_{t \in T_1} \max R_t(i_t,(j_1^*,j_2)) + \sum_{t \in T_2} \max R_t(i_t,(J^*[1:k-1],j_2)) - C_k \\
-&= \sum_{t \in [n]} \max R_t(i_t,(J^*[1:k-1],j_2)) - C_k.
+  & \E \sum_t \max R_t(i_t,(J_t[1:k-1],j_k)) \\
+  & \quad = \E\sum_{t \in T_1} \max R_t(i_t,(J_t[1:k-1],j_k)) + \E\sum_{t \in T_2} \max R_t(i_t,(J_t[1:k-1],j_k)) \\
+  & \quad \geq \sum_{t \in T_1} \max R_t(i_t,(J^*[1:k-1],j_k)) + \E\sum_{t \in T_2} \max R_t(i_t,(J_t[1:k-1],j_k)) \\
+  & \quad \geq \sum_{t \in T_1} \max R_t(i_t,(J^*[1:k-1],j_k)) + \E\sum_{t \in T_2} \max R_t(i_t,J_t[1:k-1]) \\
+  & \quad \geq \sum_{t \in T_1} \max R_t(i_t,(J^*[1:k-1],j_k)) + \sum_{t \in T_2} \max R_t(i_t,J^*[1:k-1]) - C_k \\
+  & \quad = \sum_{t \in T_1} \max R_t(i_t,(j_1^*,j_2)) + \sum_{t \in T_2} \max R_t(i_t,(J^*[1:k-1],j_2)) - C_k \\
+  & \quad = \sum_{t \in [n]} \max R_t(i_t,(J^*[1:k-1],j_2)) - C_k.
 \end{align*}
+\todob{$(j_1^*,j_2)$ should be $(J^*[1:k-1],j_k)$. $j_2$ should be $j_k$. The same below.}
+
 The first inequality is easy because $\max R_t(i_t,(J^*[1:k-1],j_2)) = R_t(i_t,j_2)$ for $t \in T_1$. Second inequality is trivial. Third inequality follows from the assumption. The next equality holds because of the definition of $T_2$.  
 \end{proof}
 \todoan{Define a new slicing operator and a more compressed '-' operator so that the above expressions look a bit nicer?}
@@ -125,7 +140,8 @@ The first inequality is easy because $\max R_t(i_t,(J^*[1:k-1],j_2)) = R_t(i_t,j
 %where the last inequality follows from first EXP3 guarantee.
 
 
-\subsection*{Bounding Row Regret}
+\subsection{Bounding Row Regret}
+
 To bound $R_r(n)$, we first note that
 $$R_r(n) =  E \left( \sum_{t} d\cdot \max R(i_t,J_t)  - \sum_{t} \sum_k R(i_t,j_{t,k}) \right) .$$ 
 Since there is an EXP3 algorithm on $d+1$ arms for each user, we have
@@ -135,3 +151,5 @@ $$R_r(n) = O \left( \frac{K d\log d}{\gamma} + \gamma n  \right),$$
 where $\gamma >0$ is any positive number.
 \todoan{This proof needs to have a bit more details. Also, $\gamma$ should appear in the algorithm and we should refer to that.}
 %\end{document}
+
+\todob{Please add more details. This needs to be done over all users.}
