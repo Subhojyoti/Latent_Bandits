@@ -1,0 +1,47 @@
+%!TEX root=Paper.tex
+
+\section{Algorithm}
+\label{sec:algorithm}
+
+\begin{algorithm}
+%  \caption{$\bubblerank$}
+%  \label{alg:bubble-rank}
+  \begin{algorithmic}[1]
+    \For{$t = 1, \dots, n$}
+      \State User $i_t$ comes to the system
+      \State
+      \State // Choose $d$ arms in $d$ column bandits
+      \State Let $p_{c, t}(k, j)$ be the probability of playing arm $j \in [L]$ in c-bandit $k \in [d]$ at time $t$
+      \For{$k = 1, \dots, d$}
+        \State Sample $J_t[k] \sim \mathrm{Cat}(p_{c, t}(k, 1), \dots, p_{c, t}(k, L))$
+      \EndFor
+      \State
+      \State // Choose an arm in row bandit $i_t$
+      \State Let $p_{r, t}(i_t, k)$ be the probability of playing arm $k \in [d + 1]$ in r-bandit $i_t \in [K]$ at time $t$
+      \State Sample $k_t \sim \mathrm{Cat}(p_{r, t}(i_t, 1), \dots, p_{r, t}(i_t, d + 1))$
+      \State
+      \State // Update row bandit $i_t$
+      \If{$k_t \leq d$}
+        \State $\displaystyle s_{c, t}(i_t, k_t) \gets s_{c, t - 1}(i_t, k_t) + d \frac{R_t(i_t, J_t[k_t])}{p_{r, t}(i_t, k_t)}$
+      \Else
+        \State $\displaystyle s_{c, t}(i_t, k_t) \gets s_{c, t - 1}(i_t, k_t) + \sum_{k = 1}^d \frac{R_t(i_t, J_t[k])}{p_{r, t}(i_t, k_t)}$
+      \EndIf
+      \State
+      \State // Update $d$ column bandits
+      \If{$k_t \leq d$}
+        \For{$k = 1, \dots, d$}
+          \State $j_{t, k} \gets J_t[k_t]$
+        \EndFor
+      \Else
+        \For{$k = 1, \dots, d$}
+          \State $j_{t, k} \gets J_t[k]$
+        \EndFor
+        \For{$k = 1, \dots, d$}
+          \State $\displaystyle
+          s_{r, t}(k, J_t[k]) \gets s_{r, t - 1}(k, J_t[k]) +
+          \frac{\max R_t(i_t, J_t[: k]) - \max R_t(i_t, J_t[: k - 1])}{p_{c, t}(k, J_t[k]) \ p_{r, t}(i_t, k_t)}$
+        \EndFor
+      \EndIf
+    \EndFor
+  \end{algorithmic}
+\end{algorithm}
