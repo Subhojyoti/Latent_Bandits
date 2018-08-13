@@ -1,0 +1,167 @@
+\newcommand\clairesworries[1]{\textcolor{blue}{#1}}
+
+\section{Claire's point of view}
+
+
+We assume that users come sequentially: the indices $i_1, \dots, i_n \in [K]$ are \iid random variables chosen by an unknown (and uncontrolled) distribution $\mathcal{D}_u$.
+
+
+When $J =(j_1,...,j_k) \in [L]^k$ is a $k$-tuple, by $J[\ell]$ we will mean $j_\ell,$ the $l$'th entry of $J$ and
+$\max R(i, J) := \max_{l \in [k]} R(i,J[\ell])$.
+Let $U_t \in \mathbb{R}_{\geq 0}^{K \times d}$ and $V_t \in \mathbb{R}_{\geq 0}^{L \times d}$  be time varying latent user and item factors.
+
+ \begin{assumption}[Hot Topics]
+ We will assume that there is a $d$-tuple $J^{*} \in [L]^d$ such that any user latent vector is
+ a convex combination of the vectors in $J^{*}$.
+ In other words, for every  $j \in [L],$ there exists $\alpha_1^j,...,\alpha_d^j \in [0,1]^d,$,
+ $ \sum_k \alpha_k^j \leq 1$ and
+ \[
+  V[j,:] = \sum_{k \in J^*} \alpha_k^j V[k,:].
+ \]
+ Moreover, for any user $i\in [K]$, we assume that there exists one unique best item
+ that we denote $B(i)$. The mapping $B$ is deternministic and defined my
+ \[
+ B(i) = \argmax_{j\in [L]} u_i^T v_j
+ \]
+ \end{assumption}
+
+With the above assumption, we have the following cornerstone Lemma.
+
+\begin{lemma}
+\label{thm:hott}
+The mapping $B$ has its image included in $J^*$. This means that for any user $i\in [K]$,
+$B(i) \in J^*$.
+\end{lemma}
+\begin{proof}
+By definition,
+\[
+B(i) = \argmax_{j\in [L]} u_i^T v_j.
+\]
+The function $v \mapsto u_i^T v$ is linear so its maximum on a convex is reached
+at one of its summits.
+\todocla{could be nice to write this down more properly.}
+
+\end{proof}
+
+This means that no matter which user $i_t$ shows up at round $t$, the best item recommendation
+is one of the $d$ elements of $J^*$.
+
+% That was my first idea but I think it's wrong :
+% Hence, the best item recommendation in hindsight is the one that maximizes the
+% expected reward with repsect to the unknown distribution $D_u$.
+% We define $j^* = \argmax_{j\in J^*} \mathds{E}_{i\sim D_u}[u_i^Tv_j]$.
+% We can then define the gaps for each column arm $j$ as the expected
+% gap:
+% \[
+% \bar{\Delta}_j = \mathds{E}_{i\sim D_u}[u_i^(v_j^*-v_j)] = \mathds{E}_{i\sim D_u}[R(i,j^*)-R(i,j)].
+% \]
+
+
+At each round, the learner must choose $d$ arms possibly with repetitions.
+Given a user $i_t$, the optimal action is $A^*(i_t)=(B(i_t),\ldots,B(i_t))$.
+The instantaneous regret incurred by taking action $A_t= (j_{t,1},\ldots,j_{t,k})$
+is
+\[
+r_t = d R(i_t,B(i_t)) - \sum_{k\in A_t} R(i_t,k).
+\]
+
+The goal of the learner is to minimize the expected regret
+\begin{align*}
+R(T) & = \mathds{E}_{D_u} \sum_{t=1}^T r_t\\
+ & = \mathds{E}_{D_u} \sum_{t=1}^T d R(i_t,B(i_t)) - \sum_{k\in A_t} R(i_t,k)\\
+ & = \sum_{t=1}^T \sum_{k\in A_t} \mathds{E}_{D_u} \left[ R(i_t,B(i_t)) - R(i_t,k) \right]\\
+ & = \sum_{t=1}^T \sum_{j\in [L]}  \mathds{1}\{ j\in A_t \} \mathds{E}_{D_u} \left[ R(i_t,B(i_t)) - R(i_t,j)\right] \\
+ & = \sum_{j\in [L]} [N_j(T)] \bar{\Delta}_j
+\end{align*}
+where
+\[
+N_j(t) := \sum_{t=1}^T \mathds{1}\{ j\in A_t \}; \quad \bar{\Delta}_j:=  \mathds{E}_{D_u}  \left[ R(i_t,B(i_t)) - R(i_t,j)\right].
+\]
+
+\todocla{ This decomposition is correct but it also hides a little bit too much information about the users. I'm not sure it will actually help bounding the regret of our algorithm but I wanted to write it down. }
+
+\subsection{Lower bound discussion}
+
+Now that the problem is defined, we discuss its complexity through a problem-dependent lower bound on the expected regret.
+It appears that as soon as the probability of each user to show up is positive,
+each row bandit problem will be allocated a linear number of request.
+Moreover, under the assumption that the reward matrix $R$ is rank $d$, the users' latent vectors
+are $d-$dimensional and they span the space (otherwise, the matrix rank would be lower).
+This implies in particular that each summit of the convex set defined by the master columns in $J^*$
+is the best arm for a linear number of rounds.
+Thus, intuitively, a \emph{uniformly efficient} strategy should pull each arm in $j^*$ a linear number of times.
+However, all the suboptimal arms $j \notin J^*$ are never $B(i_t)$ for any $i_t$
+so they should be pulled only for the sake of exploration.
+
+In order to frame this exploration-exploitation problem in the usual finitely-armed stochastic bandit setting, we will rewrite the parameter of each arm $j\in [L]$. We introduce the
+parameters $p_i = \mathds{P}(i_t =i)$ for each user $i$ and we write
+\[
+\theta_j = \mathds{E}_{i\sim D_u}[R(i,j)] = \left(\sum_{i=1}^K p_i u_i\right)^T v_j,
+\]
+which is the expected reward that the learner receives when he chooses action $j$ in his set.
+On average over the columns, some rewards have a higher expectation than other due to the
+uneven representation of the users prefering them. We will denote $j_d$ the $d-th$ best
+arm.
+We prove the following theorem
+\begin{theorem}
+The distribution of the rewards associated with each arm $j \in [L]$ is a mixture
+of $K$ distributions depending on the user. We denote $\mathcal{P}_j$ the
+probability distribution of the rewards when pulling arm $j$. For any $\theta^* \in [0,1]$,
+\begin{equation}
+\label{eq:kinf}
+\mathcal{K}_{\text{inf}}(j;\theta^*) = \inf_{\mathcal{P}}\{KL(\mathcal{P}_j,\mathcal{P})| \mathds{E}_{P}[\text{reward}]\geq \theta^*\}.
+\end{equation}
+\todocla{notation is needed here. It's a mess for now. }
+The expected regret of any uniformly efficient strategy is bounded from below by
+\[
+\liminf_{T\to \infty} \frac{R(T)}{\log(T)} \geq \sum_{j\notin J^*} \frac{\bar{\Delta}_j}{\mathcal{K}_{\text{inf}}(j; \theta_{j_d})}.
+\]
+\end{theorem}
+
+Note that this lower bound takes into account the unknown probability distribution
+of the users both in the numerator (the gaps are defined in expectation wrt this distribution)
+and in the denominator (the information quantity $\mathcal{K}_{\text{inf}}$ also depends on it).
+
+\begin{proof}
+This proof relies on changes of measure (blah blah).
+Basically, $\mathcal{K}_{\text{inf}}(j;\theta_{j_d})$ is the expected log-likelihood ratio
+of the observations under two models : the original one and the one where arm $j$
+has a modified parameter $v_j$ that gives it a higher expected reward than $j_d$.
+This is a quite standard result but the expectation over the users must be handled gently
+\todocla{I still need to think about it and fix the notations to make it right but I believe the result is true. }
+\end{proof}
+
+\subsection{About the algorithm}
+
+\paragraph{Simple Multiple-Plays bandits as a baseline. } One first idea is run a
+MPB algorithm that builds a list a $d$ items that look better.
+Unfortunately, the expected regret of such strategy is linear ! Indeed, the optimal action of this kind of method is $A^*_{\textsc{mp}}= J^*$ that incurs a regret $\sum_{j\in J^*} \bar{\Delta}_j >0$.
+This is because the bandit algorithm learns one fixed best action for all arms while the optimal
+strategy for our problem is to learn the best arm of each user \emph{among the $d$ best arms}.
+
+\paragraph{Hierarchical bandits. } To overcome this additional difficulty, we suggest the following general idea:
+\begin{itemize}
+\item We maintain a column bandit that takes the averaged rewards over the rows and learns the best $d$ columns in expectaction over the users;
+\item At each round, a user $i_t$ pops up and the corresponding \emph{independent} row bandit will make
+his own recommendation decision after calling the column bandit for advice.
+\item The column bandit will send a possible set of $d$ \emph{different} arms $S_t$ and the row bandit will choose the final action $A_t$ by constructing a set out of these $d$ suggestions. To simplify exposition, we will assume that two types of set can be constructed: either an \emph{exploratory} one that simply pulls all the suggested arms and a \emph{exploitation} action that decides which is the most promising item among the suggested ones and simply fills the whole list with $d$ identical arms.
+\end{itemize}
+\todocla{Note that it is really important to be consistent when using the terms action for the list and arms for each individual item of the lits, otherwise it's a mess. I'm doing my best...}
+
+In order to decompose the regret, we need to split the rounds when the column bandit recommended the best set $J^*$.
+
+Fix a row $i\in [K]$ and consider the filtration $\mathcal{F}_i=\{t\leq T: i_i=i \}$.
+The regret of the corresponding bandit is equal to
+
+\begin{align*}
+R_i(T) &= \mathds{E}\left[\sum_{t \in \mathcal{F}_i} r_t \mathds{S_t = J^*} \right] + \mathds{E}\left[\sum_{t \in \mathcal{F}_i} \mathds{S_t \neq J^*} \right]
+\end{align*}
+The idea is now to say
+\begin{itemize}
+\item the first term is bounded by $O(d\log (p_iT))$ because the chosen row bandit algorithm is designed for that,
+\item the second term is bounded by $O(L\log(T))$ because the column bandit is designed for that.
+\end{itemize}
+
+Even if the intuition seems to go through, it is not completely immediate to prove.
+The recommendations of the column bandits will be base on the actions and observations gathered by the row bandits and simply averaged over the rows. This means for instance that if the column bandit is TS,
+its posteriot for arm $j$ at round $T$ is a gaussian (assuming Gaussian noise...) with mean $\sum_i S_{i,j}(T)/ \sum_i N_{i,j}(T)$. In order to make sure that the column bandit does learn the best action $J^*$, we must make sure that the arms in $J^*$ are pulled enough such that the expectation of the optimal action is not badly underestimated. Given that the column bandit cannot directly control the actions, it seems hard.
