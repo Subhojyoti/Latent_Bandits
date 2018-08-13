@@ -1,0 +1,199 @@
+%\begin{proof}
+%Considering any arbitrary row $i\in [K]$, we can show that,
+%\begin{align*}
+%\argmax_{j\in[L]} U(i,:){V(j,:)}^{\intercal}  &= U(i,:)V(j^*(i),:)^{\intercal}\\
+%& \overset{(a)}{=} U(i,:)\left(a_{j^*(i)}V(J^*,:)\right)^{\intercal}\\
+%& = \sum_{k=1}^{d}a_{j^*(i)}(k)U(i,:)V(j^*(i),:)^{\intercal}\\
+%& \leq \argmax a_{j^*(i)}(k)U(i,:)V(k,:)^{\intercal} \\
+%& \leq \argmax_{k\in[d]}U(i,:){V(k,:)}^{\intercal}   ,
+%\end{align*}
+%where $(a)$ is from Assumption \ref{assm:1}.
+%\end{proof}
+
+%\subsection{Proof of Regret Bound for Noise Free case}
+%
+%\begin{proof}
+%\textbf{Step 1. (Some notations):} We denote the number of times we observe $r_t\left( i ,j \right) \in \bar{R}\left( i  ,j \right)$ till $t$-th timestep as $z_t\left( i,j\right)$. Let, $\J^*$ be the set of $d$ best columns.
+%
+%\textbf{Step 2. (Assumptions): } We assume that $\bar{R}(i,j)$ is a square matrix of dimension $K\times K$, where $K \geq 4$ and $\lceil\sqrt{K} \rceil \in \mathbb{Z}^+$.
+%
+%\textbf{Step 3. (Total pulls in phase $0$)}: The total number of pulls in phase $0$ is accrued due to \textbf{Chequerboard exploration} and \textbf{Best-d exploration}, which gives,
+%\begin{align*}
+%Kd n_0 + \gamma Kn_0 & \overset{(a)}{=} Kd + K\lceil\sqrt{K} \rceil\\
+%&= Kd + K^{\frac{3}{2}},
+%\end{align*}
+%
+%where $(a)$ is obtained because $n_0 = 1$ and $\gamma = \lceil\sqrt{K} \rceil$.
+%
+%\textbf{Step 4. (Probability of $j\in B_m$ and $j\notin \J^*$ after column-equivalence domination):} In the worst case the chequerboard exploration only observes $j\in J^*$ over the same equivalence class $E_1\in \C$ (say). Hence, the number of arms $j'\in \B_m$ surviving after the $m$-th phase cannot be more than,
+%
+%\begin{align*}
+%K - \dfrac{\sqrt{K}}{d} = \sqrt{K}\left(\sqrt{K} - \dfrac{1}{d}\right).
+%\end{align*} 
+%
+%\textbf{Step 5. (Probability of  $j\in \S_m$ and $j\notin \J^*$):} 
+%
+%\end{proof}
+
+\begin{proof}
+
+\textbf{Step 0. (Outline):} We separate the proof into two larger sub-modules. In the first sub-module, we show that there exist a phase $m_{i,j}$ for a user $i\in\G_b$ such that the $d$-best items are in $\Z_{\G_b, m_{i,j}}$ with a very high probability. In the second sub-module, we show that in such a phase $m_{i,j}$, there exist a $\G_{b}$ such that $J^*\in\G_b$ and for all $i\in\G_b$ a sub-optimal item $j$ is eliminated with a very high probability.
+
+\textbf{Step 1.(Define some notations):} In this proof,  we define the confidence interval for the $(i,j)$-th user-item pair as $S_{i,j}=\sqrt{\dfrac{\alpha\log(\psi T\epsilon_m^2)}{n_{i,j}}}$. Let $J^*$ denote the set of $d$-best items. The phase numbers are denoted by $m=0,1,\ldots,M$ where $M=\frac{1}{2}\log_{2}\frac{T}{e}$. We also define $\A'=\big\lbrace i\in[K], j\in\A: \Delta_{i,j}\geq \sqrt{\frac{e}{T}} \big\rbrace$.
+
+\textbf{Step 2.(Define a phase $p_{J^*}$):} We define a phase $p_{J^*}$ such that all $\Z_{\G_b,m}, \forall b\in\left[ 1,\frac{K}{d}\right]$ contains $J^*$.
+
+\textbf{Step 3.(Frequency of UCBs from $J^*$ in $D_m$):} In the $m$-th phase, for the best-$d$ column selection, GLBUCB selects $\argmax_{j\in\Z_{\G_b,m}}\left\lbrace \hat{R}(i,j)  + U_m(\epsilon_m, n_{i,j})\right\rbrace$ for each $i\in[K]$ and $i\in \Z_{\G_b,m}$. Let, $z_j^*$ be the count of the total number of times the UCB from $j\in J^*$ is in $D_m$. Let, $z_j$ be the count of the total number of times the UCB from $j$
+
+\textbf{Step 3.(Regret for selecting sub-optimal item $j$ after  $p_{J^*}$-th phase):} Note, that by construction of GLBUCB, for any phase $m$, $\bigcup\limits_{b=1}^{\frac{K}{d}}Z_{\G_b,m+1} = \lbrace B_m\rbrace$. For all $\Z_{\G_b}$ to contain $J^*$, $\D_{p_{J^*}}(i)$ must contain $j^*,\forall i\in[K]$. So, if the following three conditions hold, then 
+
+%$j_0\in \argmax_{j\in\Z_{\G_b,m}}\left\lbrace \hat{R}(i,j)  + U_m(\epsilon_m, n_{i,j})\right\rbrace$
+
+
+\textbf{Step 3.(Define a stopping phase for item $j$ and $i\in\G_b$ as  $m_{i,j}$):} We define a stopping phase $m_{i,j}$ for a sub-optimal item $j\in\A'$ as the first phase after which the item $j$ is eliminated,
+
+\begin{align*}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+m_{i,j} = \min\left\lbrace m: \sqrt{\alpha\epsilon_{m}} < \dfrac{\Delta_{i,j}}{4} \right\rbrace
+\end{align*} 
+
+Note, that this item $j$ is no longer selected for any user $i\in[K]$.
+
+\textbf{Step 4.(Regret for sub-optimal item $j$ being selected after $m_{j}$-th phase):} Note, that on or after the $m_{i,g}$-th phase a sub-optimal arm $j\in\A'$ is eliminated if these four conditions hold for all $i\in\G_b$,
+
+\begin{eqnarray}
+\hat{R}(i,j) < \bar{R}(i,j) + S_{i,j}, \hspace*{2em}  \hat{R}(i,j^*) > \bar{R}(i,j^*) - S_{i,j^*}, \hspace*{2em} S_{i,j} > S_{i,j^*}, \hspace*{2em} n_{i,j} \geq \ell_{m_{i,j}} \label{eq:arm-pull}
+\end{eqnarray}
+
+Moreover, in the $m_{i,j}$-th phase for an $i\in\G_b$ if $n_{i,j} \geq \ell_{m_{i,j}} = \dfrac{\log(\psi T\epsilon_{m_{i,j}}^2)}{2\epsilon_{m_{i,j}}}$ then we can show that,
+\begin{align*}
+S_{i,j} = \sqrt{\dfrac{\alpha\log(\psi T\epsilon_{m_{i,j}}^2)}{2n_{i,j}}} \leq \sqrt{\dfrac{\alpha\log(\psi T\epsilon_{m_{i,j}}^2)}{2\ell_{m_{i,j}}}} \leq \sqrt{\alpha\epsilon_{m_{j}}\dfrac{\log(\psi T\epsilon_{m_{i,j}}^2)}{\log(\psi T\epsilon_{m_{j}}^2)}} \leq \dfrac{\Delta_{i,j}}{4}.
+\end{align*}
+
+If the four conditions in equation \ref{eq:arm-pull} hold for all $i\in\G_b$ then we can show that in the $m_{j}$-th phase,
+
+\begin{align*}
+\hat{R}(i,j) + S_{i,j} &\leq \bar{R}(i,j) + 4S_{i,j} - 2S_{i,j} \\
+%%%%%%%%%%%%%
+&\leq \bar{R}(i,j) + \Delta_{i,j} - 2S_{i,j}\\
+%%%%%%%%%%%%%
+& \leq \bar{R}(i,j^*) - 2S_{i,j^*} \\
+%%%%%%%%%%%%%
+&\leq \hat{R}(i,j^*) - S_{i , j^*}
+\end{align*}
+
+Hence, the sub-optimal item $j$ is eliminated in the $m_{j}$-th phase. Therefore, to bound the number of pulls of the sub-optimal item $j$, we need to bound the probability of the complementary of the four events in equation \ref{eq:arm-pull-opt}.
+
+For the first event in equation \ref{eq:arm-pull}, using Chernoff-Hoeffding bound we can upper bound the probability of the complementary of that event by,
+
+\begin{align*}
+\sum_{i=1}^{d}\sum_{m=0}^{m_{i,j}}\sum_{n=1}^{\ell_{m_{}}}\Pb\bigg\lbrace \dfrac{\sum_{s=1}^{n} r_{s}(i,j)}{n} \geq  \bar{R}(i,j) + \sqrt{\dfrac{\alpha\log(\psi T\epsilon_{m_{i,j}}^2)}{2n}} \bigg\rbrace & \leq \sum_{i=1}^{d}\sum_{m=0}^{m_{i,j}}\sum_{n=1}^{\ell_{m_{}}}\exp\left(-2 \left(\sqrt{\dfrac{\alpha\log(\psi T\epsilon_{m_{}}^2)}{2n}}\right)^2 n \right)\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\leq \sum_{i=1}^{d}\sum_{m=0}^{m_{i,g}}\sum_{n=1}^{\ell_{m_{}}}\exp\left(-2\dfrac{\alpha\log(\psi T\epsilon_{m_{}}^2)}{2n}n \right)\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\leq \sum_{i=1}^{d}\sum_{m=0}^{m_{i,j}}\sum_{n=1}^{\ell_{m_{}}}\dfrac{1}{(\psi T\epsilon_{m_{}}^2)^{\alpha}} \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\leq \sum_{i=1}^{d}\sum_{i=1}^{d}\sum_{m=0}^{m_{i,j}}\dfrac{\log(\psi T\epsilon_{m_{}}^2)}{2\epsilon_{m_{}}}\dfrac{1}{(\psi T\epsilon_{m_{}}^2)^{\alpha}} \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\leq \sum_{i=1}^{d} \dfrac{\log(\psi T  \sum_{m=0}^{m_{i,j}}\epsilon_{m}^2)}{2(\psi T)^{\alpha}}\sum_{m=0}^{m_{i,j}}\dfrac{1}{\epsilon_{m_{}}^{2\alpha +1}} \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\leq \sum_{i=1}^{d}\dfrac{\log(\psi T)}{2(\psi T)^{\alpha}}\sum_{m=0}^{m_{i,j}}\dfrac{1}{\epsilon_{m_{}}^{2\alpha +1}}.
+\end{align*}
+
+Similarly, for the second event in equation \ref{eq:arm-pull}, we can bound the probability of its complementary event by,
+
+\begin{align*}
+\sum_{i=1}^{d}\sum_{m=0}^{m_{i,j}}\sum_{n =1}^{\ell_{m_{}}}\Pb\bigg\lbrace \dfrac{\sum_{s=1}^{n} r_{s}(i,j^*)}{n} \leq \bar{R}(i,j^*) - \sqrt{\dfrac{\alpha\log(\psi T\epsilon_{m_{}}^2)}{2n}} \bigg\rbrace &\leq \sum_{i=1}^{d}\sum_{m=0}^{m_{i,j}}\sum_{n=1}^{\ell_{m_{}}}\exp\left(-2\left(\sqrt{\dfrac{\alpha\log(\psi T\epsilon_{m_{}}^2)}{2n}}\right)^2n_{} \right)\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\leq \sum_{i=1}^{d}\dfrac{\log(\psi T )}{2(\psi T)^{\alpha}}\sum_{m=0}^{m_{i,j}}\dfrac{1}{\epsilon_{m_{}}^{2\alpha +1}}.
+\end{align*}
+
+
+Also, for the third event in equation \ref{eq:arm-pull}, we can bound the probability of its complementary event by,
+
+\begin{align*}
+\sum_{i=1}^{d}\sum_{m=0}^{m_{i,j}}\Pb\lbrace S_{i,j} < S_{i,j^*} \rbrace &\leq \sum_{i=1}^{d}\sum_{m=0}^{m_{i,j}}\Pb \lbrace \hat{R}(i,j) + S_{i,j} > \hat{R}(i,j^*) + S_{i,j^*}\rbrace \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+\end{align*}
+
+
+
+Following, the argument of \citet{auer2002finite} we can show that  the event $\hat{R}(i,j) + S_{i,j} > \hat{R}_{i,j^*} + S_{i,j^*}$ is possible only when the following three events occur for each $i\in\G_b$, 
+\begin{align*}
+\hat{R}(i,j^*) \leq \hat{R}(i,j^*) - S_{i,j^*}  , \hspace*{2em}  \hat{R}(i,j) \geq \hat{R}(i,j) + S_{i,j}, \hspace*{2em}  \bar{R}(i,j^*)-\bar{R}(i,j) < 2 S_{i,j} . 
+\end{align*}
+ 
+However, the third event will not happen with high probability for $n_{i,j}\geq \ell_{m_{j}}$. Proceeding as before, we can show that the probability of the remaining two events is bounded by,
+
+\begin{align*}
+\sum_{i=1}^{d}\sum_{m=0}^{m_{i,j}}\Pb\lbrace S_{i,j} < S_{i,j^*} \rbrace & \leq \sum_{i=1}^{d}\sum_{m=0}^{m_{i,j}}\sum_{n=1}^{\ell_{m_{}}}\sum_{q=1}^{\ell_{m_{}}}\Pb\bigg\lbrace  \dfrac{\sum_{s=1}^{n} r_{s}(i,j)}{n} + \sqrt{\dfrac{\alpha\log(\psi T\epsilon_{m_{}}^2)}{2n}} >  \dfrac{\sum_{s=1}^{q} r_{s}(i,j^*)}{q} + \sqrt{\dfrac{\alpha\log(\psi T\epsilon_{m_{}}^2)}{2q}} \bigg\rbrace \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+& \leq \sum_{i=1}^{d}\sum_{m=0}^{m_{i,j}}\sum_{n =1}^{\ell_{m_{}}}\Pb\bigg\lbrace  \dfrac{\sum_{s=1}^{n} r_{s}(i,j)}{n} \geq  \bar{R}(i,j) + \sqrt{\dfrac{\alpha\log(\psi T\epsilon_{m_{}}^2)}{2n}} \bigg\rbrace \\
+%%%%%%%%%%%%%%
+&+  \sum_{i=1}^{d}\sum_{m=0}^{m_{i,j}}\sum_{q =1}^{\ell_{m_{}}}\Pb\bigg\lbrace  \dfrac{\sum_{s=1}^{q} r_{s}(i,j^*)}{q} \leq  \bar{R}(i,j^*) - \sqrt{\dfrac{\alpha\log(\psi T\epsilon_{m_{}}^2)}{2q}} \bigg\rbrace\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\leq \sum_{i=1}^{d}\sum_{m=0}^{m_{i,j}}\sum_{n=1}^{\ell_{m_{}}}\exp\left(-2\dfrac{\alpha\log(\psi T\epsilon_{m_{}}^2)}{2n}n \right) + \sum_{i=1}^{d}\sum_{m=0}^{m_{i,g}}\sum_{q=1}^{\ell_{m_{}}}\exp\left(-2\dfrac{\alpha\log(\psi T\epsilon_{m_{}}^2)}{2q}q \right)\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\leq \sum_{i=1}^{d}\dfrac{\log(\psi T )}{2(\psi T)^{\alpha}}\sum_{m=0}^{m_{i,g}}\dfrac{1}{\epsilon_{m_{}}^{2\alpha +1}}
+\end{align*}
+
+Finally, for the fourth event in equation \ref{eq:arm-pull} we can show that for each $i\in\G_b$,
+
+\begin{align*}
+\sum_{i=1}^{d}\sum_{m=0}^{m_{i,j}}\Pb\lbrace n_{i,j} < \ell_{m_{i,j}}\rbrace &\leq \sum_{m=0}^{m_{i,j}}\Pb\lbrace \hat{\mu}_{i,g} + S_{i,g} < \hat{\mu}_{i*,g} + S_{i*,g} \rbrace\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\leq \sum_{i=1}^{d}\sum_{m=0}^{m_{i,g}}\sum_{n=1}^{\ell_{m_{}}}\sum_{q=1}^{\ell_{m_{}}}\Pb\bigg\lbrace  \dfrac{\sum_{s=1}^{n}  r_{s}(i,j)}{n} + \sqrt{\dfrac{\alpha\log(\psi T\epsilon_{m_{}}^2)}{2n}} <  \dfrac{\sum_{s=1}^{q} r_{s}(i,j^*)}{q} + \sqrt{\dfrac{\alpha\log(\psi T\epsilon_{m_{}}^2)}{2q}} \bigg\rbrace \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\leq \sum_{i=1}^{d}\dfrac{\log(\psi T)}{(\psi T)^{\alpha}}\sum_{m=0}^{m_{i,j}}\dfrac{1}{\epsilon_{m}^{2\alpha +1}}.
+\end{align*}
+
+
+Combining the above four cases we can bound the probability that a sub-optimal arm $i$ will no longer be pulled on or after the $m_{i,g}$-th phase by,
+
+\begin{align*}
+\sum_{i=1}^{d}\dfrac{4\log(\psi T )}{(\psi T)^{\alpha}}\sum_{m=0}^{m_{i,j}}\dfrac{1}{\epsilon_{m_{}}^{2\alpha +1}} &\leq \dfrac{4\log(\psi T )}{(\psi T)^{\alpha}}\sum_{m=0}^{M}\left(\dfrac{1}{\epsilon_{m}}\right)^{2\alpha +1}\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+& \overset{(a)}{\leq} \sum_{i=1}^{d}\dfrac{4\log(\psi T )}{(\psi T)^{\alpha}}\left(\dfrac{2(2^M - 1)}{(2) - 1}\right)^{2\alpha +1} \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\overset{(b)}{\leq} \sum_{i=1}^{d}\dfrac{4\log(\psi T )}{(\psi T)^{\alpha}}\left(2 \sqrt{T}\right)^{2\alpha +1} = \sum_{i=1}^{d}\dfrac{2^{2\alpha + 3}\sqrt{T}\log(\psi T )}{(\psi)^{\alpha}}.
+\end{align*}
+
+Here, in $(a)$ we use the standard geometric progression formula and  in $(b)$ we substitute the value of $M=\dfrac{1}{2}\log_{2}\dfrac{T}{e}$. Bounding this trivially by $T\Delta_{i,j}$ for each item $j\in\A'$ we get the regret suffered for all items $j\in\A'$ and for each $i\in\G_b$ after the $m_{i,j}$-th phase  as,
+
+\begin{align*}
+\sum_{i=1}^{d}\sum_{j\in\A'}\left( \dfrac{2^{2\alpha + 3}\sqrt{T}\log(\psi T )}{(\psi)^{\alpha}} \right) =  \sum_{i=1}^{d}\sum_{j\in\A'}\left( \dfrac{2^{2\alpha + 3}T^{\frac{3}{2}}\Delta_{i,j}\log(\psi T )}{(\psi)^{\alpha}} \right) =\sum_{i=1}^{d} \sum_{j\in\A'}\left( \dfrac{2^{2\alpha + 3}\Delta_{i,j}\log(\psi T )}{(\psi T^{-\frac{3}{2\alpha}})^{\alpha}} \right).
+\end{align*}
+
+
+\textbf{Step 6.(Regret for pulling the sub-optimal item $j$ on or before $m_{i,j}$-th phase):} Either a sub-optimal item $j$ gets pulled $\ell_{m_{i,j}}$ number of times till the $m_{i,j}$-th phase or after that the probability of it getting pulled is exponentially low (as shown in \textbf{step 4}). Hence, the number of times a sub-optimal item $j$ is pulled till the $m_{i,j}$-th phase is given by,
+
+\begin{align*}
+n_{i,j} < \ell_{m_{i,j}} = \left\lceil \dfrac{\log(\psi T\epsilon_{m_{i,j}}^2)}{2\epsilon_{m_{i,j}}} \right\rceil
+\end{align*}
+
+Hence, considering each item $j\in\A'$ and each $i\in\G_b$ the total regret is bounded by,
+
+\begin{align*}
+\sum_{i=1}^{d}\sum_{i\in\A'}\Delta_{i,j}\left\lceil \dfrac{\log(\psi T\epsilon_{m_{i,g}}^2)}{2\epsilon_{m_{i,g}}} \right\rceil < \sum_{i=1}^{d}\sum_{i\in\A'}\Delta_{i,j}\left[ 1 + \dfrac{\log(\psi T\epsilon_{m_{i,j}}^2)}{2\epsilon_{m_{i,j}}} \right] \leq  \sum_{i=1}^{d}\sum_{i\in\A'}\Delta_{i,j}\left[ 1 + \dfrac{8\log(\psi T(\Delta_{i,j})^4)}{(\Delta_{i,j})^2}\right].
+\end{align*} 
+
+
+%\textbf{Step 8.(Final Regret bound):} Combining the assumption in \textbf{Step 0} and the problem definition, the expected regret till the $T$-th timestep is bounded by,
+%
+%\begin{align*}
+%\E[R_{T}]&= \sum_{i = 1}^K\sum_{j=1}^{G}\Delta^{opt}_{i,g}\E[N_{i,g}] \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%& \leq \sum_{i\in\A'}\sum_{j=1}^{G}\bigg[ 1 
+%%%%%%%%%%%
+%+ \underbrace{ \dfrac{8C\left(\gamma, \alpha \right)\Delta^{opt}_{i,g}\log(\psi T )}{(\psi T^{-\frac{3}{2\alpha}})^{\alpha}}  }_{\textbf{from Step 4}}
+%%%%%%%%%%%
+%+ \underbrace{\Delta^{opt}_{i,g} + \dfrac{8\log(\psi T(\Delta^{opt}_{i,g})^4)}{(\Delta^{opt}_{i,g})}}_{\textbf{from Step 5}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% + \underbrace{ \dfrac{8C\left(\gamma, \alpha \right)\Delta^{opt}_{i,g}\log(\psi T )}{(\psi T^{-\frac{3}{2\alpha}})^{\alpha}}  }_{\textbf{from Step 6}}\bigg]\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%&+ \underbrace{ \sum_{i\in\A}\sum_{j=1}^{G}\bigg[\Delta^{opt}_{\max,g+1} + \dfrac{8\Delta^{opt}_{\max,g+1}\log(\psi T(\Delta^{chg}_{i,g})^4)}{(\Delta^{chg}_{\epsilon_0,g})^2}\bigg] + \sum_{i\in\A'}\sum_{j=1}^{G}\bigg[\Delta^{opt}_{i,g+1} + \dfrac{8\Delta^{opt}_{i,g+1}\log(\psi T(\Delta^{chg}_{i,g})^4)}{(\Delta^{chg}_{i,g})^2}}_{\textbf{from Step 7}}
+%\bigg]
+%\end{align*}
+%
+%Hence, we get the main result of the regret bound.
+
+\end{proof}

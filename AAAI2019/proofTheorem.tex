@@ -1,0 +1,583 @@
+\subsubsection{Proof of Regret Bound of UCB-CPD}
+\label{sec:proof:Theorem:1}
+
+
+\begin{customproof}{1}
+\label{proof:Lemma:1}
+\label{proof:Theorem:1}
+We start by noting that for any arm $i\in\A$, we detect a change-point if,
+\begin{eqnarray}
+&\hat{\mu}_{i,t_0:t'} - s_{i,t_0:t'} > \hat{\mu}_{i,t'+1:t} + s_{i,t'+1:t}, \text{ or }\nonumber\\ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\hat{\mu}_{i,t_0:t'} +  s_{i,t_0:t'} < \hat{\mu}_{i,t'+1:t} - s_{i,t'+1:t}. \label{eq:CPD1}
+\end{eqnarray}
+ 
+where for any $t'\in[t_0,t]$ we define confidence interval term $s_{i,t_0:t'}$ for an arm $i\in\A$ at the $t$-th timestep as $s_{i,t_0:t'} = \sqrt{\dfrac{\log(\frac{t}{\sqrt{\delta}})}{n_{i,t_0:t'}}}$.
+ 
+\textbf{Step 1.(Define Bad Event):} We define a bad event $\xi^{chg}_{i,t}$ for each arm $i\in\A$ as the complementary of events in Eq (\ref{eq:CPD1}) such that,
+\begin{eqnarray}
+\xi^{chg}_{i,t} = \bigg\lbrace\forall t'\in [t_0 , t]: \big(\hat{\mu}_{i,t_0:t'} - s_{i,t_0:t'} \leq \hat{\mu}_{i,t'+1:t} + s_{i,t'+1:t}\big) \bigcup \big(\hat{\mu}_{i,t_0:t'} +  s_{i,t_0:t'} \geq \hat{\mu}_{i,t'+1:t} - s_{i,t'+1:t}\big)\bigg\rbrace. \label{event:1}
+\end{eqnarray}
+
+\textbf{Step 2.(Define a stopping time):} We define a stopping time $\tau_{i,c_j}$ and $\tau'_{i,c_j}$ such that,
+
+\begin{align*}
+\tau_{i,c_j} = \min\left\lbrace t': s_{i,t_0:t'} < \dfrac{\Delta^{chg}_{i,c_j}}{2} \right\rbrace ,\hspace*{4em}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tau'_{i,c_j} = \min\left\lbrace t': s_{i,t'+1:t} < \dfrac{\Delta^{chg}_{i,c_j}}{2} \right\rbrace
+\end{align*}
+
+
+\textbf{Step 3.(Minimum pulls before $\tau_{i,c_j}$ and $\tau'_{i,c_j}$): } We define $n_{i,\min_{D}}$ as the minimum number of pulls  before $\tau_{i,c_j}$. Then, for $n_{i,t_0:\tau_{i,c_j}}\geq n_{i,\min_{D}} = \dfrac{4\log(\frac{t}{\sqrt{\delta}})}{(\Delta^{chg}_{i,c_j})^2}$ we can show that,
+
+\begin{align*}
+s_{i,t_0:\tau_{i,c_j}} = \sqrt{\dfrac{\log(\frac{t}{\sqrt{\delta}})}{n_{i,t_0:\tau_{i,c_j}}}} \leq \sqrt{\dfrac{\log(\frac{t}{\sqrt{\delta}})}{n_{i,\min_{D}}}} \leq \sqrt{\dfrac{(\Delta^{chg}_{i,c_j})^2\log(\frac{t}{\sqrt{\delta}})}{4\log(\frac{t}{\sqrt{\delta}})}} \leq \dfrac{\Delta^{chg}_{i,c_j}}{2}.
+\end{align*} 
+
+%so that the event $|\mu_{i,\rho_{c_{j-1}:c_j}}-\mu_{i,\rho_{c_j:c_{j+1}}}| < 2s_{i,t_0:\tau_{i,c_j}}$ never occurs and $|\mu_{i,\rho_{c_{j-1}:c_j}}-\mu_{i,\rho_{c_j:c_{j+1}}}|$ are sufficiently far apart.
+
+\textbf{Step 4.(Bounding the probability of bad event): } In this step we bound the probability of the bad event $\xi^{chg}_{i,t}$ in Eq (\ref{event:1}). Now from Chernoff-Hoeffding inequality we know that for any constant $\epsilon > 0$,
+
+\begin{align*}
+\Pb\bigg\lbrace\left| \dfrac{\sum_{q=t_0}^{n} X_{i,q}}{n} - \mu_{i,t_0:n}\right| \geq \epsilon\bigg\rbrace \leq 2\exp\left(-2\epsilon^2 n\right)   
+\end{align*}
+
+Starting with the first condition of $\xi^{chg}_{i,t}$ and applying this inequality we can show that for a $\tau_{i,c_j}\in [t_0,t]$
+
+\begin{align*}
+\sum_{\tau_{i,c_j}=t_0}^{t} \sum_{q=t_0}^{\tau_{i,c_j}}\Pb\bigg\lbrace\hat{\mu}_{i,t_0:q} \leq \mu_{i,t_0:q} - s_{i,t_0:q}\bigg\rbrace \leq \sum_{\tau_{i,c_j}=t_0}^{t} \sum_{q=t_0}^{\tau_{i,c_j}}\exp\left(-2.\dfrac{\log(\frac{t}{\sqrt{\delta}})}{q}q \right)\leq \sum_{\tau_{i,c_j}=t_0}^{t} \sum_{q=t_0}^{\tau_{i,c_j}}\dfrac{\delta}{t^2}\leq \delta.
+\end{align*}
+
+
+%Summing over all $t'\in[t_0,t]$ we can show that,
+%
+%\begin{align*}
+%\Pb\bigg\lbrace \hat{\mu}_{i,t_0:t'} \leq \mu_{i,t_0:t'} - s_{i,t_0:t'}\bigg\rbrace \leq \sum_{t'= t_0}^{t}\sum_{t'=\tau_{i,c_j}}^{t}\dfrac{\delta}{t^2}\leq \delta  
+%\end{align*} 
+
+%\begin{align*}
+%\sum_{t'= t_0}^{t}\sum_{t'=\tau_{i,c_j}}^{t}\Pb\bigg\lbrace \hat{\mu}_{i,t_0:t'} \leq \mu_{i,\rho_{c_1:c_2}} - s_{i,t_0:t'}\bigg\rbrace &\leq \sum_{t'= t_0}^{t}\sum_{n_{i}=t_0}^{t'}\Pb\bigg\lbrace \hat{\mu}_{i,t_0:t'} \leq \mu_{i,t_0:t'} - s_{i,t_0:t'}\bigg\rbrace \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%&\overset{(a)}{\leq} \sum_{t'= t_0}^{t}\sum_{n_{i}=t_0}^{t'}\exp\left( -2(s_{i,t_0:t'})^{2}t' \right)\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%&\leq \sum_{t'= t_0}^{t}\sum_{n_{i}=t_0}^{t'}\exp\left( -2\dfrac{\log(\frac{t}{\sqrt{\delta}})}{n_{i,t_0:t'}} t' \right)\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%&\leq \sum_{t'= t_0}^{t}\sum_{n_{i}=t_0}^{t'}\exp\left( -\dfrac{2\log(\frac{t}{\sqrt{\delta}})}{n_{i,t_0:t'}} t' \right)\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%&\overset{(b)}{\leq} \sum_{t'= t_0}^{t}\sum_{n_{i}=t_0}^{t'}\exp\left( -\dfrac{2\log(\frac{t}{\sqrt{\delta}})}{t'} t' \right)\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%&\leq \sum_{t'= t_0}^{t}\sum_{n_{i}=t_0}^{t'}\frac{\delta}{t^2}\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%&\leq \delta.
+%\end{align*} 
+
+%In the above formulation, $(a)$ is derived from the application of Chernoff-Hoeffding bound and for $(b)$ we apply the basic inequality that $n_{i,t_0:t'}\leq t', \forall t'\in [t_0,t]$.
+
+Proceeding similarly as above, we can show that for a $\tau'_{i,c_j}\in[t_0,t]$,
+\begin{align*}
+\sum_{\tau'_{i,c_j}=t_0}^{t} \sum_{q=\tau'_{i,c_j}}^{t}\Pb\bigg\lbrace \hat{\mu}_{i,q:t} \geq \mu_{i,q:t} + s_{i,q:t}\bigg\rbrace \leq \sum_{\tau'_{i,c_j}=t_0}^{t} \sum_{q=\tau'_{i,c_j}}^{t}\dfrac{\delta}{t^2} \leq \delta.
+\end{align*}
+
+Summing the two up, the probability that the change-point for the arm $i$ is not detected by first condition of $\xi^{chg}_{i,t}$ for a $t'\in[t_0,t]$ is bounded by $\dfrac{2\delta}{t^2}$.
+
+Again, for the second condition we can proceed in a similar way and show that for all $t'\in [t_0,t]$ and $\tau_{i,c_j},\tau'_{i,c_j}\in[t_0,t']$,
+\begin{align*}
+\Pb\bigg\lbrace\hat{\mu}_{i,t_0:t'} +  s_{i,t_0:t'} \geq \hat{\mu}_{i,t'+1:t} - s_{i,t'+1:t}\bigg\rbrace\leq \sum_{\tau_{i,c_j}=t_0}^{t} \sum_{q=t_0}^{\tau_{i,c_j}}\dfrac{\delta}{t^2} +\sum_{\tau'_{i,c_j}=t_0}^{t} \sum_{q=\tau'_{i,c_j}}^{t}\dfrac{\delta}{t^2} \leq 2\delta .
+\end{align*} 
+
+Hence, we can bound the probability of the bad event $\xi^{chg}_{i,t}$ for an arm $i\in\A$ by taking the union of all such events for all $t'\in[t_0,t]$ and for all $\tau_{i,c_j},\tau'_{i,c_j}\in[t_0,t']$ as,
+\begin{align*}
+\Pb\lbrace \xi^{chg}_{i,t}\rbrace \leq 4\delta.
+\end{align*}
+
+\end{customproof}
+
+
+
+\begin{customproof}{2}
+\label{proof:Theorem:1}
+
+\textbf{Step 1.(Some notations and definitions):} Let, $n_{i,1:t}$ denote the number of times an arm $i\in\A$ is pulled  between $1$ to $t$-th timestep. We recall the definition of $\tau_{i,c_j}$, $\tau'_{i,c_j}$ for an arm $i$ and for a $t'\in[\tau_{i,c_{j-1}}, t]$ from Theorem \ref{Theorem:1} as,
+
+\begin{align*}
+\tau_{i,c_j} = \min\left\lbrace t': s_{i,\tau_{i,c_{j-1}}:t'} < \dfrac{\Delta^{chg}_{i,c_j}}{2} \right\rbrace ,\hspace*{4em}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tau'_{i,c_j} = \min\left\lbrace t': s_{i,t'+1:t} < \dfrac{\Delta^{chg}_{i,c_j}}{2} \right\rbrace
+\end{align*}
+
+We denote $n_{i,\min_{D}}= \dfrac{4\log(\frac{t}{\sqrt{\delta}})}{(\Delta^{chg}_{i,c_j})^2}$ as the minimum number of pulls required for an arm $i$ before $\tau_{i,c_j}$ or $\tau'_{i,c_j}$. We also recall the definition of the bad event $\xi^{chg}_{i,t}$ when the changepoint is not detected as,
+
+\begin{align*}
+\xi^{chg}_{i,t} = \bigg\lbrace\forall t'\in [\tau_{i,c_{j-1}} , t]:& \big(\hat{\mu}_{i,\tau_{i,c_{j-1}}:t'} - s_{i,\tau_{i,c_{j-1}}:t'} \leq \hat{\mu}_{i,t'+1:t} + s_{i,t'+1:t}\big) \\
+%%%%%%%%%%%%%%%%%%
+&\bigcup \big(\hat{\mu}_{i,\tau_{i,c_{j-1}}:t'} +  s_{i,\tau_{i,c_{j-1}}:t'} \geq \hat{\mu}_{i,t'+1:t} - s_{i,t'+1:t}\big)\bigg\rbrace.
+\end{align*}
+
+
+\textbf{Step 2.(Define an optimality stopping time): } We define an optimality stopping time $\tau^{opt}_{i,c_j}$ for a $\tau^{opt}_{i,c_j}\in[\tau_{i,c_{j-1}},t]$such that,
+
+\begin{align*}
+\tau^{opt}_{i,c_j} = \min\left\lbrace t: s'_{i,\tau_{i,c_{j-1}}:t} \leq \dfrac{\Delta^{opt}_{i,c_j}}{2} \right\rbrace
+\end{align*}
+
+where $s'_{i,\tau_{i,c_{j-1}}:t} = \sqrt{\dfrac{2\log(t)}{n_{i,\tau_{i,c_{j-1}}:t}}}$. 
+
+
+\textbf{Step 3.(Minimum pulls of a sub-optimal arm): } We denote $n_{i,\min_{E}}$ as the minimum number of pulls required for a sub-optimal arm $i$ before $\tau^{opt}_{i,c_j}$ is satisfied. Indeed we can show that for $n_{i,\tau_{i,c_{j-1}}:t}\geq n_{i,\min_{E}} = \dfrac{8\log t}{(\Delta^{opt}_{i})^2}$,
+
+\begin{align*}
+s'_{i,\tau_{i,c_{j-1}}:t} = \sqrt{\dfrac{2\log(t)}{n_{i,\tau_{i,c_{j-1}}:t}}} \leq \sqrt{\dfrac{2\log(t)}{n_{i,\min_{E}}}}\leq \dfrac{\Delta^{opt}_{i,c_j}}{2}
+\end{align*}
+
+\textbf{Step 4.(Define the optimality bad event):} We define the optimality bad event $\xi^{opt}_{i,t}$ as,
+%\begin{align*}
+%\xi^{opt}_{i,t} = \left\lbrace\forall t'\in [\tau_{i,c_{j-1}} , t]: s'_{i,\tau_{i,c_{j-1}}:t'} > \dfrac{\Delta_{i,c_j}^{opt}}{2} \right\rbrace
+%\end{align*}
+
+\begin{align*}
+\xi^{opt}_{i,t} = \left\lbrace\forall t'\in [\tau_{i,c_{j-1}} , t]: \hat{\mu}_{i^*} + s'_{i^*,\tau_{i,c_{j-1}},t} \leq  \hat{\mu}_{i} + s'_{i,\tau_{i,c_{j-1}},t} \right\rbrace
+\end{align*}
+
+For the above event to be true the following three events have to be true,
+
+\begin{align*}
+\xi^{opt}_{i,t} \subset \bigg\lbrace\forall t'\in [\tau_{i,c_{j-1}} , t]: &\lbrace\hat{\mu}_{i,\tau_{i,c_{j-1}}:t'} > \mu_{i,\tau_{i,c_{j-1}}:t'} + s'_{i,\tau_{i,c_{j-1}}:t'}\rbrace \\
+%%%%%%%%%%%%%%%%%%%%%%
+&\bigcup \lbrace\hat{\mu}_{i^*,\tau_{i,c_{j-1}}:t'} < \mu_{i^*,\tau_{i,c_{j-1}}:t'} - s'_{i^*,\tau_{i,c_{j-1}}:t'}\rbrace \\
+%%%%%%%%%%%%%%%%%%%%%%
+&\bigcup \lbrace (\mu_{i^*,\tau_{i^*,c_{j-1}}:t'} - \mu_{i,\tau_{i,c_{j-1}}:t'}) \leq 2s'_{i,\tau_{i,c_{j-1}}:t'} \rbrace\bigg\rbrace
+\end{align*}
+
+which implies that the sub-optimal arm $i$ has been over-estimated, the optimal arm $i^*$ has been under-estimated or there is sufficient gap between $(\mu_{i^*,\tau_{i^*,c_{j-1}}:t'} - \mu_{i,\tau_{i,c_{j-1}}:t'})$. But, from step $3$, we know that for $n_{i,\tau_{i,c_{j-1}}:t'}\geq n_{\min_E}$ the third event of $\xi^{opt}_{i,t}$ is not possible.
+
+%\xi^{opt}_{i,t} = \left\lbrace\forall t'\in [\tau_{i,c_{j-1}} , t]: \hat{\mu}_{i,\tau_{i,c_{j-1}}:t'} - \mu_{i,\tau_{i,c_{j-1}}:t'} > 2s'_{i,\tau_{i,c_{j-1}}:t'}\right\rbrace
+
+\textbf{Step 5.(Bound the number of pulls):} Let $\tau_{i,c_{0}}=1$ denoting the first timestep. Now, the total number of pulls  $n_{i,1:t}$ for an arm $i\in\A$ till $t$-th timestep is given by,
+
+\begin{align*}
+n_{i,1:t} &= \left[ 1 + \sum_{t'=K+1}^{t}\mathbf{1}_{\lbrace\mathbb{I}_{t'}=i\neq i^*_{t'}\rbrace} \right] \\
+\end{align*}
+
+We consider the contribution of each changepoint $c_{j}\in\G,\forall j=1,\ldots,G$ to the number of pulls $n_{i,1:t}$ and decompose the event $\lbrace\mathbb{I}_{t'}=i\neq i^*_{t'}\rbrace$ into four parts,
+
+\begin{align*}
+n_{i,1:t} &= \sum_{j=1}^{G}\bigg[ \underbrace{1 + \sum_{t'=\tau_{i,c_{j-1}}+K+1}^{t_{c_j}}\mathbf{1}_{\lbrace\mathbb{I}_{t'}=i\neq i^*_{t'},n_{i,\tau_{i,c_{j-1}}:t_{c_j}} < \max\lbrace n_{i,\min_E}, n_{i,\min_D}\rbrace\rbrace}}_{\textbf{part A}} + \underbrace{\sum_{t'=\tau_{i,c_{j-1}}+K+1}^{t_{c_j}}\mathbf{1}_{\lbrace\mathbb{I}_{t'}=i\neq i^*_{t'},n_{i,\tau_{i,c_{j-1}}:t_{c_j}} \geq \max\lbrace n_{i,\min_E}, n_{i,\min_D}\rbrace\rbrace}}_{\textbf{part B}}+\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\hspace*{-3em} \underbrace{\sum_{t'=t_{c_j}}^{\tau_{i,c_j}}\mathbf{1}_{\left\lbrace\mathbb{I}_{t'}=i\in\argmax_{i\in\A}\big\lbrace\argmax_{k\in\A}\lbrace \Delta^{opt}_{k,c_{j+1}}\rbrace \bigcup \argmin_{k\in\A}\lbrace \Delta^{chg}_{k,c_j}\rbrace \bigcup \argmax_{k\in\A}\lbrace \frac{\Delta^{opt}_{k,c_{j+1}}}{\Delta^{chg}_{k,c_j}} \rbrace\big\rbrace \right\rbrace}}_{\textbf{part C}} + \underbrace{\sum_{t'=t_{c_j}}^{\tau_{i,c_j}}\mathbf{1}_{\lbrace\mathbb{I}_{t'}=i\neq i^*_{t'},n_{i,t_{c_j}:\tau_{i,c_{j}}}\geq n_{i,\min_D}\rbrace}}_{\textbf{part D}} \bigg]
+\end{align*}
+
+where, \textbf{part A} refers to the minimum number of pulls required before either the expert discards the sub-optimal arm $i$ or a changepoint is detected between $\tau_{i,c_{j-1}}:t_{c_j}$, \textbf{part B} refers to the number of pulls due to bad event that the expert continues to pull the sub-optimal arm $i$ or the changepoint in not detected between $\tau_{i,c_{j-1}}:t_{c_j}$, \textbf{part C} refers to the pulls accrued due to the worst case events when the changepoint has occurred and has not been detected by the expert from $t_{c_j}:\tau_{i,c_{j}}$ and finally, \textbf{part D} refers to number of pulls for the bad event that the changepoint is not detected from $t_{c_j}:\tau_{i,c_{j}}$. 
+
+Now, we will consider this parts individually and see their contribution to the number of pulls. For \textbf{part A},
+
+\begin{align*}
+\underbrace{1 + \sum_{t'=\tau_{i,c_{j-1}}+K+1}^{t_{c_j}}\mathbf{1}_{\lbrace\mathbb{I}_{t'}=i\neq i^*_{t'},n_{i,\tau_{i,c_{j-1}}:t_{c_j}} < \max\lbrace n_{i,\min_E}, n_{i,\min_D}\rbrace\rbrace}}_{\textbf{part A}} \leq 1 + n_{i,\min_E} + n_{i,\min_D} \overset{(a)}{=} 1 + \dfrac{8\log t}{(\Delta^{opt}_{i,c_{j-1}})^2} + \dfrac{4\log t}{(\Delta^{chg}_{i,c_{j-1}})^2}
+\end{align*}
+
+where $(a)$ is obtained from previous step $3,4$ and from step $3$ in Theorem \ref{Theorem:2}. Similarly, for \textbf{part B} we can show that the event,
+
+\begin{align*}
+\left\lbrace\mathbb{I}_{t'}=i\neq i^*_{t'},n_{i,\tau_{i,c_{j-1}}:t_{c_j}} \geq \max\lbrace n_{\min_E}, n_{i,\min_D}\rbrace\right\rbrace \subseteq \lbrace \xi^{opt}_{i,t_{c_j}} + \xi^{chg}_{i,t_{c_j}}  \rbrace
+\end{align*}
+
+which is obtained from step 4 and from Theorem \ref{Theorem:2}. Hence, we can upper bound \textbf{part B} as,
+
+\begin{align*}
+\underbrace{\sum_{t'=\tau_{i,c_{j-1}}+K+1}^{t_{c_j}}\mathbf{1}_{\lbrace\mathbb{I}_{t'}=i\neq i^*_{t'},n_{i,\tau_{i,c_{j-1}}:t_{c_j}} \geq \max\lbrace n_{i,\min_E}, n_{i,\min_D}\rbrace\rbrace}}_{\textbf{part B}} \leq \sum_{t'=\tau_{i,c_{j-1}}+K+1}^{t_{c_j}}\xi^{opt}_{i,t_{c_j}} + \sum_{t'=\tau_{i,c_{j-1}}+K+1}^{t_{c_j}}\xi^{chg}_{i,t_{c_j}}.
+\end{align*}
+
+Now, \textbf{part C} consist of the worst case scenario where the changepoint has occurred and has not been detected. A good learner always try to minimize the number of pulls that might occur in this period from $t_{c_j}:\tau_{i,c_j}$. Let the total number of pulls that might occur for this worst case scenario be denoted by $n_{i_{w},t_{c_j}:\tau_{i,c_j}}$ such that,
+
+\begin{align*}
+\underbrace{\sum_{t'=t_{c_j}}^{\tau_{i,c_j}}\mathbf{1}_{\left\lbrace\mathbb{I}_{t'}=i\in\argmax_{i\in\A}\big\lbrace\argmax_{k\in\A}\lbrace \Delta^{opt}_{k,c_{j+1}}\rbrace \bigcup \argmin_{k\in\A}\lbrace \Delta^{chg}_{k,c_j}\rbrace \bigcup \argmax_{k\in\A}\lbrace \frac{\Delta^{opt}_{k,c_{j+1}}}{\Delta^{chg}_{k,c_j}} \rbrace\big\rbrace \right\rbrace}}_{\textbf{part C}} = n_{i_{w},t_{c_j}:\tau_{i,c_j}}.
+\end{align*}
+
+Finally, for \textbf{part D} we can show that for $t'\in[t_{c_j}, \tau_{i,c_j}]$ or $t'\in[t_{c_j}, \tau'_{i,c_j}]$,
+\begin{align*}
+\left\lbrace\mathbb{I}_{t'}=i\neq i^*_{t'},n_{i,t_{c_j}:\tau_{i,c_{j}}}\geq  n_{\min_D}\right\rbrace \subseteq \lbrace \xi^{chg}_{i,\tau_{i,c_j}}  \rbrace \bigcup \lbrace (\mu_{i^*,t_{c_j}:\tau_{i^*,c_{j}}} - \mu_{i,t_{c_j}:\tau_{i^*,c_{j}}}) < 2s_{i,t_{c_j}:\tau_{i^*,c_{j}}} \rbrace.
+\end{align*}
+
+But from step 5 in Theorem \ref{Theorem:2} we know that for $n_{i,\tau_{c_{j-1}}:\tau_{c_{j}}}\geq n_{i,\min_D}$ then the event $ (\mu_{i,t_{c_j}:\tau_{i,c_{j}}} - \mu_{i,t_{c_j}:\tau_{i,c_{j}}}) < 2s_{i,t_{c_j}:\tau_{i,c_{j}}}$ is not possible. Hence, we can show that \textbf{part D} is upper bounded by,
+
+\begin{align*}
+\underbrace{\sum_{t'=t_{c_j}}^{\tau_{i,c_j}}\mathbf{1}_{\lbrace\mathbb{I}_{t'}=i\neq i^*_{t'},n_{i,t_{c_j}:\tau_{i,c_{j}}}\geq n_{i,\min_D}\rbrace}}_{\textbf{part D}} \leq n_{i,\min_D} + \sum_{t'=t_{c_j}}^{\tau_{i,c_j}}\xi^{chg}_{i,\tau_{i,c_j}} \leq n_{i,\min_D} + \sum_{t'=\tau_{i,c_{j-1}}}^{\tau_{i,c_j}}\xi^{chg}_{i,\tau_{i,c_j}} = \dfrac{4\log t}{(\Delta^{chg}_{i,c_{j}})^2} + \sum_{t'=\tau_{i,c_{j-1}}}^{\tau_{i,c_j}}\xi^{chg}_{i,\tau_{i,c_j}}.
+\end{align*}
+
+
+%\begin{align*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%&\overset{(a)}{\leq} \sum_{j=1}^{G}\bigg[ 1 + \max\lbrace n_{i,\min_E}, n_{i,\min_D}\rbrace + \sum_{t'=\tau_{i,c_{j-1}}+K+1}^{t_{c_j}}\mathbf{1}_{\lbrace\mathbb{I}_{t'}=i\neq i^*_{t'},n_{i,\tau_{i,c_{j-1}}:t_{c_j}} \geq \max\lbrace n_{i,\min_E}, n_{i,\min_D}\rbrace\rbrace}+\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%&\hspace*{-3em} \sum_{t'=t_{c_j}}^{\tau_{i,c_j}}\mathbf{1}_{\left\lbrace\mathbb{I}_{t'}=i\in\argmax_{i\in\A}\big\lbrace\argmax_{k\in\A}\lbrace \Delta^{opt}_{k,c_{j+1}}\rbrace \bigcup \argmin_{k\in\A}\lbrace \Delta^{chg}_{k,c_j}\rbrace \bigcup \argmax_{k\in\A}\lbrace \frac{\Delta^{opt}_{k,c_{j+1}}}{\Delta^{chg}_{k,c_j}} \rbrace\big\rbrace \right\rbrace} + \sum_{t'=t_{c_j}}^{\tau_{i,c_j}}\mathbf{1}_{\lbrace\mathbb{I}_{t'}=i\neq i^*_{t'},n_{i,t_{c_j}:\tau_{i,c_{j}}}\geq n_{i,\min_D}\rbrace} \bigg]\\
+%\end{align*}
+%
+%Now, combining the result of step 4 and from Theorem \ref{Theorem:2} we can show that,
+%\begin{align*}
+%\mathbb{I}_{t'}=i\neq i^*_{t'},n_{i,\tau_{i,c_{j-1}}:t_{c_j}} \geq \max\lbrace n_{\min_E}, n_{i,\min_D}\rbrace \subseteq \lbrace \xi^{opt}_{i,t_{c_j}} + \xi^{chg}_{i,t_{c_j}}  \rbrace
+%\end{align*}
+%
+%Similarly, we can show that for $t'\in[t_{c_j}, \tau_{i,c_j}]$ or $t'\in[t_{c_j}, \tau'_{i,c_j}]$,
+%\begin{align*}
+%\mathbb{I}_{t'}=i\neq i^*_{t'},n_{i,t_{c_j}:\tau_{i,c_{j}}}\geq  n_{\min_D} \subseteq \lbrace \xi^{chg}_{i,\tau_{i,c_j}}  \rbrace \bigcup \lbrace (\mu_{i^*,t_{c_j}:\tau_{i^*,c_{j}}} - \mu_{i,t_{c_j}:\tau_{i^*,c_{j}}}) < 2s_{i,t_{c_j}:\tau_{i^*,c_{j}}} \rbrace.
+%\end{align*}
+%
+%But from step 5 in Theorem \ref{Theorem:2} we know that for $n_{i,\tau_{c_{j-1}}:\tau_{c_{j}}}\geq n_{i,\min_D}$ then the event $ (\mu_{i,t_{c_j}:\tau_{i,c_{j}}} - \mu_{i,t_{c_j}:\tau_{i,c_{j}}}) < 2s_{i,t_{c_j}:\tau_{i,c_{j}}}$ is not possible. Hence, we get,
+%
+%\begin{align*}
+%n_{i,1:t} &= \left[ 1 + \sum_{t'=K+1}^{t}\mathbf{1}_{\lbrace\mathbb{I}_{t'}=i\neq i^*_{t'}\rbrace} \right] \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%&= \sum_{j=1}^{G}\bigg[ 1 + \max\lbrace n_{i,\min_E}, n_{i,\min_D}\rbrace + \sum_{t'=\tau_{i,c_{j-1}}+K+1}^{t_{c_j}}\mathbf{1}_{\lbrace\mathbb{I}_{t'}=i_{t'}\neq i^*_{t'},n_{i,\tau_{i,c_{j-1}}:t_{c_j}} \geq \max\lbrace n_{i,\min_E}, n_{i,\min_D}\rbrace\rbrace} + \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%&\hspace*{-3em}\sum_{t'=t_{c_j}}^{\tau_{i,c_j}}\mathbf{1}_{\left\lbrace\mathbb{I}_{t'}=i\in\argmax_{i\in\A}\big\lbrace\argmax_{k\in\A}\lbrace \Delta^{opt}_{k,c_{j+1}}\rbrace \bigcup \argmin_{k\in\A}\lbrace \Delta^{chg}_{k,c_j}\rbrace \bigcup \argmax_{k\in\A}\lbrace \frac{\Delta^{opt}_{k,c_{j+1}}}{\Delta^{chg}_{k,c_j}} \rbrace\big\rbrace \right\rbrace} + \sum_{t'=t_{c_j}}^{\tau_{i,c_j}}\mathbf{1}_{\lbrace\mathbb{I}_{t'}=i\neq i^*_{t'},n_{i,t_{c_j}:\tau_{i,c_{j}}}\geq n_{i,\min_D}\rbrace} \bigg]\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%&\leq \sum_{j=1}^{G}\bigg[\underbrace{1 + n_{i,\min_E} + \sum_{t'=\tau_{i,c_{j-1}}+K+1}^{t_{c_j}}\mathbf{1}_{\xi^{opt}_{i,t_{c_j}}}}_{\textbf{optimality detection from $\tau_{i,c_{j-1}}:t_{c_j}$}} + \underbrace{n_{i,\min_D} +\sum_{t'=\tau_{i,c_{j-1}}+K+1}^{t_{c_j}}\mathbf{1}_{\xi^{chg}_{i,t_{c_j}}}}_{\textbf{changepoint detection from $\tau_{i,c_{j-1}}:t_{c_j}$}}
+%\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%& +\underbrace{\sum_{t'=t_{c_j}}^{\tau_{i,c_j}}\mathbf{1}_{\left\lbrace\mathbb{I}_{t'}=i\in\argmax_{i\in\A}\big\lbrace\argmax_{k\in\A}\lbrace \Delta^{opt}_{k,c_{j+1}}\rbrace \bigcup \argmin_{k\in\A}\lbrace \Delta^{chg}_{k,c_j}\rbrace \bigcup \argmax_{k\in\A}\lbrace \frac{\Delta^{opt}_{k,c_{j+1}}}{\Delta^{chg}_{k,c_j}} \rbrace\big\rbrace \right\rbrace}}_{\textbf{pull arm for worst case event from $t_{c_j}:\tau_{i,c_j}$}} + \underbrace{n_{i,\min_D} +\sum_{t'=t_{c_j}}^{\tau_{i,c_{j}}}\mathbf{1}_{\xi^{chg}_{i,\tau_{i,c_j}}}}_{\textbf{changepoint detection from $t_{c_j}:\tau_{i,c_{j}}$}}\bigg] 
+%\end{align*}
+
+
+%\begin{align*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%& = \sum_{j=1}^{G}\bigg[ 1 + \underbrace{\sum_{t'=\tau_{i,c_{j-1}}+K+1}^{t_{c_j}}\mathbb{I}\left({s'_{i,\tau_{i,c_{j-1}}:t'} \leq \dfrac{\Delta^{opt}_{i,c_j}}{2}}\right) +  \sum_{t'=\tau_{i,c_{j-1}}+K+1}^{t_{c_j}}\mathbb{I}\left(s'_{i,\tau_{i,c_{j-1}}:t'} > \dfrac{\Delta^{opt}_{i,c_j}}{2}\right)}_{\textbf{optimality detection till $\tau_{i,c_{j-1}}:t_{c_j}$}} + \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%& \underbrace{\sum_{t'=\tau_{i,c_{j-1}}+K+1}^{t_{c_j}}\mathbb{I}\left({s_{i,\tau_{i,c_{j-1}}:t'} \leq \dfrac{\Delta^{chg}_{i,c_j}}{2} }\right) +  \sum_{t'=\tau_{i,c_{j-1}}+K+1}^{t_{c_j}}\mathbb{I}\left({s_{i,\tau_{i,c_{j-1}}:t'} > \dfrac{\Delta^{chg}_{i,c_j}}{2} }\right)}_{\textbf{changepoint detection till $\tau_{i,c_{j-1}}:t_{c_j}$}} + \underbrace{\mathbb{I}\left( i_{t_{c_j:\tau_{i,c_j}}}=\max\lbrace \Delta^{opt}_{i,c_j},\forall i\in\A \rbrace\right)}_{\textbf{pull arm with $\max_{i\in\A}\lbrace \Delta^{opt}_{i,c_{j}} \rbrace$ till $t_{c_j}:\tau_{i,c_j}$}} \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%& + \underbrace{\sum_{t'=t_{c_j}}^{\tau_{i,c_j}}\mathbb{I}\left({s_{i,\tau_{i,c_{j-1}}:t'} \leq \dfrac{\Delta^{chg}_{i,c_j}}{2} }\right) +  \sum_{t'=t_{c_j}}^{\tau_{i,c_j}}\mathbb{I}\left({s_{i,\tau_{i,c_{j-1}}:t'} > \dfrac{\Delta^{chg}_{i,c_j}}{2} }\right)}_{\textbf{changepoint detection till $t_{c_j}:\tau_{i,c_j}$}} \bigg]\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\end{align*}
+
+\textbf{Step 6.(Bound the expected regret):} Now, taking expectation over $n_{i,1:t}$, and considering the contributions form $\textbf{parts A, B, C, D}$ we can show that,
+
+\begin{align*}
+\E[n_{i,1:t}] &\leq \sum_{j=1}^{G}\bigg[ \underbrace{1 + n_{i,\min_{E}} +  \sum_{t'=n_{i,\min_{E}}}^{t_{c_j}}\Pb\lbrace \xi^{opt}_{i,t_{c_j}} \rbrace}_{\textbf{A1) expected pulls from $\tau_{i,c_{j-1}}:t_{c_j}$ for optimality detection}} + \underbrace{n_{i,\min_{D}}  +  \sum_{t'=n_{i,\min_{D}}}^{t_{c_j}}\Pb\lbrace \xi^{chg}_{i,t_{c_j}}\rbrace}_{\textbf{B1) expected pulls from $\tau_{i,c_{j-1}}:t_{c_j}$ for changepoint detection}}  \\
+%%%%%%%%%%%%%%%%%%%%%%%%%
+ &+ \underbrace{n_{i_{w},t_{c_j}:\tau_{i,c_j}}}_{\textbf{C1) worst case expected pulls from $t_{c_j}:\tau_{i,c_j}$}} + \underbrace{ n_{i,\min_{D}} + \sum_{t'=n_{i,\min_{D}}}^{\tau_{i,c_j}}\Pb\lbrace \xi^{chg}_{i,\tau_{i,c_j}}\rbrace}_{\textbf{D1) expected pulls from $t_{c_j}:\tau_{i,c_{j}}$ for changepoint detection}} \bigg]\\
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{align*}
+
+%where, $n_{i_{w},t_{c_j}:\tau_{i,c_j}}$ denotes the number of times arm(s) are pulled for the worst case event,
+%\begin{align*}
+%\sum_{t'=t_{c_j}}^{\tau_{i,c_j}}\mathbf{1}_{\left\lbrace\mathbb{I}_{t'}=i\in\argmax_{i\in\A}\big\lbrace\argmax_{k\in\A}\lbrace \Delta^{opt}_{k,c_{j+1}}\rbrace \bigcup \argmin_{k\in\A}\lbrace \Delta^{chg}_{k,c_j}\rbrace \bigcup \argmax_{k\in\A}\lbrace \frac{\Delta^{opt}_{k,c_{j+1}}}{\Delta^{chg}_{k,c_j}} \rbrace\big\rbrace \right\rbrace}.
+%\end{align*}
+Now, for \textbf{part A1} we obtain from from Theorem 1 in \citet{auer2002finite} that,
+
+\begin{align*}
+\sum_{t'=n_{i,\min_{E}}}^{t_{c_j}}\Pb\lbrace \xi^{opt}_{i,t_{c_j}} \rbrace &\leq \sum_{t'=1}^{\infty}\sum_{n_{i}=n_{\min_{E}}}^{t'}\sum_{n_{i^*}=1}^{t'}\left\lbrace \Pb\left(\hat{\mu}_{i} \geq \mu_{i} + \dfrac{2\log(t)}{n_i}\right) + \Pb\left(\hat{\mu}_{i^*} \leq \mu_{i^*}- \dfrac{2\log(t)}{n_{i^*}}\right)\right\rbrace\\
+&\overset{(a)}{\leq} \sum_{t'=1}^{\infty}\sum_{n_{i}=1}^{t'}\sum_{n_{i^*}=1}^{t'}\dfrac{2}{(t')^4} \leq \dfrac{\pi^2}{3}.
+\end{align*}
+
+where, $(a)$ comes from the application of Chernoff-Hoeffding bound. Again, for \textbf{part C1} we use the assumption \ref{assm:space-gap}, assumption \ref{assm:chg-gap} and discussion \ref{dis:gap-delay} to upper bound it as,
+
+\begin{align*}
+\underbrace{n_{i_{w},t_{c_j}:\tau_{i,c_j}}}_{\textbf{C1) worst case expected pulls from $t_{c_j}:\tau_{i,c_j}$}} \leq \dfrac{4\log(t\sqrt{t})}{(\Delta^{chg}_{\epsilon_0,c_j})^{2}}.
+\end{align*}
+
+Substituting these in $\E[n_{i,1:t}]$ we get,
+
+\begin{align*}
+\E[n_{i,1:t}] &\overset{(a)}{\leq} \sum_{j=1}^{G}\bigg[\underbrace{1+ \dfrac{8\log t}{(\Delta^{opt}_{i,c_j})^2} + \dfrac{\pi^2}{3}}_{\textbf{part A1}} + \underbrace{\dfrac{4\log(\frac{t}{\sqrt{\delta}})}{(\Delta^{chg}_{i,c_j})^2} + \sum_{t'=\tau_{i,c_{j-1}}+K+1}^{t_{c_j}}4\delta}_{\textbf{part B1}} + \underbrace{\dfrac{4\log(t\sqrt{t})}{(\Delta^{chg}_{\epsilon_0,c_j})^{2}}}_{\textbf{part C1}}
+%%%%%%%%%%%%%%%%%%
++ \underbrace{\dfrac{4\log(\frac{t}{\sqrt{\delta}})}{(\Delta^{chg}_{i,c_j})^2} + \sum_{t'=\tau_{i,c_{j-1}}+K+1}^{\tau_{i,c_j}}4\delta}_{\textbf{part D1}} \bigg]\\
+%%%%%%%%%%%%%%%%%%%%%%%%%
+&\overset{(b)}{\leq} \sum_{j=1}^{G}\left[1+ \dfrac{8\log t}{(\Delta^{opt}_{i,c_j})^2} + \dfrac{\pi^2}{3} + \dfrac{4\log(t\sqrt{t})}{(\Delta^{chg}_{i,c_j})^2} + \sum_{t'=\tau_{i,c_{j-1}}+K+1}^{t_{c_j}}\dfrac{4}{t} + \dfrac{4\log(t\sqrt{t})}{(\Delta^{chg}_{\epsilon_0,c_j})^{2}} +\dfrac{4\log(t\sqrt{t})}{(\Delta^{chg}_{i,c_j})^2} + \sum_{t'=\tau_{i,c_{j-1}}+K+1}^{\tau_{i,c_j}}\dfrac{4}{t} \right]\\
+\end{align*}
+
+where, $(a)$ comes from the result of Theorem \ref{Theorem:1} and in $(b)$ we substitute $\delta=\dfrac{1}{t}$ from Remark \ref{Rem:1}.
+
+%\max_{i\in\A}\left\lbrace \dfrac{\Delta^{opt}_{i,c_j}}{\Delta^{chg}_{i,c_j}}\right\rbrace
+%Hence, combining the two above we can show that,
+%
+%\begin{align*}
+%& n_{i\neq i^*_{t'} ,\forall t'\in[t_0:t]} = \sum_{j=1}^{G}\bigg\lbrace\mathbb{I}_{\text{Expert Algorithm from $t_0:t_{c_j}$}} + \mathbb{I}_{i,t_{c_j}:\tau_{i,c_j}}\bigg\rbrace \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%&= \sum_{j=1}^{G}\bigg\lbrace n_{i,\min_{Expert}} + \sum_{t'= t_0+K+1}^{t_{c_j}}\big\lbrace\min\hat{\mu}_{i^*,t_0:t'} + s'_{i^*,t_0:t'} < \max\hat{\mu}_{i,t_0:t'} + s'_{i,t_0:t'}, n_{i,t_0:t'}\geq n_{i,\min_{Expert}} \big\rbrace + \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%&  n_{i,\min_{Detect}} + \sum_{t'= t_0}^{\tau_{i,c_j}}\big\lbrace \big(\hat{\mu}_{i,t_0:t'} - s_{i,t_0:t'} \geq \hat{\mu}_{i,t':t_{c_j}} + s_{i,t':t_{c_j}}\big) \bigcup \big( \hat{\mu}_{i,t_0:t'} +  s_{i,t_0:t'} < \hat{\mu}_{i,t'+1:t_{c_j}} - s_{i,t'+1:t_{c_j}}\big), n_{i,t_0:t'}\geq n_{i,\min_{Detect}}  \big\rbrace \bigg\rbrace \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%&\leq  \sum_{j=1}^{G} \bigg\lbrace n_{i,\min_{Expert}} + \sum_{t'=t_0}^{\infty}\sum_{n_{i^*,t_0:t'}=t_0}^{t'}\sum_{n_{i,t_0:t'}=n_{i,\min_{Expert}}}^{t'}\big\lbrace  \hat{\mu}_{i,t_0:t'} +  s'_{i,t_0:t'} < \hat{\mu}_{i,t'+1:t_{c_j}} - s'_{i,t'+1:t_{c_j}} \big\rbrace + \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%& n_{i,\min_{Detect}} + \sum_{t'= t_0}^{\tau_{i,c_j}}\big\lbrace \big(\hat{\mu}_{i,t_0:t'} - s_{i,t_0:t'} \geq \hat{\mu}_{i,t':t_{c_j}} + s_{i,t':t_{c_j}}\big) \bigcup \big( \hat{\mu}_{i,t_0:t'} +  s_{i,t_0:t'} < \hat{\mu}_{i,t'+1:t_{c_j}} - s_{i,t'+1:t_{c_j}}\big), n_{i,t_0:t'}\geq n_{i,\min_{Detect}}  \big\rbrace\bigg\rbrace \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\end{align*}
+%
+%Now, taking expectation on both sides we can show that $\E[n_{i\neq i^*_{t'} ,\forall t'\in[t_0:t]}]$ is bounded by,
+%
+%\begin{eqnarray}
+%%&\E[n_{i\neq i^*_{t'} ,\forall t'\in[t_0:t]}] \nonumber \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%& \sum_{j=1}^{G} \bigg\lbrace n_{i,\min_{Expert}} + \sum_{t'=t_0}^{\infty}\sum_{n_{i^*,t_0:t'}=t_0}^{t'}\sum_{n_{i,t_0:t'}=n_{i,\min_{Expert}}}^{t'}\Pb\big\lbrace  \hat{\mu}_{i^*,t_0:t'} +  s'_{i^*,t_0:t'}\big\rbrace  + \Pb\big\lbrace \hat{\mu}_{i,t'+1:t_{c_j}} - s'_{i,t'+1:t_{c_j}} \big\rbrace \nonumber \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%&  + n_{i,\min_{Detect}} + \sum_{t'= t_0}^{\tau_{i,c_j}}\big\lbrace \Pb\big(\hat{\mu}_{i,t_0:t'} - s_{i,t_0:t'} \geq \hat{\mu}_{i,t'+1:t_{c_j}} + s_{i,t'+1:t_{c_j}}\big) + \Pb\big( \hat{\mu}_{i,t_0:t'} +  s_{i,t_0:t'} < \hat{\mu}_{i,t'+1:t_{c_j}} - s_{i,t'+1:t_{c_j}}\big) \big\rbrace \bigg\rbrace \label{eq:Reg2}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\end{eqnarray}
+%
+%For the first term in Eq $(\ref{eq:Reg2})$, considering the single expert is running the UCB1 algorithm, it can be bounded by using Theorem 1 of \citet{auer2002finite} and the second term in Eq $(\ref{eq:Reg2})$, considering the result of Theorem \ref{Theorem:1} and Remark \ref{Rem:1}, it can be bounded by,
+%
+%\begin{align*}
+%& \E[n_{i\neq i^*_{t'} ,\forall t'\in[t_0:t]}] \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%&= \sum_{j=1}^{G} \bigg\lbrace n_{i,\min_{Expert}} + \sum_{t'=t_0}^{\infty}\sum_{n_{i^*,t_0:t'}=t_0}^{t'}\sum_{n_{i,t_0:t'}=n_{i,\min_{Expert}}}^{t'}\big\lbrace \Pb\lbrace\hat{\mu}_{i^*,t_0:t'} \leq {\mu}_{i^*,t_0:t'} -  s'_{i^*,t_0:t'}\rbrace + \Pb\lbrace\hat{\mu}_{i,t':t_{c_j}} \geq {\mu}_{i,t'+1:t_{c_j}} + s'_{i,t'+1:t_{c_j}}\rbrace \big\rbrace +\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%& n_{i,\min_{Detect}} + \sum_{t'= t_0}^{\tau_{i,c_j}}\big\lbrace \Pb\big(\hat{\mu}_{i,t_0:t'} - s_{i,t_0:t'} \geq \hat{\mu}_{i,t':t_{c_j}} + s_{i,t':t_{c_j}}\big) + \Pb\big( \hat{\mu}_{i,t_0:t'} +  s_{i,t_0:t'} < \hat{\mu}_{i,t'+1:t_{c_j}} - s_{i,t'+1:t_{c_j}}\big) \big\rbrace \bigg\rbrace \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%&\leq \sum_{j=1}^{G} \bigg\lbrace \dfrac{8\log(t)}{\Delta_{i,c_j}'^{2}} + 1 + \dfrac{\pi^2}{3} + \dfrac{4\log(t\sqrt{t})}{\Delta_{i,c_j}^{2}} + \dfrac{4}{t} \bigg\rbrace\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\end{align*}
+
+Hence, the regret upper bound is given by summing over all arms in $\A$,
+
+\begin{align*}
+\E[R_t] &\leq \sum_{i=1}^{K}\sum_{j=1}^{G}\E[n_{i_{t'}\neq i^*_{t'} ,\forall t'\in[t_{c_{j-1}}:t_{c_j}]}]\Delta^{opt}_{i,c_j} \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\leq \sum_{i=1}^{K}\sum_{j=1}^{G} \bigg\lbrace 1 + \dfrac{8\log(t)}{\Delta^{opt}_{i,c_j}} + \dfrac{\pi^2}{3} + n_{i_w,t_{c_j}:\tau_{i_w,c_j}} + \dfrac{4\Delta^{opt}_{i,c_{j}}\log(t\sqrt{t})}{(\Delta^{chg}_{i,c_j})^2} +\dfrac{4\Delta^{opt}_{i,c_{j+1}}\log(t\sqrt{t})}{(\Delta^{chg}_{i,c_j})^{2}} + 8 \bigg\rbrace\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+& \overset{(a)}{\leq} \sum_{i=1}^{K}\sum_{j=1}^{G} \bigg\lbrace 9 + \dfrac{8\log(t)}{\Delta^{opt}_{i,c_j}} + \dfrac{\pi^2}{3} + \dfrac{4\Delta^{opt}_{\max,c_{j+1}}\log(t\sqrt{t})}{(\Delta^{chg}_{\epsilon_0,c_j})^{2}} + \dfrac{4\Delta^{opt}_{i,c_{j}}\log(t\sqrt{t})}{(\Delta^{chg}_{i,c_j})^2} + \dfrac{4\Delta^{opt}_{i,c_{j+1}}\log(t\sqrt{t})}{(\Delta^{chg}_{i,c_j})^{2}}\bigg\rbrace
+\end{align*}
+
+where, $(a)$ is obtained from assumption \ref{Def:e-chg-gap}.
+\end{customproof}
+
+\subsubsection{Proof of Regret Bound of ImpCPD}
+\label{sec:proof:Theorem:2}
+
+
+\begin{customproof}{3}
+\label{proof:Theorem:2}
+
+We proceed as like Theorem 3.1 in \citet{auer2010ucb} and we combine the changepoint detection sub-routine with this. 
+
+\textbf{Step 0.(Vital Assumption for proving):} In this proof, we assume that all the changepoints are detected by the algorithm with some delay. Since, all the gaps are significant (Assumption \ref{assm:chg-gap}) and there is sufficient delay between two changepoints (Assumption \ref{assm:space-gap}), we can take this assumption for proving the result.
+
+\textbf{Step 1.(Define some notations):} In this proof, we define the confidence interval for the $i$-th arm as $s_i=\sqrt{\dfrac{\alpha\log(\psi T\epsilon_m^2)}{n_{i}}}$. The phase numbers are denoted by $m=0,1,\ldots,M$ where $M=\frac{1}{2}\log_{1+\gamma}\frac{T}{e}$. For the sake of brevity, in this proof we write $n_i$ instead of $n_{i,t_0:t_p}$ denoting the number of times the arm $i$ is pulled between two restarts, ie, between $t_0$ to $t_p$ (as shown in algorithm). For each sub-optimal arm $i$, we consider their contribution to cumulative regret individually till each of the changepoint is detected. We also define $\A'=\left\lbrace i\in\A: \Delta^{opt}_{i,c_j}\geq \sqrt{\frac{e}{T}}, \Delta^{chg}_{i,c_j}\geq \sqrt{\frac{e}{T}},\forall c_j\in\G \right\rbrace$.
+
+\textbf{Step 2.(Define an optimality stopping phase $m_{i,c_j}$):} We define an optimality stopping phase $m_{i,c_j}$ for a sub-optimal arm $i\in\A'$ as the first phase after which the arm $i$ is no longer pulled till the $c_j$-th changepoint is detected such that for $0<\gamma\leq 1$,
+
+\begin{align*}
+m_{i,c_j} = \min\left\lbrace m: \sqrt{\alpha\epsilon_{m}} < \dfrac{\Delta^{opt}_{i,c_j}}{2(1+\gamma)^2} \right\rbrace
+\end{align*} 
+
+\textbf{Step 3.(Define a changepoint stopping phase $p_{i,c_j}$):} We define a changepoint stopping phase $p_{i,c_j}$ for an arm $i\in\A'$ such that it is the first phase when the changepoint $c_j$ is detected such that for $0<\gamma\leq 1$,
+
+\begin{align*}
+p_{i,c_j} = \min\left\lbrace m: \sqrt{\alpha\epsilon_{m}} < \dfrac{\Delta^{chg}_{i,c_j}}{2(1+\gamma)^2} \right\rbrace
+\end{align*}
+
+\textbf{Step 4.(Regret for sub-optimal arm $i$ being pulled after $m_{i,c_j}$-th phase):} Note, that on or after the $m_{i,c_j}$-th phase a sub-optimal arm $i\in\A'$ is not pulled anymore if these four conditions hold,
+
+\begin{eqnarray}
+\hat{r}_{i,c_j} < r_{i,c_j} + s_i, \hspace*{2em}  \hat{r}_{i*,c_j} > r_{i*,c_j} - s_{i*}, \hspace*{2em} s_i > s_{i*}, \hspace*{2em} n_i < n_{i*} \label{eq:arm-pull-opt}
+\end{eqnarray}
+
+Also, in the $m_{i,c_j}$-th phase if $n_i \geq \ell_{m_{i,c_j}} = \dfrac{\log(\psi T\epsilon_{m_{i,c_j}}^2)}{2\epsilon_{m_{i,c_j}}}$ then we can show that,
+\begin{align*}
+s_i = \sqrt{\dfrac{\alpha\log(\psi T\epsilon_{m_{i,c_j}}^2)}{2n_{i}}} \leq \sqrt{\dfrac{\alpha\log(\psi T\epsilon_{m_{i,c_j}}^2)}{2\ell_{m_{i,c_j}}}} \leq \sqrt{\alpha\epsilon_{m_{i,c_j}}\dfrac{\log(\psi T\epsilon_{m_{i,c_j}}^2)}{\log(\psi T\epsilon_{m_{i,c_j}}^2)}} \leq \dfrac{\Delta^{opt}_{i,c_j}}{2(1+\gamma)^2}.
+\end{align*}
+
+If indeed the four conditions in equation \ref{eq:arm-pull-opt} hold then we can show that in the $m_{i,c_j}$-th phase,
+
+\begin{align*}
+\hat{r}_{i,c_j} + s_i \leq {r}_{i,c_j} + 2(1+\gamma)^2 s_i - (1+\gamma)^2s_i \leq {r}_{i,c_j} + \Delta^{opt}_{i,c_j} - (1+\gamma)^2s_i \leq {r}_{i*,c_j} - (1+\gamma)^2s_{i*} \leq \hat{r}_{i*,c_j} - s_{i*}
+\end{align*}
+
+Hence, the sub-optimal arm $i$ is no longer pulled on or after the $m_{i,c_j}$-th phase. Therefore, to bound the number of pulls of the sub-optimal arm $i$, we need to bound the probability of the complementary of the four events in equation \ref{eq:arm-pull-chg}.
+
+For the first event in equation \ref{eq:arm-pull-opt}, using Chernoff-Hoeffding bound we can bound the probability of the complementary of that event by,
+
+\begin{align*}
+&\sum_{m=0}^{m_{i,c_j}}\sum_{n_i=1}^{\ell_{m_{}}}\Pb\lbrace \hat{r}_{i,c_j} \geq  r_{i,c_j} + s_i \rbrace \leq \sum_{m=0}^{m_{i,c_j}}\sum_{n_i=1}^{\ell_{m_{}}}\exp\left(-2s_i^2n_i \right)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\leq \sum_{m=0}^{m_{i,c_j}}\sum_{n_i=1}^{\ell_{m_{}}}\exp\left(-2\dfrac{\alpha\log(\psi T\epsilon_{m_{}}^2)}{2n_i}n_i \right)\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\leq \sum_{m=0}^{m_{i,c_j}}\sum_{n_i=1}^{\ell_{m_{}}}\dfrac{1}{\psi T\epsilon_{m_{}}^2} \leq \sum_{m=0}^{m_{i,c_j}}\dfrac{\log(\psi T\epsilon_{m_{}}^2)}{2\epsilon_{m_{}}}\dfrac{1}{(\psi T\epsilon_{m_{}}^2)^{\alpha}} \leq  \dfrac{\log(\psi T  \epsilon_{m_{i,c_j}}^2)}{2(\psi T)^{\alpha}}\sum_{m=0}^{m_{i,c_j}}\dfrac{1}{\epsilon_{m_{}}^{2\alpha +1}}.
+\end{align*}
+
+Similarly, for the second event in equation \ref{eq:arm-pull-opt}, we can bound the probability of its complementary event by,
+
+\begin{align*}
+\sum_{m=0}^{m_{i,c_j}}\sum_{n_{i*} =1}^{\ell_{m_{}}}\Pb\lbrace \hat{r}_{i*,c_j} \leq  r_{i*,c_j} - s_{i*} \rbrace &\leq \sum_{m=0}^{m_{i,c_j}}\sum_{n_i=1}^{\ell_{m_{}}}\exp\left(-2(s_{i*})^2n_{i*} \right)\leq \dfrac{\log(\psi T \epsilon_{m_{i,c_j}}^2)}{2(\psi T)^{\alpha}}\sum_{m=0}^{m_{i,c_j}}\dfrac{1}{\epsilon_{m_{}}^{2\alpha +1}}.
+\end{align*}
+
+
+Also, for the third event in equation \ref{eq:arm-pull-opt}, we can bound the probability of its complementary event by,
+
+\begin{align*}
+\sum_{m=0}^{m_{i,c_j}}\sum_{n_i=1}^{\ell_{m_{}}}\sum_{n_{i*}=1}^{\ell_{m_{}}}\Pb\lbrace s_i < s_{i*}\rbrace \leq \sum_{m=0}^{m_{i,c_j}}\sum_{n_i=1}^{\ell_{m_{}}}\sum_{n_{i*}=1}^{\ell_{m_{}}}\Pb\lbrace n_i > n_{i*}\rbrace \leq \sum_{m=0}^{m_{i,c_j}}\sum_{n_i=1}^{\ell_{m_{}}}\sum_{n_{i*}=1}^{\ell_{m_{}}}\Pb\lbrace \hat{r}_{i,c_j} + s_i > \hat{r}_{i*,c_j} + s_{i*} \rbrace.
+\end{align*}
+
+But the event $\hat{r}_{i,c_j} + s_i > \hat{r}_{i*,c_j} + s_i$ is possible only when the following three events occur, $\hat{r}_{i*,c_j} \leq r_{i*,c_j} - s_{i*} , \hat{r}_{i,c_j} \geq r_{i,c_j} + s_i$ and $r_{i*}-r_{i} < 2(1+\gamma)^2 s_i $. But the third event will not happen for $n_i\geq \ell_{m_{i,c_j}}$. Proceeding as before, we can show that the probability of the remaining two events is bounded by,
+
+\begin{align*}
+&\sum_{m=0}^{m_{i,c_j}}\sum_{n_i=1}^{\ell_{m_{}}}\sum_{n_{i*}=1}^{\ell_{m_{}}}\Pb\lbrace s_i < s_{i*}\rbrace \leq \sum_{m=0}^{m_{i,c_j}}\sum_{n_i=1}^{\ell_{m_{}}}\sum_{n_{i*}=1}^{\ell_{m_{}}}\Pb\lbrace n_i > n_{i*}\rbrace \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+& \leq \sum_{m=0}^{m_{i,c_j}}\sum_{n_i=1}^{\ell_{m_{}}}\sum_{n_{i*}=1}^{\ell_{m_{}}}\Pb\lbrace \hat{r}_{i,c_j} + s_i > \hat{r}_{i*,c_j} + s_{i*} \rbrace \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\leq \sum_{m=0}^{m_{i,c_j}}\sum_{n_i=1}^{\ell_{m_{}}}\sum_{n_{i*}=1}^{\ell_{m_{}}}\left( \Pb\lbrace \hat{r}_{i,c_j} \geq r_{i,c_j} + s_i \rbrace \bigcup \Pb\lbrace \hat{r}_{i*,c_j} \leq r_{i*,c_j} - s_{i*} \rbrace \right)\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\leq \sum_{m=0}^{m_{i,c_j}}\sum_{n_i=1}^{\ell_{m_{}}}\left( \Pb\lbrace \hat{r}_{i,c_j} \geq r_{i,c_j} + s_i \rbrace \right) +  \sum_{m=0}^{m_{i,c_j}}\sum_{n_{i*}=1}^{\ell_{m_{}}}\left( \Pb\lbrace \hat{r}_{i*,c_j} \leq r_{i*,c_j} - s_{i*} \rbrace \right) \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\leq \sum_{m=0}^{m_{i,c_j}}\sum_{n_i=1}^{\ell_{m_{}}}\dfrac{1}{\psi T\epsilon_{m_{}}^2} +  \sum_{m=0}^{m_{i,c_j}}\sum_{n_{i*}=1}^{\ell_{m_{}}}\dfrac{1}{\psi T\epsilon_{m_{}}^2} \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\leq 2\left(\dfrac{\log(\psi T \epsilon_{m_{i,c_j}}^2)}{2(\psi T)^{\alpha}}\right)\sum_{m=0}^{m_{i,c_j}}\dfrac{1}{\epsilon_{m_{}}^{2\alpha + 1}}.
+\end{align*}
+
+%\sum_{m=0}^{m_{i,c_j}}\sum_{n_i=1}^{\ell_{m_{i,c_j}}}
+Finally for the fourth event in equation \ref{eq:arm-pull-opt}, we can bound the probability of its complementary event by following the same steps as above,
+
+\begin{align*}
+\sum_{m=0}^{m_{i,c_j}}\sum_{n_i=1}^{\ell_{m_{}}}\sum_{n_{i*}=1}^{\ell_{m_{}}}\Pb\lbrace n_i > n_{i*}\rbrace &\leq \sum_{m=0}^{m_{i,c_j}}\sum_{n_i=1}^{\ell_{m_{}}}\sum_{n_{i*}=1}^{\ell_{m_{}}}\Pb\lbrace r_{i,c_j} + s_i > r_{i*,c_j} + s_{i*} \rbrace\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\leq \dfrac{\log(\psi T \epsilon_{m_{i,c_j}}^2)}{(\psi T)^{\alpha}}\sum_{m=0}^{m_{i,c_j}}\dfrac{1}{\epsilon_{m}^{2\alpha +1}}.
+\end{align*}
+
+
+Combining the above four cases we can bound the probability that a sub-optimal arm $i$ will no longer be pulled on or after the $m_{i,c_j}$-th phase by,
+
+\begin{align*}
+\dfrac{4\log(\psi T \epsilon_{m_{i,c_j}}^2)}{(\psi T)^{\alpha}}\sum_{m=0}^{m_{i,c_j}}\dfrac{1}{\epsilon_{m_{i,c_j}}^{2\alpha +1}} &\leq \dfrac{4\log(\psi T \epsilon_{m_{i,c_j}}^2)}{(\psi T)^{\alpha}}\sum_{m=0}^{M}\left(\dfrac{1}{\epsilon_{m}}\right)^{2\alpha +1}\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+& \overset{(a)}{\leq} \dfrac{4\log(\psi T \epsilon_{m_{i,c_j}}^2)}{(\psi T)^{\alpha}}\left(\dfrac{(1+\gamma)((1+\gamma)^M - 1)}{(1+\gamma) - 1}\right)^{2\alpha +1} \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\overset{(b)}{\leq} \dfrac{4\log(\psi T \epsilon_{m_{i,c_j}}^2)}{(\psi T)^{\alpha}}\left( \left( \dfrac{1+\gamma}{\gamma}\right) \sqrt{T}\right)^{2\alpha +1} \overset{(c)}{=} \dfrac{4\sqrt{T}C\left(\gamma, \alpha \right)\log(\psi T \epsilon_{m_{i,c_j}}^2)}{(\psi)^{\alpha}}.
+\end{align*}
+
+Here, in $(a)$ we use the standard geometric progression formula, in $(b)$ we substitute the value of $M=\dfrac{1}{2}\log_{1+\gamma}\dfrac{T}{e}$ and in $(c)$ we substitute $C\left(\gamma, \alpha \right)= \left( \dfrac{1+\gamma}{\gamma}\right)^{2\alpha + 1}$ . Bounding this trivially by $T\Delta^{opt}_{i,c_j}$ for each arm $i\in\A'$ we get the regret suffered for all arm $i\in\A'$ after the $m_{i,c_j}$-th phase  as,
+
+\begin{align*}
+\sum_{i\in\A'}\left( \dfrac{4T\Delta^{opt}_{i,c_j}\sqrt{T}C_{\gamma}\log(\psi T \epsilon_{m_{i,c_j}}^2)}{(\psi)^{\alpha}} \right) \leq \sum_{i\in\A'}\left( \dfrac{4T^{\frac{3}{2}}C\left(\gamma, \alpha \right)\Delta^{opt}_{i,c_j}\log(\psi T (\Delta^{opt}_{i,c_j})^4)}{(\psi)^{\alpha}} \right).
+\end{align*}
+
+
+%\begin{align*}
+%\sum_{i\in\A}\left(\dfrac{4T\Delta^{opt}_{i,c_j}\log(\psi T)}{(\psi T)^{\alpha}}\sum_{m=0}^{m_{i,c_j}}\dfrac{1}{\epsilon_{m_{i,c_j}}^{2\alpha +1}}\right) \leq \sum_{i\in\A}\left(\dfrac{4T\Delta^{opt}_{i,c_j}\log(\psi T)}{(\psi T)^{\alpha}}\dfrac{M 2^{2\alpha +1}}{(\Delta^{opt}_{i,c_j})^{4\alpha +2}}\right).
+%\end{align*}
+
+\textbf{Step 5.(Regret for pulling the sub-optimal arm $i$ on or before $m_{i,c_j}$-th phase):} Either a sub-optimal arm gets pulled $\ell_{m_{i,c_j}}$ number of times till the $m_{i,c_j}$-th phase or after that the probability of it getting pulled is exponentially low (as shown in \textbf{step 4}). Hence, the number of times a sub-optimal arm $i$ is pulled till the $m_{i,c_j}$-th phase is given by,
+
+\begin{align*}
+n_i < \ell_{m_{i,c_j}} = \left\lceil \dfrac{\log(\psi T\epsilon_{m_{i,c_j}}^2)}{2\epsilon_{m_{i,c_j}}} \right\rceil
+\end{align*}
+
+Hence, considering each arm $i\in\A'$ the total regret is bounded by,
+
+\begin{align*}
+\sum_{i\in\A'}\Delta^{opt}_{i,c_j}\left\lceil \dfrac{\log(\psi T\epsilon_{m_{i,c_j}}^2)}{2\epsilon_{m_{i,c_j}}} \right\rceil < \sum_{i\in\A'}\Delta^{opt}_{i,c_j}\left[ 1 + \dfrac{\log(\psi T\epsilon_{m_{i,c_j}}^2)}{2\epsilon_{m_{i,c_j}}} \right] \leq \sum_{i\in\A'}\Delta^{opt}_{i,c_j}\left[ 1 + \dfrac{4\log(\psi T(\Delta^{opt}_{i,c_j})^4)}{(\Delta^{opt}_{i,c_j})^2}\right].
+\end{align*} 
+
+\textbf{Step 6.(Regret for not detecting changepoint $c_{j}$ for arm $i$ after the $p_{i,c_j}$-th phase):} First we define a few additional notations, starting with $\hat{r}_{i,N_{p_{i,c_{j-1}}}:N_{m'}}$ denoting the sample mean of the $i$-th arm from $N_{p_{i,c_{j-1}}}$ to $N_{m'}$ timestep while $\hat{r}_{i,N_{m'}+1:N_{p_{i,c_j}}}$ denotes the sample mean of the $i$-th arm from $N_{m'}+1$ to $N_{p_{i,c_j}}$ timesteps where $m'=1,\ldots,p_{i,c_j}$. Proceeding similarly as in \textbf{step 4} we can show that in the $p_{i,c_j}$-th phase for an arm $i\in\A'$ if $n_{i}\geq\ell_{p_{i,c_j}}$ then,
+
+\begin{align*}
+s_i = \sqrt{\dfrac{\alpha\log(\psi T\epsilon_{p_{i,c_j}}^2)}{2n_{i}}} \leq \sqrt{\dfrac{\alpha\log(\psi T\epsilon_{p_{i,c_j}}^2)}{2\ell_{p_{i,c_j}}}} \leq \sqrt{\alpha\epsilon_{p_{i,c_j}}\dfrac{\log(\psi T\epsilon_{p_{i,c_j}}^2)}{\log(\psi T\epsilon_{p_{i,c_j}}^2)}} \leq \dfrac{\Delta^{chg}_{i,c_j}}{2(1+\gamma)^2}.
+\end{align*}
+
+Furthermore, we can show that for a phase $m\in[1,p_{i,c_j}]$ if the following three conditions hold for an arm $i\in\A'$ then the changepoint will definitely get detected, that is,
+
+\begin{eqnarray}
+&\hat{r}_{i,N_{p_{i,c_{j-1}}}:N_{m}} + s_{i,N_{p_{i,c_{j-1}}}:N_{m}} < \hat{r}_{i,N_{m}+1:N_{p_{i,c_j}}} - s_{i,N_{m}+1:N_{p_{i,c_j}}},\hspace*{4mm}
+\nonumber\\
+&\hat{r}_{i,N_{p_{i,c_{j-1}}}:N_{m}} - s_{i,N_{p_{i,c_{j-1}}}:N_{m}} > \hat{r}_{i,N_{m}+1:N_{p_{i,c_j}}} + s_{i,N_{m}+1:N_{p_{i,c_j}}},\hspace*{4mm} 
+\nonumber\\
+& s_{i,N_{p_{i,c_{j-1}}}:N_{m}} < s_{i,N_{m}+1:N_{p_{i,c_j}}} \label{eq:arm-pull-chg}.\\\nonumber
+\end{eqnarray}
+
+Indeed, we can show that if there is a changepoint at $c_j$ such that $r_{i,c_{j-1}} < r_{i,c_j}$ and if the first and third  conditions in equation \ref{eq:arm-pull-chg} hold  in the $p_{i,c_j}$-th phase then,
+
+\begin{align*}
+\hat{r}_{i,N_{p_{i,c_{j-1}}}:N_{m}} + s_{i,N_{p_{i,c_{j-1}}}:N_{m}} &\leq {r}_{i,c_{j-1}} + 2(1+\gamma)^2 s_{i,N_{p_{i,c_{j-1}}}:N_{m}} - (1+\gamma)^2s_{i,N_{p_{i,c_{j-1}}}:N_{m}}\\
+%%%%%%%%%%%%%%%%%%%
+& \leq {r}_{i,c_{j-1}} + \Delta^{chg}_{i,c_j} - (1+\gamma)^2s_{i,N_{p_{i,c_{j-1}}}:N_{m}}\\
+%%%%%%%%%%%%%%%%%%%
+ &\leq {r}_{i,c_{j}} - (1+\gamma)^2s_{i,N_{m}+1:N_{p_{i,c_j}}} \leq \hat{r}_{i,N_{m}+1:N_{p_{i,c_j}}} - s_{i,N_{m}+1:N_{p_{i,c_j}}}.
+\end{align*}
+
+Conversely, for the case $r_{i,c_{j-1}} > r_{i,c_j}$ the second and third conditions will hold for the $p_{i,c_j}$-th phase. Now, to bound the regret we need to bound the probability of the complementary of these three events. For the complementary of the first event in equation \ref{eq:arm-pull-chg} by using Chernoff-Hoeffding bound we can show that for all $m'\in[1,p_{i,c_j}]$,
+
+\begin{align*}
+&\sum_{m=0}^{m'}\sum_{n_i=1}^{\ell_{m'}}\Pb\lbrace \hat{r}_{i,N_{p_{i,c_{j-1}}}:N_{m'}} \geq  r_{i,c_{j-1}} + s_{i,N_{p_{i,c_{j-1}}}:N_{m'}} \rbrace \leq \sum_{m=0}^{p_{i,c_j}}\sum_{n_i=1}^{\ell_{p_{i,c_j}}}\exp\left(-2s_{i}^2n_{i} \right)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\leq \sum_{m=0}^{p_{i,c_j}}\sum_{n_i=1}^{\ell_{m}}\exp\left(-2\dfrac{\alpha\log(\psi T\epsilon_{m}^2)}{2n_{i}}n_{i} \right)\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+&\leq \sum_{m=0}^{p_{i,c_j}}\sum_{n_i=1}^{\ell_{m}}\dfrac{1}{\psi T\epsilon_{m}^2} \leq \sum_{m=0}^{p_{i,c_j}}\dfrac{\log(\psi T\epsilon_{m}^2)}{2\epsilon_{m}}\dfrac{1}{(\psi T\epsilon_{m}^2 )^{\alpha}} \leq  \dfrac{\log(\psi T\epsilon_{p_{i,c_j}}^2)}{2(\psi T)^{\alpha}}\sum_{m=0}^{p_{i,c_j}}\dfrac{1}{\epsilon_{m}^{2\alpha + 1}}.
+\end{align*}
+
+Also, again by using Chernoff-Hoeffding bound we can show that for all $m'\in[1,p_{i,c_j}]$,
+
+\begin{align*}
+\sum_{m=m'}^{p_{i,c_j}}\sum_{n_i=1}^{\ell_{p_{i,c_j}}}\Pb\lbrace \hat{r}_{i,N_{m'}+1:N_{p_{i,c_j}}} \leq  r_{i,c_j} - s_{i,N_{m'}+1:N_{p_{i,c_j}}} \rbrace &\leq \sum_{m=0}^{p_{i,c_j}}\sum_{n_i=1}^{\ell_{m}}\exp\left(-2s_{i}^2n_{i} \right) \leq \dfrac{\log(\psi T\epsilon_{p_{i,c_j}}^2)}{2(\psi T)^{\alpha}}\sum_{m=0}^{p_{i,c_j}}\dfrac{1}{\epsilon_{m}^{2\alpha + 1}}.
+\end{align*}
+
+%\ell_{p_{i-1, c_j}}
+Hence, the probability that the changepoint is not detected by the first event in equation \ref{eq:arm-pull-chg} is bounded by,
+\begin{align*}
+\dfrac{\log(\psi T \epsilon_{p_{i,c_j}}^2)}{(\psi T )^{\alpha}}\sum_{m=0}^{p_{i,c_j}}\dfrac{1}{\epsilon_{m}^{2\alpha + 1}}.
+\end{align*}
+
+Similarly, we can bound the probability of the complementary of the second event in equation \ref{eq:arm-pull-chg} for a $m'\in[1,p_{i,c_j}]$ as,
+
+\begin{align*}
+&\sum_{m=0}^{m'}\sum_{n_i=1}^{\ell_{m'}}\Pb\lbrace \hat{r}_{i,t_0:N_{m'}} \leq  r_{i,c_{j-1}} - s_{i,t_0:N_{m'}} \rbrace\leq \dfrac{\log(\psi T\epsilon_{p_{i,c_j}}^2)}{2(\psi T)^{\alpha}}\sum_{m=0}^{p_{i,c_j}}\dfrac{1}{\epsilon_{m}^{2\alpha + 1}} \textbf{,  and  }\\
+%%%%%%%%%%%%%%%%%%%%%%%%%
+&\sum_{m=m'}^{p_{i,c_j}}\sum_{n_i=1}^{\ell_{m'}}\Pb\lbrace \hat{r}_{i,c_j} \geq  r_{i,c_j} + s_i \rbrace\leq \dfrac{\log(\psi T\epsilon_{p_{i,c_j}}^2)}{(\psi T)^{\alpha}}\sum_{m=0}^{p_{i,c_j}}\dfrac{1}{\epsilon_{m}^{2\alpha + 1}}.
+\end{align*}
+
+%\ell_{p_{i-1,c_j}}
+
+Combining the contribution from these two events, we can show that the probability of not detecting the changepoint $c_j$ for the $i$-th arm after the $p_{i,c_j}$-th phase is upper bounded by,
+
+\begin{align*}
+\dfrac{2\log(\psi T)}{(\psi T\epsilon_{p_{i,c_j}}^2)^{\alpha}}\sum_{m=0}^{p_{i,c_j}}\dfrac{1}{\epsilon_{p_{i,c_j}}^{2\alpha + 1}} \overset{(a)}{\leq} \dfrac{2C\left(\gamma,\alpha\right)\sqrt{T}\log(\psi T \epsilon_{p_{i,c_j}}^2)}{(\psi)^{\alpha}} .
+\end{align*}
+
+Here, in $(a)$ we substitute $C\left(\gamma,\alpha\right)=\left( \dfrac{1+\gamma}{\gamma}\right)^{2\alpha + 1}$ and we follow the same steps as in \textbf{step 4} to reduce the expression to the above form. Furthermore, bounding the regret trivially (after the changepoint $c_j$) by $\Delta^{opt}_{i,c_{j+1}}$ for each arm $i\in\A'$, we get 
+
+
+\begin{align*}
+\sum_{i\in\A'}\left( \dfrac{2T\Delta^{opt}_{i,c_{j+1}}\sqrt{T}C\left(\gamma,\alpha\right)\log(\psi T \epsilon_{p_{i,c_j}}^2)}{(\psi)^{\alpha}} \right) \leq \sum_{i\in\A'}\left( \dfrac{2T^{\frac{3}{2}}C\left(\gamma,\alpha\right)\Delta^{opt}_{i,c_{j+1}}\log(\psi T (\Delta^{chg}_{i,c_j})^4)}{(\psi)^{\alpha}} \right).
+\end{align*}
+
+
+%\begin{align*}
+%\sum_{i\in\A}\left(\dfrac{2T\Delta^{opt}_{i,c_{j+1}}\log(\psi T)}{(\psi T)^{\alpha}}\sum_{m=0}^{p_{i,c_j}}\dfrac{1}{\epsilon_{p_{i,c_j}}^{2\alpha + 1}}\right) \leq \sum_{i\in\A}\left(\dfrac{2T\Delta^{opt}_{i,c_{j+1}}\log(\psi T)}{(\psi T)^{\alpha}}\dfrac{M 2^{2\alpha + 1}}{(\Delta^{chg}_{i,c_j})^{4\alpha + 2}}\right).
+%\end{align*}
+
+\textbf{Step 7.(Regret for not detecting a changepoint $c_{j}$ for arm $i\in\A$ on or before the $p_{i,c_j}$-th phase):} The regret for not detecting the changepoint $c_j$ on or before the $p_{i,c_j}$-th phase can be broken into two parts, \textbf{(a)} the worst case events from $t_{c_j}$ to $p_{i}$ and \textbf{(b)} the minimum number of pulls $\ell_{p_{i,c_j}}$ required to detect the changepoint. For the first part (a) we can use Assumption \ref{assm:space-gap}, Assumption ref{assm:chg-gap}, Discussion \ref{dis:gap-delay} and Definition \ref{Def:e-chg-gap} to upper bound the regret as,
+
+\begin{align*}
+\sum_{i\in\A}\Delta^{opt}_{\max,c_{j+1}}\left\lceil \dfrac{\log(\psi T\epsilon_{p_{i,c_j}}^2)}{2(\Delta^{chg}_{\epsilon_0,c_j})^2} \right\rceil < \sum_{i\in\A}\Delta^{opt}_{\max,c_{j+1}}\left[ 1 + \dfrac{\log(\psi T\epsilon_{p_{i,c_j}}^2)}{2(\Delta^{chg}_{\epsilon_0,c_j})^2} \right].
+\end{align*}
+
+Again, for the second part (b) the arm $i\in\A'$ can be pulled no more than $\ell_{p_i}$ number of times. Hence, for each arm $i\in\A$  the regret for this case is bounded by,
+
+\begin{align*}
+\sum_{i\in\A'}\Delta^{opt}_{i,c_{j+1}}\left\lceil \dfrac{\log(\psi T\epsilon_{p_{i,c_j}}^2)}{2\epsilon_{p_{i,c_j}}} \right\rceil <  \sum_{i\in\A'}\Delta^{opt}_{i,c_{j+1}}\left[ 1 + \dfrac{\log(\psi T\epsilon_{p_{i,c_j}}^2)}{2\epsilon_{p_i}} \right].
+\end{align*}
+
+Therefore, combining these two parts (a) and (b) we can show that the total regret for not detecting the changepoint till the $p_{i,c_j}$-th phase is given by,
+
+\begin{align*}
+&\sum_{i\in\A}\left\lbrace\Delta^{opt}_{\max,c_{j+1}} + \dfrac{\Delta^{opt}_{\max,c_{j+1}}\log(\psi T\epsilon_{p_{i,c_j}}^2)}{2(\Delta^{chg}_{\epsilon_0,c_j})^2}\right\rbrace + \sum_{i\in\A'}\left\lbrace\Delta^{opt}_{i,c_{j+1}} + \dfrac{\Delta^{opt}_{i,c_{j+1}}\log(\psi T\epsilon_{p_{i,c_j}}^2)}{2\epsilon_{p_{i,c_j}}}\right\rbrace \\
+%%%%%%%%%%%%%%%%%%%%%%%%%
+&\leq \sum_{i\in\A}\left\lbrace\Delta^{opt}_{\max,c_{j+1}} + \dfrac{4\Delta^{opt}_{\max,c_{j+1}}\log(\psi T(\Delta^{chg}_{i,c_j})^4)}{(\Delta^{chg}_{\epsilon_0,c_j})^2} \right\rbrace + \sum_{i\in\A'}\left\lbrace \Delta^{opt}_{i,c_{j+1}} + \dfrac{4\Delta^{opt}_{i,c_{j+1}}\log(\psi T(\Delta^{chg}_{i,c_j})^4)}{(\Delta^{chg}_{i,c_j})^2}\right\rbrace
+\end{align*}
+
+\textbf{Step 8.(Final Regret bound):} Combining the assumption in \textbf{Step 0} and the problem definition, the expected regret till the $T$-th timestep is bounded by,
+
+\begin{align*}
+\E[R_{T}]&= \sum_{i = 1}^K\sum_{j=1}^{G}\Delta^{opt}_{i,c_j}\E[n_{i_j\neq i^*_{j}}] \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+& \leq \sum_{i\in\A'}\sum_{j=1}^{G}\bigg[ 1 
+%%%%%%%%%%
++ \underbrace{ \dfrac{4T^{\frac{3}{2}}C\left( \gamma,\alpha\right)\Delta^{opt}_{i,c_j}\log(\psi T (\Delta^{opt}_{i,c_j})^4)}{(\psi)^{\alpha}} }_{\textbf{from Step 4}}
+%%%%%%%%%%
++ \underbrace{\Delta^{opt}_{i,c_j} + \dfrac{4\log(\psi T(\Delta^{opt}_{i,c_j})^4)}{(\Delta^{opt}_{i,c_j})}}_{\textbf{from Step 5}}\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+& + \underbrace{ \dfrac{2T^{\frac{3}{2}}C\left( \gamma,\alpha\right)\Delta^{opt}_{i,c_{j+1}}\log(\psi T (\Delta^{chg}_{i,c_j})^4)}{(\psi)^{\alpha}} }_{\textbf{from Step 6}}\bigg]\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+&+ \underbrace{ \sum_{i\in\A}\sum_{j=1}^{G}\bigg[\Delta^{opt}_{\max,c_{j+1}} + \dfrac{4\Delta^{opt}_{\max,c_{j+1}}\log(\psi T(\Delta^{chg}_{i,c_j})^4)}{(\Delta^{chg}_{\epsilon_0,c_j})^2}\bigg] + \sum_{i\in\A'}\sum_{j=1}^{G}\bigg[\Delta^{opt}_{i,c_{j+1}} + \dfrac{4\Delta^{opt}_{i,c_{j+1}}\log(\psi T(\Delta^{chg}_{i,c_j})^4)}{(\Delta^{chg}_{i,c_j})^2}}_{\textbf{from Step 7}}
+\bigg]
+\end{align*}
+
+Hence, we get the main result of the regret bound.
+
+\end{customproof}
+

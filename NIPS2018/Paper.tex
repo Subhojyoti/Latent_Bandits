@@ -33,7 +33,7 @@
 
 \setlength{\marginparwidth}{0.8in}
 \usepackage[backgroundcolor=White,textwidth=0.8in]{todonotes}
-\newcommand{\todob}[2][]{\todo[color=cyan!20,size=\tiny,#1]{Bra: #2}} % Brano's comments
+\newcommand{\todob}[2][]{\todo[color=cyan!20,size=\tiny,inline,#1]{Bra: #2}} % Brano's comments
 \newcommand{\todocla}[2][]{\todo[color=black!20,size=\tiny,inline, #1]{Cla: #2}} %
 \newcommand{\todos}[2][]{\todo[color=black!20,size=\tiny,inline, #1]{Sub: #2}} %
 \newcommand{\todoan}[2][]{\todo[color=black!20,size=\tiny,inline, #1]{Anup: #2}} %
@@ -155,15 +155,7 @@ To be written.
 \label{sec:related}
 \input{related}
 
-
-%I don't think contributions should be in a separate section. I prefer to see them in the introduction.
-% \section{Contributions}
-% \input{contributions}
-
-%\newpage
-\section{$\algoname$: learning efficiently on a rank-$d$ matrix.}
-\label{sec:algorithms}
-\input{algo1}
+\input{Algorithm}
 
 \input{regret_proof}
 

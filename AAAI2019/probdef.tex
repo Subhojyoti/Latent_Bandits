@@ -1,0 +1,50 @@
+We define $[n] = \lbrace 1,2,\ldots, n\rbrace$ and for any two sets $A$ and $B$, $A^B$ denotes the set of all vectors who take values from $A$ and are indexed by $B$. Let, $M\in [0,1]^{K\times L}$ denote any matrix, then $M(I,:)$ denote any submatrix of $k$ rows such that $I\in[K]^k$ and similarly $M(:,J)$ denote any submatrix of $j$ columns such that $J\in[L]^{j}$.
+	
+	Let $M$ be reward matrix of  dimension $K\times L$ where $K$ is the number of user or rows and $L$ is the number of arms or columns. Also, let us assume that this matrix  $M$ has a low rank structure of rank $d << \min\lbrace L,K\rbrace$. Let $U$ and $V$ denote the latent matrices for the users and items, which are not visible to the learner such that,
+\begin{align*}
+	M = UV^{\intercal} \textbf{ \hspace*{4mm}   s.t.   \hspace*{4mm}} U\in [ \mathbb{R}^+ ]^{K\times d} \textbf{, } V\in  [0,1]^{L\times d} 
+\end{align*}	  
+	
+	Furthermore, we put a constraint on $V$ such that, $\forall j\in [L]$, $ \norm{V(j,:)}_1 \leq 1$. 
+	
+	
+\begin{assumption}\textbf{(Hott-Topics)}
+\label{assm:1}
+We assume that there exists $d$-column base factors, denoted by $V(J^*,:)$, such that all rows of $V$ can be written as a convex combination of $V(J^*,:)$ and the zero vector and $J^* = [d]$. We denote the column factors by $V^* = V(J*,:)$. Therefore, for any $i\in [L]$, it can be represented by
+\begin{align*}
+V(i,:) = a_i V(J^*,:) , 
+\end{align*}
+where $\exists a_i\in [0,1]^{d}$ and $ \norm{a_i}_1 \leq 1$.
+\end{assumption}
+
+%In this paper, in addition to the noisy setting explained in section \ref{intro} we first analyze the proposed algorithm in the easier noise free setting. In the noise free setting, the nature reveals the row $i_t$, and when the learner selects the column $j_t$, it observes the mean of the distribution $\bar{R}(i_t,j_t)$.
+
+%\begin{assumption}
+%\label{assm:round-robin}
+%We assume that nature is revealing the user $i$ in $\bar{R}(i,:), \forall i\in [K]$  in a Round-Robin fashion such that at timestep $t$, nature reveals $i_t = (t \mod K) + 1$.
+%\end{assumption}
+
+\begin{assumption}\textbf{(Click Model)}
+\label{assm:d-items}
+For each user $i_t$ revealed by the nature at round $t$, the learner is allowed to suggest atmost $d$-items, where $d$ is the rank of the matrix $\bar{R}$. The user can click one, or all, or none of the recommendations.
+\end{assumption}
+
+\begin{discussion}
+The above Assumption \ref{assm:d-items} can be conceptualized in this real-world scenario where the learner has  to suggest movies to users and each movie belongs to a different genre (say thriller, romance, comedy, etc). So, the learner can suggest $d$ movies belonging to different genres to each user in a webpage, and the user can click one, or all, or none of the recommended movies (query abandonement).
+\end{discussion}
+
+The main goal of the learning agent is to minimize the cumulative regret until the end of horizon $n$. We define the cumulative regret, denoted by $\mathcal{R}_n$ as,
+
+\begin{align*}
+\mathcal{R}_n = \sum_{t=1}^{n}\bigg\lbrace \sum_{z=1}^{d} \bigg( r_{t}\left(i_{t}, j^* \right) - r_{t}\left( i_{t}, j_{t,z}\right)\bigg)\bigg\rbrace
+\end{align*}
+
+where, $j^* = \argmax_{j\in [L]}\lbrace M(i_t,j)\rbrace$ and $j_{t,z}$ be the suggestion of the learner for the $i_t$ -th user for  $z=1,2,\ldots, d$. Note that $r_{t}\left(i_t, j^* \right)\sim Ber(M\left(i_t, j^*\right))$ and $r_{t}\left(i_t, j_{t,z} \right)\sim Ber(M\left(i_t, j_{t,z} \right))$. Taking expectation over both sides, we can show that,
+
+\begin{align*}
+\E[\mathcal{R}_n] & = \E\left [ \sum_{t=1}^{n}\bigg\lbrace\sum_{z=1}^{d} \bigg( r_{z,t}\left(i_t, j^* \right) - r_{z, t}\left( i_t, j_{z, t}\right)\bigg)\bigg\rbrace\right] \\
+%%%%%%%%%%%%%%%%%%%%
+&= \E\left [ \sum_{t=1}^{T} \sum_{z=1}^{d} \bigg( N_{i_t,j_{z,t}}\bigg) \right ]\Delta_{i_t,j_{z,t}}
+\end{align*}
+
+where, $\Delta_{i_t,j_{z,t}} = M(i_t,j^*) - M(i_t,j_{z,t})$ and $N_{i_t,j_{z,t}}$ is the number of times the learner has observed the $j_{z,t}$-th item for the $i_t$-th user. Let, $\Delta = \min_{i\in[K],j\in[L]}\lbrace \Delta_{i,j}\rbrace$ be the minimum gap over all the user, item pair in $M$.

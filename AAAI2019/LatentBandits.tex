@@ -1,0 +1,73 @@
+\def\year{2019}\relax
+%File: formatting-instruction.tex
+\documentclass[letterpaper]{article} %DO NOT CHANGE THIS
+\usepackage{aaai19}  %Required
+\usepackage{times}  %Required
+\usepackage{helvet}  %Required
+\usepackage{courier}  %Required
+\usepackage{url}  %Required
+\usepackage{graphicx}  %Required
+
+
+%%%%%%%%%%%%% ADD CUSTOM PACKAGES TO macros.sty
+\usepackage{macros}
+
+
+\frenchspacing  %Required
+\setlength{\pdfpagewidth}{8.5in}  %Required
+\setlength{\pdfpageheight}{11in}  %Required
+%PDF Info Is Required:
+  \pdfinfo{
+/Title (2019 Formatting Instructions for Authors Using LaTeX)
+/Author (AAAI Press Staff)}
+\setcounter{secnumdepth}{2}  
+ \begin{document}
+% The file aaai.sty is the style file for AAAI Press 
+% proceedings, working notes, and technical reports.
+%
+\title{Submodular Bandits for Online Personalized Ranking}
+\author{Author names withheld}
+%\author{AAAI Press\\
+%Association for the Advancement of Artificial Intelligence\\
+%2275 East Bayshore Road, Suite 160\\
+%Palo Alto, California 94303\\
+%}
+\maketitle
+\begin{abstract}
+To be written
+\end{abstract}
+
+
+\section{Introduction}
+\label{intro}
+\input{intro}
+
+
+\subsection{Related Works}
+\input{related}
+
+\subsection{Notations, Problem Formulation and Assumptions}
+\input{probdef}
+
+
+\section{Contributions}
+\input{contributions}
+
+\newpage
+\section{Proposed Algorithms}
+\input{Algorithm}
+
+
+\section{Experiments}
+\input{expt}
+
+
+\newpage
+\section{Conclusions and Future Direction}
+\input{conclusions}
+
+
+\bibliographystyle{aaai}
+\bibliography{biblio}
+
+\end{document}
