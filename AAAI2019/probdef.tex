@@ -26,11 +26,11 @@ where $\exists a_i\in [0,1]^{d}$ and $ \norm{a_i}_1 \leq 1$.
 
 \begin{assumption}\textbf{(Click Model)}
 \label{assm:d-items}
-For each user $i_t$ revealed by the nature at round $t$, the learner is allowed to suggest atmost $d$-items, where $d$ is the rank of the matrix $\bar{R}$. The user can click one, or all, or none of the recommendations.
+For each user $i_t$ revealed by the nature at round $t$, the learner is allowed to suggest atmost $d$-items, where $d$ is the rank of the matrix $\bar{R}$. The user can click one, or all, or none of the recommendations. 
 \end{assumption}
 
 \begin{discussion}
-The above Assumption \ref{assm:d-items} can be conceptualized in this real-world scenario where the learner has  to suggest movies to users and each movie belongs to a different genre (say thriller, romance, comedy, etc). So, the learner can suggest $d$ movies belonging to different genres to each user in a webpage, and the user can click one, or all, or none of the recommended movies (query abandonement).
+The above Assumption \ref{assm:d-items} is another instance of the \textit{document click model (DCM)} discussed in section \ref{related}. It can be conceptualized in the real-world scenario where the learner has  to suggest movies to users and each movie belongs to a different genre (say thriller, romance, comedy, etc). So, the learner can suggest $d$ movies belonging to different genres to each user in a webpage, and the user can click one, or all, or none of the recommended movies (query abandonement).
 \end{discussion}
 
 The main goal of the learning agent is to minimize the cumulative regret until the end of horizon $n$. We define the cumulative regret, denoted by $\mathcal{R}_n$ as,
