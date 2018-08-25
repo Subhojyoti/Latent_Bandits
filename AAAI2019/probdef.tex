@@ -9,7 +9,7 @@ We define $[n] = \lbrace 1,2,\ldots, n\rbrace$ and for any two sets $A$ and $B$,
 	
 	
 \begin{assumption}\textbf{(Hott-Topics)}
-\label{assm:1}
+\label{assm:hott-topics}
 We assume that there exists $d$-column base factors, denoted by $V(J^*,:)$, such that all rows of $V$ can be written as a convex combination of $V(J^*,:)$ and the zero vector and $J^* = [d]$. We denote the column factors by $V^* = V(J*,:)$. Therefore, for any $i\in [L]$, it can be represented by
 \begin{align*}
 V(i,:) = a_i V(J^*,:) , 
@@ -25,13 +25,15 @@ where $\exists a_i\in [0,1]^{d}$ and $ \norm{a_i}_1 \leq 1$.
 %\end{assumption}
 
 \begin{assumption}\textbf{(Click Model)}
-\label{assm:d-items}
+\label{assm:click-model}
 For each user $i_t$ revealed by the nature at round $t$, the learner is allowed to suggest atmost $d$-items, where $d$ is the rank of the matrix $\bar{R}$. The user can click one, or all, or none of the recommendations. 
 \end{assumption}
 
 \begin{discussion}
-The above Assumption \ref{assm:d-items} is another instance of the \textit{document click model (DCM)} discussed in section \ref{related}. It can be conceptualized in the real-world scenario where the learner has  to suggest movies to users and each movie belongs to a different genre (say thriller, romance, comedy, etc). So, the learner can suggest $d$ movies belonging to different genres to each user in a webpage, and the user can click one, or all, or none of the recommended movies (query abandonement).
+The above Assumption \ref{assm:click-model} is another instance of the \textit{document click model (DCM)} discussed in section \ref{related}. It can be conceptualized in the real-world scenario where the learner has  to suggest movies to users and each movie belongs to a different genre (say thriller, romance, comedy, etc). So, the learner can suggest $d$ movies belonging to different genres to each user in a webpage, and the user can click one, or all, or none of the recommended movies (query abandonement).
 \end{discussion}
+
+\textbf{Noise Model:} Our noise model is quite different from the existing stochastic noise model assumptions of various click models. Independent Bernoulli rewards on the entries of the user-item preference matrix $M$ is not feasible because the hott-topics assumption  is required for every realization of the matrix $M$. Hence,  at every timestep $t$, we generate a noisy matrix $M_t = UD_t V^{\intercal}$, where $D_t$ is a diagonal matrix such that $D_t(i,i)\in[0,1]$. Thus, for every such realization of $M_t, \forall t\in [n]$ the hott-topics structure of $M$ is preserved.
 
 The main goal of the learning agent is to minimize the cumulative regret until the end of horizon $n$. We define the cumulative regret, denoted by $\mathcal{R}_n$ as,
 

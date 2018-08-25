@@ -21,30 +21,31 @@ Finally, after all the user clicks are recorded by the system both the column MA
       \State User $i_t$ comes to the system
       \For{$k = 1, \dots, d$}
       %\State // Choose $d$ items from $d$ column MABs
-      \State $\hat{\ell}_{k,t} \leftarrow$ suggest arm $MAB_k(n)$
-      \If{$\hat{\ell}_{k,t} \in \ell_{1, t},\dots,\ell_{k-1, t}$}
-      \State $\hat{\ell}_{k,t} \leftarrow$ Select arbitrary unselected document
-      \Else
-      \State $\ell_{k,t} \leftarrow \hat{\ell}_{k,t}$
+      \State ${\ell}_{k,t} \leftarrow$ suggest item $MAB_k(n)$
+      \If{${\ell}_{k,t} \in \ell_{1, t},\dots,\ell_{k-1, t}$}
+      \State ${\ell}_{k,t} \leftarrow$ Select arbitrary unselected item from $[L]\setminus \ell_{1, t},\dots,\ell_{k-1, t}$
+      %\Else
+      %\State $\ell_{k,t} \leftarrow \hat{\ell}_{k,t}$
       \EndIf
       \EndFor
-      \State $\tilde{\ell}_{1,t},\tilde{\ell}l_{2,t},\dots,\tilde{\ell}_{d,t}\leftarrow$ Permutation by WMA$_{i_t}(\ell_{1,t},\ell_{2,t},\dots,\ell_{d,t})$ by sampling according to $p_{i_t,1},p_{i_t,1},\dots,p_{i_t,d}$.
-      \State Present $\tilde{\ell}_{1,t},\tilde{\ell}l_{2,t},\dots,\tilde{\ell}_{d,t}$ to user $i_t$ and record feedback $r_{t}(\tilde{\ell}_{1,t}), r_{t}(\tilde{\ell}_{2,t}),\dots,r_{t}(\tilde{\ell}_{d,t})$.
+      \State $\tilde{\ell}_{1,t},\tilde{\ell}_{2,t},\dots,\tilde{\ell}_{d,t}\leftarrow$ Permutation by WMA$_{i_t}(\ell_{1,t},\ell_{2,t},\dots,\ell_{d,t})$ by sorting descendingly according to $w_{i_t,1},w_{i_t,2},\dots,w_{i_t,d}$.
+      \State Present $\tilde{\ell}_{1,t},\tilde{\ell}_{2,t},\dots,\tilde{\ell}_{d,t}$ to user $i_t$ and record feedback $r_{t}(\tilde{\ell}_{1,t}), r_{t}(\tilde{\ell}_{2,t}),\dots,r_{t}(\tilde{\ell}_{d,t})$.
       \State Call Procedure UpdateColumnMAB
       \State Call Procedure UpdateRowWMA($i_t$)
     \EndFor
     \Procedure{UpdateColumnMAB}{}
     \For{$k = 1, \dots, d$}
-    \State Update MAB$_k(n)$ with feedback $f_{k,t} = \max r_t(i_t, J_t[1: k]) - \max r_t(i_t, J_t[1: k - 1])$, where $J_t[1: k] = \lbrace r_{t}(\tilde{\ell}_{1,t}), r_{t}(\hat{\ell}_{2,t}),\dots,r_{t}(\tilde{\ell}_{k,t})\rbrace$
+    \State Update MAB$_k(n)$ with feedback $f_{k,t} = \max_{j\in [k]} r_t(i_t, \ell_{j,t}) - \max_{j\in [k-1]} r_t(i_t,\ell_{j,t})$
+    % where $J_t[1: k] = \lbrace r_{t}({\ell}_{1,t}), r_{t}({\ell}_{2,t}),\dots,r_{t}({\ell}_{k,t})\rbrace$
     \EndFor
 \EndProcedure
-\Procedure{UpdateRowWMA}{($i_t$)}
+\Procedure{UpdateRowWMA}{$i_t$}
     \For{$j = 1, \dots, d$}
-    \State $w_{i_t,j} = w_{i_t,j} + r_{t}(\tilde{\ell}_{j,t})$
+    \State $w_{i_t,j} = w_{i_t,j} + \frac{1}{j}r_{t}(\tilde{\ell}_{j,t})$
     \EndFor
-    \For{$j = 1, \dots, d$}
-    \State $p_{i_t,j} = \dfrac{\exp(w_{i_t,j})}{\sum_{b=1}^d \exp(w_{i_t,b})} $
-    \EndFor
+%    \For{$j = 1, \dots, d$}
+%    \State $p_{i_t,j} = \dfrac{\exp(w_{i_t,j})}{\sum_{b=1}^d \exp(w_{i_t,b})} $
+%    \EndFor
 \EndProcedure
   \end{algorithmic}
 \end{algorithm}
