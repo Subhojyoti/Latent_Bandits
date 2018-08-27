@@ -3,9 +3,9 @@ We propose the algorithm Latent Ranked Bandit, abbreviated as LRB (see Algorithm
 Finally, after all the user clicks are recorded by the system both the column MABs and row WMA$_{i_t}(n)$ is updated. The $k$-th column bandit MAB$_k(n)$ is updated with feedback $f_{k,t} = \max_{j\in [k]} r_t(i_t, \ell_{j,t}) - \max_{j\in [k-1]} r_t(i_t,\ell_{j,t})$ such the monotonicity and submodularity properties discussed in section \ref{related} are maintained. Note that RBA is also a special case of submodular bandits such that $f_{k,t}\in\lbrace 0, 1\rbrace$ \citep{streeter2009online}. 
 
 
-The row WMA$_{i_t}(n)$ update for the $i_t$-th user is quite straightforward as all the $d$ clicks are observed. Since, we observe all the clicks by user $i_t$ (total information), we can easily calculate the feedback for all the $d!$ permutation of arms for the row bandit WMA$_{i_t}(n)$. Hence, we calculate a weighted sum for each of the $d!$ permutation of WMA$_{i_t}(n)$ and update the weights and its probabilities. An illustrative diagram of the entire process is shown in Figure \ref{fig:rankedbandit}.
+The row WMA$_{i_t}(n)$ update for the $i_t$-th user is quite straightforward as all the $d$ clicks are observed (total information). Hence, LRB can easily calculate the feedback for all the $d!$ permutation of $\Pi_{i_t}(S_t)$ and update its $d!$ arms representing each of those permutations. LRB calculates a weighted sum of feedback for each of the $d!$ permutation of $\Pi_{i_t}(S_t)$ and update the weights and its probabilities of the corresponding permutation. An illustrative diagram of the entire process is shown in Figure \ref{fig:rankedbandit}.
 
-
+%Since, we observe all the clicks by user $i_t$ (total information),
 \begin{figure}[!th]
     \includegraphics[scale=0.2]{img/RankedBand.png}
     \caption{Latent Ranked Bandit in rank $d=2$ scenario.}
