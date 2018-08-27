@@ -30,10 +30,12 @@ For each user $i_t$ revealed by the nature at round $t$, the learner is allowed 
 \end{assumption}
 
 \begin{discussion}
-The above Assumption \ref{assm:click-model} is an instance of the \textit{Document Click Model (DCM)} \citep{craswell2008experimental}. In DCM every user-item pair has a single parameter which needs to be learned and hence often leads to overfitting of model parameters. Assumption \ref{assm:click-model} can be conceptualized in the real-world scenario where the learner has  to suggest movies to users and each movie belongs to a different genre (say thriller, romance, comedy, etc). So, the learner can suggest $d$ movies belonging to different genres to each user in a webpage, and the user can click one, or all, or none of the recommended movies (query abandonement).
+The above Assumption \ref{assm:click-model} is an instance of the \textit{Document Click Model (DCM)} \citep{craswell2008experimental}. In DCM every user-item pair has a single parameter which needs to be learned and hence often leads to overfitting of model parameters. 
 \end{discussion}
 
-\textbf{Noise Model:} Our noise model is quite different from the existing stochastic noise model assumptions of various click models. Independent Bernoulli rewards on the entries of the user-item preference matrix $M$ is not feasible because the hott-topics assumption  is required for every realization of the matrix $M$. Hence,  at every timestep $t$, we generate a noisy matrix $M_t = UD_t V^{\intercal}$, where $D_t$ is a diagonal matrix such that $D_t(i,i)\in[0,1]$. Thus, for every such realization of $M_t, \forall t\in [n]$ the hott-topics structure of $M$ is preserved.
+%Assumption \ref{assm:click-model} can be conceptualized in the real-world scenario where the learner has  to suggest movies to users and each movie belongs to a different genre (say thriller, romance, comedy, etc). So, the learner can suggest $d$ movies belonging to different genres to each user in a webpage, and the user can click one, or all, or none of the recommended movies (query abandonement).
+
+\textbf{Noise Model:} Our noise model is quite different from the existing stochastic noise model assumptions of various click models. Independent Bernoulli rewards on the entries of the user-item preference matrix $M$ is not feasible because the hott-topics assumption  is required for every realization of the matrix $M$. Hence,  at every timestep $t$, we generate a noisy matrix $\tilde{M}_t = UD_t V^{\intercal}$, where $D_t$ is a diagonal matrix such that $D_t(i,i)\in[0,1]$. Thus, for every such realization of $\tilde{M}_t, \forall t\in [n]$ the hott-topics structure of $M$ is preserved.
 
 The main goal of the learning agent is to minimize the cumulative regret until the end of horizon $n$. We define the cumulative regret, denoted by $\mathcal{R}_n$ as,
 
@@ -41,7 +43,7 @@ The main goal of the learning agent is to minimize the cumulative regret until t
 \mathcal{R}_n = \sum_{t=1}^{n}\bigg\lbrace \sum_{z=1}^{d} \bigg( r_{t}\left(i_{t}, j^* \right) - r_{t}\left( i_{t}, j_{t,z}\right)\bigg)\bigg\rbrace
 \end{align*}
 
-where, $j^* = \argmax_{j\in [L]}\lbrace M(i_t,j)\rbrace$ and $j_{t,z}$ be the suggestion of the learner for the $i_t$ -th user for  $z=1,2,\ldots, d$. Note that $r_{t}\left(i_t, j^* \right)\sim Ber(M\left(i_t, j^*\right))$ and $r_{t}\left(i_t, j_{t,z} \right)\sim Ber(M\left(i_t, j_{t,z} \right))$. Taking expectation over both sides, we can show that,
+where, $j^* = \argmax_{j\in [L]}\lbrace M(i_t,j)\rbrace$ and $j_{t,z}$ be the suggestion of the learner for the $i_t$ -th user for  $z=1,2,\ldots, d$. Note that $r_{t}\left(i_t, j^* \right)\sim \tilde{M}_t\left(i_t, j^*\right)$ and $r_{t}\left(i_t, j_{t,z} \right)\sim \tilde{M}_t\left(i_t, j_{t,z} \right)$. Taking expectation over both sides, we can show that,
 
 \begin{align*}
 \E[\mathcal{R}_n] & = \E\left [ \sum_{t=1}^{n}\bigg\lbrace\sum_{z=1}^{d} \bigg( r_{t}\left(i_t, j^* \right) - r_{t}\left( i_t, j_{t,z}\right)\bigg)\bigg\rbrace\right] \\
@@ -49,4 +51,4 @@ where, $j^* = \argmax_{j\in [L]}\lbrace M(i_t,j)\rbrace$ and $j_{t,z}$ be the su
 &= \E\left [ \sum_{t=1}^{n} \sum_{z=1}^{d} \bigg( N_{i_t,j_{z,t}}(t)\bigg) \right ]\Delta_{i_t,j_{t,z}}
 \end{align*}
 
-where, $\Delta_{i_t,j_{z,t}} = M(i_t,j^*) - M(i_t,j_{z,t})$ and $N_{i_t,j_{z,t}}(t)$ is the number of times the learner has observed the $j_{t,z}$-th item for the $i_t$-th user. Let, $\Delta = \min_{i\in[K],j\in[L]}\lbrace \Delta_{i,j}\rbrace$ be the minimum gap over all the user, item pair in $M$.
+where, $\Delta_{i_t,j_{z,t}} = M(i_t,j^*) - M(i_t,j_{z,t})$ and $N_{i_t,j_{t,z}}(t)$ is the number of times the learner has observed the $j_{t,z}$-th item for the $i_t$-th user. Let, $\Delta = \min_{i\in[K],j\in[L]}\lbrace \Delta_{i,j}\rbrace$ be the minimum gap over all the user, item pair in $M$.
