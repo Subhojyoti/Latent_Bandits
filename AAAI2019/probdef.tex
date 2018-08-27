@@ -26,7 +26,7 @@ where $\exists a_i\in [0,1]^{d}$ and $ \norm{a_i}_1 \leq 1$.
 
 \begin{assumption}\textbf{(Click Model)}
 \label{assm:click-model}
-For each user $i_t$ revealed by the nature at round $t$, the learner is allowed to suggest atmost $d$-items, where $d$ is the rank of the matrix $M$. The user can click one, or all, or none of the recommendations. We assume a Document Click Model (DCM) such that every user-item pair has a single parameter called the user-item attraction factor which determines the click probability of the user when the item is shown.  
+For each user $i_t$ revealed by the nature at round $t$, the learner is allowed to suggest atmost $d$-items, where $d$ is the rank of the matrix $M$. The user can click one, or all, or none of the recommendations and the learner observes all the $d$ clicks. We assume a Document Click Model (DCM) such that every user-item pair has a single parameter called the user-item attraction factor which determines the click probability of the user when the item is shown.  
 \end{assumption}
 
 \begin{discussion}

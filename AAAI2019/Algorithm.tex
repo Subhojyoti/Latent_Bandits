@@ -51,7 +51,7 @@ Since, we observe the rewards of all the clicked items by user $i_t$ (total info
     \State $w_{i_t,k} = w_{i_t,k} + r_k$  \Comment{Update weights}
     \EndFor
 	\For{$k = 1, \dots, d!$}
-	\State $p_{i_t,k} = \dfrac{\exp(w_{i_t,k})}{\sum_{b=1}^{d!} \exp(w_{i_t,b})} $ \Comment{Update probabilities}
+	\State $p_{i_t,k} = \dfrac{\exp(w_{i_t,k})}{\sum_{b=1}^{d!} \exp(w_{i_t,b})} $ %\Comment{Update probabilities}
 	\EndFor
 \EndProcedure
   \end{algorithmic}
