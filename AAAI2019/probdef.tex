@@ -2,7 +2,7 @@ We define $[n] = \lbrace 1,2,\ldots, n\rbrace$ and for any two sets $A$ and $B$,
 	
 	Let $M$ be reward matrix of  dimension $K\times L$ where $K$ is the number of user or rows and $L$ is the number of arms or columns. Also, let us assume that this matrix  $M$ has a low rank structure of rank $d << \min\lbrace L,K\rbrace$. Let $U$ and $V$ denote the latent matrices for the users and items, which are not visible to the learner such that,
 \begin{align*}
-	M = UV^{\intercal} \textbf{ \hspace*{4mm}   s.t.   \hspace*{4mm}} U\in [ \mathbb{R}^+ ]^{K\times d} \textbf{, } V\in  [0,1]^{L\times d} 
+	M = UV^{\intercal} \textbf{ \hspace*{4mm}   s.t.   \hspace*{4mm}} U\in [ \mathbb{R}^+ ]^{K\times d} \textbf{, } V\in  [0,1]^{L\times d}.
 \end{align*}	  
 	
 	Furthermore, we put a constraint on $V$ such that, $\forall j\in [L]$, $ \norm{V(j,:)}_1 \leq 1$. 
@@ -35,7 +35,7 @@ The above Assumption \ref{assm:click-model} is an instance of the \textit{Docume
 
 %Assumption \ref{assm:click-model} can be conceptualized in the real-world scenario where the learner has  to suggest movies to users and each movie belongs to a different genre (say thriller, romance, comedy, etc). So, the learner can suggest $d$ movies belonging to different genres to each user in a webpage, and the user can click one, or all, or none of the recommended movies (query abandonement).
 
-\textbf{Noise Model:} Our noise model is quite different from the existing stochastic noise model assumptions of various click models. Independent Bernoulli rewards on the entries of the user-item preference matrix $M$ is not feasible because the hott-topics assumption  is required for every realization of the matrix $M$. Hence,  at every timestep $t$, we generate a noisy matrix $\tilde{M}_t = UD_t V^{\intercal}$, where $D_t$ is a diagonal matrix such that $D_t(i,i)\in[0,1]$. Thus, for every such realization of $\tilde{M}_t, \forall t\in [n]$ the hott-topics structure of $M$ is preserved.
+\textbf{Noise Model:} Our noise model is quite different from the existing stochastic noise model assumptions of various click models. The usual i.i.d Bernoulli reward assumption on the entries of the user-item preference matrix $M$ is not feasible because the hott-topics assumption is required for every realization of the matrix $M$. Hence,  at every timestep $t$, we generate a noisy matrix $\tilde{M}_t = UD_t V^{\intercal}$, where $D_t$ is a diagonal matrix such that $D_t(i,i)\in[0,1]$. Thus, for every such realization of $\tilde{M}_t, \forall t\in [n]$ the hott-topics structure of $M$ is preserved.
 
 The main goal of the learning agent is to minimize the cumulative regret until the end of horizon $n$. We define the cumulative regret, denoted by $\mathcal{R}_n$ as,
 
