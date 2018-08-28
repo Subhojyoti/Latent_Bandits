@@ -12,6 +12,12 @@
 %%%%%%%%%%%%% ADD CUSTOM PACKAGES TO macros.sty
 \usepackage{macros}
 
+%%%%%%%%%%%%%For adding comments
+%\usepackage[backgroundcolor=White,textwidth=0.8in]{todonotes}
+\newcommand{\todob}[2][]{\todo[color=cyan!20,size=\tiny,inline,#1]{Bra: #2}} % Brano's comments
+\newcommand{\todosub}[2][]{\todo[color=black!20,size=\tiny,inline, #1]{Sub: #2}} %
+\newcommand{\todoan}[2][]{\todo[color=black!20,size=\tiny,inline, #1]{Anup: #2}} %
+
 
 \frenchspacing  %Required
 \setlength{\pdfpagewidth}{8.5in}  %Required
