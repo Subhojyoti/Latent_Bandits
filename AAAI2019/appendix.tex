@@ -17,7 +17,7 @@ for weights $\mu(1) \geq \dots \geq \mu(d) > 0$. We also define an unweighted re
   \tilde{r}_t(i, J) =
   \max \, \{r_t(i, J(k))\}_{k = 1}^d\,.
 \end{align*}
-Let $J_\ast = (1, \dots, d)$ be the indices of the hott topics. Let $J_{\ast, i}$ be the permutation of $J_\ast$ that is optimal for user $i$. Let $J_t$ be our recommended columns at time $t$ and $J_{t, i}$ be their permutation for user $i$, which is computed by some later specified strategy. The user at time $t$ is $i_t$. The expected $n$-step regret, where the randomness is in the learning algorithm, is
+Let $J_\ast$ be the indices of hott topics and $J_{\ast, i}$ be their highest-reward permutation for user $i$. Let $J_t$ be our recommended columns at time $t$ and $J_{t, i}$ be their permutation for user $i$, which is computed by some row algorithm. The user at time $t$ is $i_t$. The expected $n$-step regret, where the randomness is only in the learning algorithm, is
 \begin{align*}
   R(n) =
   \E\left[\sum_{t = 1}^n r_t(i_t, J_{\ast, i_t})\right] - \E\left[\sum_{t = 1}^n r_t(i_t, J_{t, i_t})\right]\,.
@@ -31,12 +31,14 @@ for any $n_0$. Let
 \begin{align*}
   \Delta = \min_{i \in [K], t \in [n]} \left(\tilde{r}_t(i, J_\ast) - \max_{J:\, J \neq J_\ast} \tilde{r}_t(i, J)\right)
 \end{align*}
-be the minimum gap. Then based on the above inequalities, the probability that the column learning algorithm chooses $J_\ast$ at any time $t \geq n_0$, is bounded from below by
-\begin{align*}
+be the minimum gap. Then, based on the above inequalities, the probability that the column learning algorithm chooses $J_\ast$ at any time $t \geq n_0$ is bounded from below by
+\begin{align}
   1 - \frac{d \sqrt{L n_0}}{\Delta n_0} =
-  \frac{\Delta \sqrt{n_0} - d \sqrt{L}}{\Delta \sqrt{n_0}}\,.
+  \frac{\Delta \sqrt{n_0} - d \sqrt{L}}{\Delta \sqrt{n_0}}
   \label{eq:opt lower bound}
-\end{align*}
+\end{align}
+for any $\Delta \geq d \sqrt{L / n_0}$.
+
 Let $p_t$ be the probability that the column learning algorithm chooses $J_\ast$ at time $t$ and let $\tilde{J}_{\ast, t, i}$ be the permutation of $J_\ast$ for user $i$ at time $t$, according to our row algorithm. Then we can bound the regret from time $n_0$ as
 \begin{align*}
   R(n)
@@ -46,274 +48,8 @@ Let $p_t$ be the probability that the column learning algorithm chooses $J_\ast$
 \end{align*}
 where $R_i(n)$ is the expected $n$-step regret of the row algorithm in row $i$, conditioned on the fact that the column learning algorithm chooses $J_\ast$. One suitable row algorithm would be the weighted majority algorithm, which learns the optimal permutation for each $J$. Then $R_i(n) = O(\log n + \log d!) \approx O(\log n + d \log d)$.
 
-
-%\begin{lemma}
-%\label{lem:list regret} Let $\cR$ be any list over $[K]$. Let
-%\begin{align}
-%  \Delta(\cR) =
-%  \sum_{k = 1}^{K - 1} \I{\alpha(\cR(k + 1)) - \alpha(\cR(k)) > 0} (\alpha(\cR(k + 1)) - \alpha(\cR(k)))
-%  \label{eq:attraction gap}
-%\end{align}
-%be the \emph{attraction gap} of list $\cR$. Then the expected regret of $\cR$ is bounded as
-%\begin{align*}
-%  \sum_{k = 1}^K (\chi(\cR^\ast, k) \alpha(k) - \chi(\cR, k) \alpha(\cR(k))) \leq
-%  K \chi_{\max} \Delta(\cR)\,.
-%\end{align*}
-%\end{lemma}
-%\begin{proof}
-%Fix position $k \in [K]$. Then
-%\begin{align*}
-%  \chi(\cR^\ast, k) \alpha(k) - \chi(\cR, k) \alpha(\cR(k))
-%  & \leq \chi(\cR^\ast, k) (\alpha(k) - \alpha(\cR(k))) \\
-%  & \leq \chi_{\max} (\alpha(k) - \alpha(\cR(k)))\,,
-%\end{align*}
-%where the first inequality follows from the fact that the examination probability of any position is the lowest in the optimal list (Assumption~\ref{ass:lowest examination}) and the second inequality follows from the definition of $\chi_{\max}$. In the rest of the proof, we bound $\alpha(k) - \alpha(\cR(k))$. We consider three cases.
-%
-%First, let $\alpha(\cR(k)) \geq \alpha(k)$. Then $\alpha(k) - \alpha(\cR(k)) \leq 0$ and bounded by $\Delta(\cR)$.
-%
-%Second, let $\alpha(\cR(k)) < \alpha(k)$ and $\pi(k) > k$, where $\pi(k)$ is the position of item $k$ in list $\cR$. Then
-%\begin{align*}
-%  \alpha(k) - \alpha(\cR(k))
-%  & = \alpha(\cR(\pi(k))) - \alpha(\cR(k)) \\
-%  & \leq \sum_{i = k}^{\pi(k) - 1} \I{\alpha(\cR(i + 1)) - \alpha(\cR(i)) > 0} (\alpha(\cR(i + 1)) - \alpha(\cR(i)))\,.
-%\end{align*}
-%From the definition of $\Delta(\cR)$, this quantity is bounded by $\Delta(\cR)$.
-% 
-%Finally, let $\alpha(\cR(k)) < \alpha(k)$ and $\pi(k) < k$. This implies that there exists an item at a lower position than $k$, $j > k$, such that $\alpha(\cR(j)) \geq \alpha(k)$. Then
-%\begin{align*}
-%  \alpha(k) - \alpha(\cR(k))
-%  & \leq \alpha(\cR(j)) - \alpha(\cR(k)) \\
-%  & \leq \sum_{i = k}^{j - 1} \I{\alpha(\cR(i + 1)) - \alpha(\cR(i)) > 0} (\alpha(\cR(i + 1)) - \alpha(\cR(i)))\,.
-%\end{align*}
-%From the definition of $\Delta(\cR)$, this quantity is bounded by $\Delta(\cR)$. This concludes the proof.
-%\end{proof}
-%
-%\begin{lemma}
-%\label{lem:off-base gap} Let
-%\begin{align*}
-%  \rnd{\cP}_t =
-%  \set{(i, j) \in [K]^2: i < j, \ \abs{\bar{\rnd{\cR}}_t^{-1}(i) - \bar{\rnd{\cR}}_t^{-1}(j)} = 1, \
-%  \rnd{s}_{t - 1}(i, j) \leq 2 \sqrt{\rnd{n}_{t - 1}(i, j) \log(1 / \delta)}}
-%\end{align*}
-%be the set of potentially randomized item pairs at time $t$ and $\rnd{\Delta}_t = \max_{\rnd{\cR}_t} \Delta(\rnd{\cR}_t)$ be the \emph{maximum attraction gap} of any list $\rnd{\cR}_t$, where $\Delta(\rnd{\cR}_t)$ is defined in \eqref{eq:attraction gap}. Then on event $\cE$ in \cref{lem:concentration},
-%\begin{align*}
-%  \rnd{\Delta}_t \leq
-%  3 \sum_{i = 1}^K \sum_{j = i + 1}^K \I{(i, j) \in \rnd{\cP}_t} (\alpha(i) - \alpha(j))
-%\end{align*}
-%holds at any time $t \in [n]$.
-%\end{lemma}
-%\begin{proof}
-%Fix list $\rnd{\cR}_t$ and position $k \in [K - 1]$. Let $i', i, j, j'$ be items at positions $k - 1, \dots, k + 2$ in $\bar{\rnd{\cR}}_t$. If $k = 1$, let $i' = i$; and if $k = K - 1$, let $j' = j$. We consider two cases.
-%
-%First, suppose that the permutation at time $t$ is such that $i$ and $j$ could be swapped. Then
-%\begin{align*}
-%  & \alpha(\rnd{\cR}_t^{-1}(k + 1)) - \alpha(\rnd{\cR}_t^{-1}(k)) \leq \\
-%  & \quad \I{(\min \set{i, j}, \max \set{i, j}) \in \rnd{\cP}_t} (\alpha(\min \set{i, j}) - \alpha(\max \set{i, j}))
-%\end{align*}
-%holds on event $\cE$ by the design of $\bubblerank$. More specifically, $(\min \set{i, j}, \max \set{i, j}) \notin \rnd{\cP}_t$ implies that $\alpha(\rnd{\cR}_t^{-1}(k + 1)) - \alpha(\rnd{\cR}_t^{-1}(k)) \leq 0$.
-%
-%Second, suppose that the permutation at time $t$ is such that $i$ and $i'$ could be swapped, $j$ and $j'$ could be swapped, or both. Then
-%\begin{align*}
-%  & \alpha(\rnd{\cR}_t^{-1}(k + 1)) - \alpha(\rnd{\cR}_t^{-1}(k)) \leq \\
-%  & \quad \I{(\min \set{i, i'}, \max \set{i, i'}) \in \rnd{\cP}_t} (\alpha(\min \set{i, i'}) - \alpha(\max \set{i, i'})) + {} \\
-%  & \quad \alpha(j) - \alpha(i) + {} \\
-%  & \quad \I{(\min \set{j, j'}, \max \set{j, j'}) \in \rnd{\cP}_t} (\alpha(\min \set{j, j'}) - \alpha(\max \set{j, j'}))
-%\end{align*}
-%holds by the same argument as in the first case. Also note that
-%\begin{align*}
-%  \alpha(j) - \alpha(i) \leq
-%  \I{(\min \set{i, j}, \max \set{i, j}) \in \rnd{\cP}_t} (\alpha(\min \set{i, j}) - \alpha(\max \set{i, j}))
-%\end{align*}
-%holds on event $\cE$ by the design of $\bubblerank$.
-%
-%Therefore, for any position $k \in [K - 1]$ in both above cases,
-%\begin{align*}
-%  & \alpha(\rnd{\cR}_t^{-1}(k + 1)) - \alpha(\rnd{\cR}_t^{-1}(k)) \leq \\
-%  & \quad \sum_{\ell = k - 1}^{k + 1}
-%  \I{\left(\min \set{\bar{\rnd{\cR}}_t^{-1}(\ell), \bar{\rnd{\cR}}_t^{-1}(\ell + 1)},
-%  \max \set{\bar{\rnd{\cR}}_t^{-1}(\ell), \bar{\rnd{\cR}}_t^{-1}(\ell + 1)}\right) \in \rnd{\cP}_t} \times {} \\
-%  & \quad \hspace{0.35in} \left(\alpha\left(\min \set{\bar{\rnd{\cR}}_t^{-1}(\ell), \bar{\rnd{\cR}}_t^{-1}(\ell + 1)}\right) -
-%  \alpha\left(\max \set{\bar{\rnd{\cR}}_t^{-1}(\ell), \bar{\rnd{\cR}}_t^{-1}(\ell + 1)}\right)\right)\,.
-%\end{align*}
-%Now we sum over all positions and note that each pair of $\bar{\rnd{\cR}}_t^{-1}(\ell)$ and $\bar{\rnd{\cR}}_t^{-1}(\ell + 1)$ appears on the right-hand side at most three times, for any list $\rnd{\cR}_t$. This concludes our proof.
-%\end{proof}
-%
-%\begin{lemma}
-%\label{lem:off-base regret} Let $\rnd{\cP}_t$ be defined as in \cref{lem:off-base gap}. Then on event $\cE$ in \cref{lem:concentration},
-%\begin{align*}
-%  \sum_{k = 1}^K (\chi(\cR^\ast, k) \alpha(k) - \chi(\rnd{\cR}_t, k) \alpha(\rnd{\cR}_t(k)))
-%  \leq 3 K \chi_{\max} \sum_{i = 1}^K \sum_{j = i + 1}^K \I{(i, j) \in \rnd{\cP}_t} (\alpha(i) - \alpha(j))
-%\end{align*}
-%holds at any time $t \in [n]$.
-%\end{lemma}
-%\begin{proof}
-%The claim follows directly from chaining \cref{lem:list regret,lem:off-base gap}.
-%\end{proof}
-%
-%\begin{lemma}
-%\label{lem:swap bound} Let $\rnd{\cP}_t$ be defined as in \cref{lem:off-base gap}, $\rnd{\cP} = \bigcup_{t = 1}^n \rnd{\cP}_t$, and $\cV_0$ be defined as in \eqref{eq:incorrectly-ordered pairs}. Then on event $\cE$ in \cref{lem:concentration},
-%\begin{align*}
-%  \abs{\rnd{\cP}} \leq K - 1 + 2 \abs{\cV_0}\,.
-%\end{align*}
-%\end{lemma}
-%\begin{proof}
-%From the design of $\bubblerank$, $\abs{\rnd{\cP}_1} = K - 1$. The set of randomized item pairs grows only if the base list in $\bubblerank$ changes. When this happens, the number of incorrectly-ordered item pairs decreases by one, on event $\cE$, and the set of randomized item pairs increases by at most two pairs. This event occurs at most $\abs{\cV_0}$ times. This concludes our proof.
-%\end{proof}
-%
-%\begin{lemma}
-%\label{lem:cumulative click loss} For any items $i$ and $j$ such that $i < j$, $\displaystyle \rnd{s}_n(i, j) \leq 15 \frac{\alpha(i) + \alpha(j)}{\alpha(i) - \alpha(j)} \log(1 / \delta)$ on event $\cE$ in \cref{lem:concentration}.
-%\end{lemma}
-%\begin{proof}
-%Let $\rnd{s}_t = \rnd{s}_t(i, j)$ and $\rnd{n}_t = \rnd{n}_t(i, j)$ for any $t \in [n]$.
-%
-%The proof has two parts. First, suppose that $\rnd{s}_t \leq 2 \sqrt{\rnd{n}_t \log(1 / \delta)}$ holds at all times $t \in [n]$. Then from this assumption and on event $\cE$ in \cref{lem:concentration},
-%\begin{align*}
-%  \frac{\alpha(i) - \alpha(j)}{\alpha(i) + \alpha(j)} \rnd{n}_t - 2 \sqrt{\rnd{n}_t \log(1 / \delta)} \leq
-%  \rnd{s}_t \leq
-%  2 \sqrt{\rnd{n}_t \log(1 / \delta)}\,.
-%\end{align*}
-%This implies that
-%\begin{align*}
-%  \rnd{n}_t \leq
-%  \left[4 \frac{\alpha(i) + \alpha(j)}{\alpha(i) - \alpha(j)}\right]^2 \log(1 / \delta)
-%\end{align*}
-%at any time $t$, and in turn that
-%\begin{align*}
-%  \rnd{s}_t \leq
-%  2 \sqrt{\rnd{n}_t \log(1 / \delta)} \leq
-%  8 \frac{\alpha(i) + \alpha(j)}{\alpha(i) - \alpha(j)} \log(1 / \delta)
-%\end{align*}
-%at any time $t$. Our claim follows from setting $t = n$.
-%
-%On the other hand, suppose that $\rnd{s}_t \leq 2 \sqrt{\rnd{n}_t \log(1 / \delta)}$ does not hold at all times $t \in [n]$. Let $\tau$ be the first time when $\rnd{s}_\tau > 2 \sqrt{\rnd{n}_\tau \log(1 / \delta)}$. Then from the definition of $\tau$ and on event $\cE$ in \cref{lem:concentration},
-%\begin{align*}
-%  \frac{\alpha(i) - \alpha(j)}{\alpha(i) + \alpha(j)} \rnd{n}_\tau - 2 \sqrt{\rnd{n}_\tau \log(1 / \delta)} \leq
-%  \rnd{s}_\tau \leq
-%  \rnd{s}_{\tau - 1} + 1 \leq
-%  2 \sqrt{\rnd{n}_\tau \log(1 / \delta)} + 1 \leq
-%  3 \sqrt{\rnd{n}_\tau \log(1 / \delta)}\,,
-%\end{align*}
-%where the last inequality holds for any $\delta \leq 1 / e$. This implies that
-%\begin{align*}
-%  \rnd{n}_\tau \leq
-%  \left[5 \frac{\alpha(i) + \alpha(j)}{\alpha(i) - \alpha(j)}\right]^2 \log(1 / \delta)\,,
-%\end{align*}
-%and in turn that
-%\begin{align*}
-%  \rnd{s}_\tau \leq
-%  3 \sqrt{\rnd{n}_\tau \log(1 / \delta)} \leq
-%  15 \frac{\alpha(i) + \alpha(j)}{\alpha(i) - \alpha(j)} \log(1 / \delta)\,.
-%\end{align*}
-%Now note that $\rnd{s}_t = \rnd{s}_\tau$ for any $t > \tau$, from the design of $\bubblerank$. This concludes our proof.
-%\end{proof}
-%
-%For some $\cF_t = \sigma(\rnd{\cR}_1, \rnd{c}_1, \dots, \rnd{\cR}_t, \rnd{c}_t)$-measurable event $A$, let $\mathbb{P}_t(A) = \mathbb{P}(A \mid \cF_t)$ be the conditional probability of $A$ given history $\rnd{\cR}_1, \rnd{c}_1, \dots, \rnd{\cR}_t, \rnd{c}_t$. Let the corresponding conditional expectation operator be $\Et{\cdot}$. Note that $\bar{\rnd{\cR}}_t$ is $\cF_{t - 1}$-measurable.
-%
-%\begin{lemma}
-%\label{lem:click loss} Let $i, j \in [K]$ be any items at consecutive positions in $\bar{\rnd{\cR}}_t$ and
-%\begin{align*}
-%  \rnd{z} = \rnd{c}_t(\rnd{\cR}_t^{-1}(i)) - \rnd{c}_t(\rnd{\cR}_t^{-1}(j))\,.
-%\end{align*}
-%Then, on the event that $i$ and $j$ are subject to randomization at time $t$, %\todot{conditional expectation undefined if $\rnd{z} \neq 0$ with prob zero}
-%\begin{align*}
-%  \Etp{\rnd{z} \mid \rnd{z} \neq 0} \geq
-%  \frac{\alpha(i) - \alpha(j)}{\alpha(i) + \alpha(j)}
-%\end{align*}
-%when $\alpha(i) > \alpha(j)$, and $\Etp{- \rnd{z} \mid \rnd{z} \neq 0} \leq 0$ when $\alpha(i) < \alpha(j)$.
-%\end{lemma}
-%\begin{proof}
-%The first claim is proved as follows. From the definition of expectation and $\rnd{z} \in \set{-1, 0, 1}$,
-%\begin{align*}
-%  \Etp{\rnd{z} \mid \rnd{z} \neq 0}
-%  & = \mathbb{P}_{t - 1}(\rnd{z} = 1 \mid \rnd{z} \neq 0) - \mathbb{P}_{t - 1}(\rnd{z} = -1 \mid \rnd{z} \neq 0) \\
-%  & = \frac{\mathbb{P}_{t - 1}(\rnd{z} = 1, \rnd{z} \neq 0) - \mathbb{P}_{t - 1}(\rnd{z} = -1, \rnd{z} \neq 0)}
-%  {\mathbb{P}_{t - 1}(\rnd{z} \neq 0)} \\
-%  & = \frac{\mathbb{P}_{t - 1}(\rnd{z} = 1) - \mathbb{P}_{t - 1}(\rnd{z} = -1)}{\mathbb{P}_{t - 1}(\rnd{z} \neq 0)} \\
-%  & = \frac{\Etp{\rnd{z}}}{\mathbb{P}_{t - 1}(\rnd{z} \neq 0)}\,,
-%\end{align*}
-%where the third equality follows from $\rnd{z} = 1 \implies \rnd{z} \neq 0$ and $\rnd{z} = -1 \implies \rnd{z} \neq 0$.
-%
-%Let $\chi_i = \Etp{\chi(\rnd{\cR}_t, \rnd{\cR}_t^{-1}(i))}$ and $\chi_j = \Etp{\chi(\rnd{\cR}_t, \rnd{\cR}_t^{-1}(j))}$ denote the average examination probabilities of the positions with items $i$ and $j$, respectively, in $\rnd{\cR}_t$; and consider the event that $i$ and $j$ are subject to randomization at time $t$. By Assumption~\ref{ass:order-free examination}, the values of $\chi_i$ and $\chi_j$ do not depend on the randomization of other parts of $\bar{\rnd{\cR}}_t$, only on the positions where $i$ and $j$ are. Then $\chi_i \geq \chi_j$; from $\alpha(i) > \alpha(j)$ and Assumption~\ref{ass:examination scaling}. Based on this fact, $\Etp{\rnd{z}}$ is bounded from below as
-%\begin{align*}
-%  \Etp{\rnd{z}} =
-%  \chi_i \alpha(i) - \chi_j \alpha(j) \geq
-%  \chi_i (\alpha(i) - \alpha(j))\,,
-%\end{align*}
-%where the inequality is from $\chi_i \geq \chi_j$. Moreover, $\mathbb{P}_{t - 1}(\rnd{z} \neq 0)$ is bounded from above as
-%\begin{align*}
-%  \mathbb{P}_{t - 1}(\rnd{z} \neq 0) =
-%  \mathbb{P}_{t - 1}(\rnd{z} = 1) + \mathbb{P}_{t - 1}(\rnd{z} = -1) \leq
-%  \chi_i \alpha(i) + \chi_j \alpha(j) \leq
-%  \chi_i (\alpha(i) + \alpha(j))\,,
-%\end{align*}
-%where the first inequality is from $\mathbb{P}_{t - 1}(\rnd{z} = 1) \leq \chi_i \alpha(i)$ and $\mathbb{P}_{t - 1}(\rnd{z} = -1) \leq \chi_j \alpha(j)$, and the second inequality is from $\chi_i \geq \chi_j$.
-%
-%Finally, we chain all above inequalities and get our first claim. The second claim follows from the observation that $\Etp{- \rnd{z} \mid \rnd{z} \neq 0} = - \Etp{\rnd{z} \mid \rnd{z} \neq 0}$.
-%\end{proof}
-%
-%\begin{lemma}
-%\label{lem:concentration} Let
-%\begin{align*}
-%  S_1 = \set{(i, j) \in [K]^2: i < j}\,, \quad
-%  S_2 = \set{(i, j) \in [K]^2: i > j}\,. \quad
-%\end{align*}
-%Let
-%\begin{align*}
-%  \cE_{t, 1} & = \set{\forall (i, j) \in S_1:
-%  \frac{\alpha(i) - \alpha(j)}{\alpha(i) + \alpha(j)} \rnd{n}_t(i, j) - 2 \sqrt{\rnd{n}_t(i, j) \log(1 / \delta)} \leq \rnd{s}_t(i, j)}\,, \\
-%  \cE_{t, 2} & = \set{\forall (i, j) \in S_2:
-%  \rnd{s}_t(i, j) \leq 2 \sqrt{\rnd{n}_t(i, j) \log(1 / \delta)}}\,.
-%\end{align*}
-%Let $\cE = \bigcap_{t \in [n]} (\cE_{t, 1} \cap \cE_{t, 2})$ and $\ccE$ be the complement of $\cE$. Then $\mathbb{P}(\ccE) \leq \delta^\frac{1}{2} K^2 n$.
-%\end{lemma}
-%\begin{proof}
-%First, we bound $\mathbb{P}(\overline{\cE_{t, 1}})$. Fix $(i, j) \in S_1$, $t \in [n]$, and $(\rnd{n}_\ell(i, j))_{\ell = 1}^t$. Let
-%\begin{align*}
-%  \tau(m) = \min \set{\ell \in [t]: \rnd{n}_\ell(i, j) = m}
-%\end{align*}
-%for $m \in [\rnd{n}_t(i, j)]$. In plain English, $\tau(m)$ is the time of observing item pair $(i, j)$ for the $m$-th time. Let $\rnd{z}_\ell = \rnd{c}_\ell(\rnd{\cR}_\ell^{-1}(i)) - \rnd{c}_\ell(\rnd{\cR}_\ell^{-1}(j))$. Since $(\rnd{n}_\ell(i, j))_{\ell = 1}^t$ is fixed, note that $\rnd{z}_\ell \neq 0$ if $\ell = \tau(m)$ for some $m \in [\rnd{n}_t(i, j)]$. Let
-%\begin{align*}
-%  \rnd{X}_\ell =
-%  \sum_{\ell' = 1}^\ell \condEsub{\rnd{z}_{\tau(\ell')}}{\rnd{z}_{\tau(\ell')} \neq 0}{\tau(\ell') - 1} - \rnd{s}_{\tau(\ell)}(i, j)
-%\end{align*}
-%for $\ell \in [\rnd{n}_t(i, j)]$ and $\rnd{X}_0 = 0$. Then $(\rnd{X}_\ell)_{\ell = 1}^{\rnd{n}_t(i, j)}$ is a martingale, because
-%\begin{align*}
-%  \rnd{X}_\ell - \rnd{X}_{\ell - 1}
-%  & = \condEsub{\rnd{z}_{\tau(\ell)}}{\rnd{z}_{\tau(\ell)} \neq 0}{\tau(\ell) - 1} -
-%  (\rnd{s}_{\tau(\ell)}(i, j) - \rnd{s}_{\tau(\ell - 1)}(i, j)) \\
-%  & = \condEsub{\rnd{z}_{\tau(\ell)}}{\rnd{z}_{\tau(\ell)} \neq 0}{\tau(\ell) - 1} -
-%  \rnd{z}_{\tau(\ell)}\,,
-%\end{align*}
-%where the last equality follows from the definition of $\rnd{s}_{\tau(\ell)}(i, j) - \rnd{s}_{\tau(\ell - 1)}(i, j)$. Now we apply the Azuma-Hoeffding inequality and get that
-%\begin{align*}
-%  P\left(\rnd{X}_{\rnd{n}_t(i, j)} - \rnd{X}_0 \geq 2 \sqrt{\rnd{n}_t(i, j) \log(1 / \delta)}\right) \leq \delta^\frac{1}{2}\,.
-%\end{align*}
-%Moreover, from the definitions of $\rnd{X}_0$ and $\rnd{X}_{\rnd{n}_t(i, j)}$, and by \cref{lem:click loss}, we have that
-%\begin{align*}
-%  \delta^\frac{1}{2}
-%  & \geq P\left(\rnd{X}_{\rnd{n}_t(i, j)} - \rnd{X}_0 \geq 2 \sqrt{\rnd{n}_t(i, j) \log(1 / \delta)}\right) \\
-%  & = P\left(\sum_{\ell' = 1}^{\rnd{n}_t(i, j)} \condEsub{\rnd{z}_{\tau(\ell')}}{\rnd{z}_{\tau(\ell')} \neq 0}{\tau(\ell') - 1} -
-%  \rnd{s}_t(i, j) \geq 2 \sqrt{\rnd{n}_t(i, j) \log(1 / \delta)}\right) \\
-%  & \geq P\left(\frac{\alpha(i) - \alpha(j)}{\alpha(i) + \alpha(j)} \rnd{n}_t(i, j) -
-%  \rnd{s}_t(i, j) \geq 2 \sqrt{\rnd{n}_t(i, j) \log(1 / \delta)}\right) \\
-%  & = P\left(\frac{\alpha(i) - \alpha(j)}{\alpha(i) + \alpha(j)} \rnd{n}_t(i, j) -
-%  2 \sqrt{\rnd{n}_t(i, j) \log(1 / \delta)} \geq \rnd{s}_t(i, j)\right)\,.
-%\end{align*}
-%The above inequality holds for any $(\rnd{n}_\ell(i, j))_{\ell = 1}^t$, and thus in expectation over $(\rnd{n}_\ell(i, j))_{\ell = 1}^t$. From the definition of $\cE_{t, 1}$ and the union bound, we have that
-%\begin{align*}
-%  \mathbb{P}(\overline{\cE_{t, 1}}) \leq
-%  \frac{1}{2} \delta^\frac{1}{2} K (K - 1)\,.
-%\end{align*}
-%The claim that
-%\begin{align*}
-%  \mathbb{P}(\overline{\cE_{t, 2}}) \leq
-%  \frac{1}{2} \delta^\frac{1}{2} K (K - 1)\,.
-%\end{align*}
-%is proved similarly, except that we use $\condEsub{\rnd{z}_{\tau(\ell)}}{\rnd{z}_{\tau(\ell)} \neq 0}{\tau(\ell) - 1} \leq 0$. From the definition of $\ccE$ and the union bound,
-%\begin{align*}
-%  \mathbb{P}(\ccE) \leq
-%  \sum_{t = 1}^n \mathbb{P}(\overline{\cE_{t, 1}}) + \sum_{t = 1}^n \mathbb{P}(\overline{\cE_{t, 2}}) \leq
-%  \delta^\frac{1}{2} K^2 n\,.
-%\end{align*}
-%This completes our proof.
-%\end{proof}
+In the first $n_0$ steps, we bound the regret trivially by $n_0$. It follows that the expected $n$-step regret is bounded by
+\begin{align*}
+  R(n) \leq
+  n_0 + \frac{\Delta \sqrt{n_0}}{\Delta \sqrt{n_0} - d \sqrt{L}} K O(\log n + d \log d)\,.
+\end{align*}
