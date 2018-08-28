@@ -1,21 +1,21 @@
-We define $[n] = \lbrace 1,2,\ldots, n\rbrace$ and for any two sets $A$ and $B$, $A^B$ denotes the set of all vectors who take values from $A$ and are indexed by $B$. Let, $M\in [0,1]^{K\times L}$ denote any matrix, then $M(I,:)$ denote any submatrix of $k$ rows such that $I\in[K]^k$ and similarly $M(:,J)$ denote any submatrix of $j$ columns such that $J\in[L]^{j}$.
+Let $[n] := \lbrace 1,2,\ldots, n\rbrace$. For any two sets $A$ and $B$, $A^B$ denotes the set of all vectors indexed by $B$ and whose coordinates are in $A$. Let $M\in [0,1]^{K\times L}$ be a matrix and $I \subset [K] $, then $M(I,:)$ denotes the $|I| \times L$ dimensional submatrix of $M$ corresponding to the rows whose indices are given by $I$. Similarly, we use $M(:,J)$ to denote the submatrix of $M$ whose columns are given by $J$.
 	
-	Let $M$ be reward matrix of  dimension $K\times L$ where $K$ is the number of user or rows and $L$ is the number of arms or columns. Also, let us assume that this matrix  $M$ has a low rank structure of rank $d << \min\lbrace L,K\rbrace$. Let $U$ and $V$ denote the latent matrices for the users and items, which are not visible to the learner such that,
+	Let $M \in  [0,1]^{K \times L}$  reward matrix.. Also, let us assume that the rank of  $M$ is $d << \min\lbrace L,K\rbrace$ \todoan{Alwasy use $\ll$ instead of $<<$}. Let $ U \in [ \mathbb{R}^+ ]^{K\times d} \textbf{, } V \in  [0,1]^{L\times d}$ be matrices representing the user and item latent factors, 
 \begin{align*}
-	M = UV^{\intercal} \textbf{ \hspace*{4mm}   s.t.   \hspace*{4mm}} U\in [ \mathbb{R}^+ ]^{K\times d} \textbf{, } V\in  [0,1]^{L\times d}.
+	M = UV^{\intercal} .
 \end{align*}	  
 	
-	Furthermore, we put a constraint on $V$ such that, $\forall j\in [L]$, $ \norm{V(j,:)}_1 \leq 1$. 
+	Furthermore, we put a constraint on $V$ such that, $\forall j\in [L]$, $ \norm{V(j,:)}_1 \leq 1$. \todoan{Do we need this assumption??}
 	
 	
 \begin{assumption}\textbf{(Hott-Topics)}
 \label{assm:hott-topics}
-We assume that there exists $d$-column base factors, denoted by $V(J^*,:)$, such that all rows of $V$ can be written as a convex combination of $V(J^*,:)$ and the zero vector and $J^* = [d]$. We denote the column factors by $V^* = V(J^*,:)$. Therefore, for any $i\in [L]$, it can be represented by
+We assume that there exists $d$ rows $J^*$,  such that every row of $V$ can be written as a convex combination of the rows in $V(J^*,:)$ and the zero vector. \end{assumption}
+We denote the column \todoan{should be row} factors by $V^* = V(J^*,:)$. Therefore, for every $i\in [L]$, there exists a column vector $a \in [0,1]^{d}$ and $ \norm{a}_1 \leq 1$ such that 
 \begin{align*}
-V(i,:) = a_i V(J^*,:) , 
+V(i,:) = V(J^*,:) a.
 \end{align*}
-where $\exists a_i\in [0,1]^{d}$ and $ \norm{a_i}_1 \leq 1$.
-\end{assumption}
+
 
 %In this paper, in addition to the noisy setting explained in section \ref{intro} we first analyze the proposed algorithm in the easier noise free setting. In the noise free setting, the nature reveals the row $i_t$, and when the learner selects the column $j_t$, it observes the mean of the distribution $\bar{R}(i_t,j_t)$.
 
@@ -26,25 +26,26 @@ where $\exists a_i\in [0,1]^{d}$ and $ \norm{a_i}_1 \leq 1$.
 
 \begin{assumption}\textbf{(Click Model)}
 \label{assm:click-model}
+\todoan{Don't have this as an assumption. After the notations, explain precisely what is the observation model and noise model in 1-2 paragraphs. This will be part of that.}
 For each user $i_t$ revealed by the nature at round $t$, the learner is allowed to suggest atmost $d$-items, where $d$ is the rank of the matrix $M$. The user can click one, or all, or none of the recommendations and the learner observes all the $d$ clicks. We assume a Document Click Model (DCM) such that every user-item pair has a single parameter called the user-item attraction factor which determines the click probability of the user when the item is shown.  
 \end{assumption}
 
 \begin{discussion}
 The above Assumption \ref{assm:click-model} is an instance of the \textit{Document Click Model (DCM)} first studied in \citet{craswell2008experimental}. Since, this click model depends on learning only one attraction factor for each user-item pair, it often leads to overfitting of model parameters. DCM is independent on the position of the item (PBM) and does not model the decreasing interest of the user (CBM) while surveying an ordered set of  items. 
+\todoan{You can comment this out from here.}
 \end{discussion}
 
 %In DCM every user-item pair has a single parameter called the user-item attraction factor which determines the click probability of the user when the item is shown
 %Assumption \ref{assm:click-model} can be conceptualized in the real-world scenario where the learner has  to suggest movies to users and each movie belongs to a different genre (say thriller, romance, comedy, etc). So, the learner can suggest $d$ movies belonging to different genres to each user in a webpage, and the user can click one, or all, or none of the recommended movies (query abandonement).
 
-\textbf{Noise Model:} Our noise model is quite different from the existing stochastic noise model assumptions of various click models. The usual i.i.d Bernoulli reward assumption on the entries of the user-item preference matrix $M$ is not feasible because the hott-topics assumption is required for every realization of the matrix $M$. Hence,  at every timestep $t$, we generate a noisy matrix $\tilde{M}_t = UD_t V^{\intercal}$, where $D_t$ is a diagonal matrix such that $D_t(i,i)\in[0,1]$. Thus, for every such realization of $\tilde{M}_t, \forall t\in [n]$ the hott-topics structure of $M$ is preserved.
+\textbf{Noise Model:} Our noise model is quite different from the existing stochastic noise model assumptions of various click models. The usual i.i.d Bernoulli reward assumption on the entries of the user-item preference matrix $M$ is not feasible because the hott-topics assumption is required for every realization of the matrix $M$ \todoan{Describe our noise model first. Any discussions and comments justifying it should come after precisely explaining the observation and noise model}. Hence,  at every timestep $t$, we generate a noisy matrix $\tilde{M}_t = UD_t V^{\intercal}$, where $D_t$ is a diagonal matrix such that $D_t(i,i)\in[0,1]$. Thus, for every such realization of $\tilde{M}_t, \forall t\in [n]$ \todoan{remove $\forall t in [n]$, you are saying for ever $t$ at the start of the paragraph} the hott-topics structure of $M$ is preserved.
 
-The main goal of the learning agent is to minimize the cumulative regret until the end of horizon $n$. We define the cumulative regret, denoted by $\mathcal{R}_n$ as,
+The main goal of the learning agent is to minimize the cumulative regret $\mathcal{R}_n$  over $n$ time steps
 
 \begin{align*}
-\mathcal{R}_n = \sum_{t=1}^{n}\bigg\lbrace \sum_{z=1}^{d} \bigg( r_{t}\left(i_{t}, j^* \right) - r_{t}\left( i_{t}, j_{t,z}\right)\bigg)\bigg\rbrace
+\mathcal{R}_n = \sum_{t=1}^{n}\bigg\lbrace \sum_{z=1}^{d} \bigg( r_{t}\left(i_{t}, j^* \right) - r_{t}\left( i_{t}, j_{t,z}\right)\bigg)\bigg\rbrace.
 \end{align*}
-
-where, $j^* = \argmax_{j\in [L]}\lbrace M(i_t,j)\rbrace$ and $j_{t,z}$ be the suggestion of the learner for the $i_t$ -th user for  $z=1,2,\ldots, d$. Note that $r_{t}\left(i_t, j^* \right)\sim \tilde{M}_t\left(i_t, j^*\right)$ and $r_{t}\left(i_t, j_{t,z} \right)\sim \tilde{M}_t\left(i_t, j_{t,z} \right)$. Taking expectation over both sides, we can show that,
+Here, $j^* = \argmax_{j\in [L]}\lbrace M(i_t,j)\rbrace$ \todoan{Why is there $i_t$ here? $j^*$ is independent of $t$} and $j_{t,z}$ be the suggestion of the learner for the $i_t$ -th user for  $z=1,2,\ldots, d$ \todoan{This gives the same reward for all permutations}. Note that $r_{t}\left(i_t, j^* \right)\sim \tilde{M}_t\left(i_t, j^*\right)$ and $r_{t}\left(i_t, j_{t,z} \right)\sim \tilde{M}_t\left(i_t, j_{t,z} \right)$. Taking expectation over both sides, we can show that,
 
 \begin{align*}
 \E[\mathcal{R}_n] & = \E\left [ \sum_{t=1}^{n}\bigg\lbrace\sum_{z=1}^{d} \bigg( r_{t}\left(i_t, j^* \right) - r_{t}\left( i_t, j_{t,z}\right)\bigg)\bigg\rbrace\right] \\
