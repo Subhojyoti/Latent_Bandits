@@ -12,7 +12,7 @@ The reward for recommending $d$ columns $J$ to user $i$ is
   r_t(i, J) =
   \max \, \{\mu(k) \, r_t(i, J(k))\}_{k = 1}^d
 \end{align*}
-for $\mu(1) \geq \dots \geq \mu(d) > 0$. We also define an unweighted reward as
+for weights $\mu(1) \geq \dots \geq \mu(d) > 0$. We also define an unweighted reward as
 \begin{align*}
   \tilde{r}_t(i, J) =
   \max \, \{r_t(i, J(k))\}_{k = 1}^d\,.
@@ -22,7 +22,7 @@ Let $J_\ast = (1, \dots, d)$ be the indices of the hott topics. Let $J_{\ast, i}
   R(n) =
   \E\left[\sum_{t = 1}^n r_t(i_t, J_{\ast, i_t})\right] - \E\left[\sum_{t = 1}^n r_t(i_t, J_{t, i_t})\right]\,.
 \end{align*}
-The expected regret of the column learning algorithm is bounded as
+The regret of the column learning algorithm in $n_0$ steps is bounded as
 \begin{align*}
   \E\left[\sum_{t = 1}^{n_0} \tilde{r}_t(i, J_\ast)\right] - \E\left[\sum_{t = 1}^{n_0} \tilde{r}_t(i, J_t)\right] \leq
   d \sqrt{L n_0}
@@ -37,9 +37,14 @@ be the minimum gap. Then based on the above inequalities, the probability that t
   \frac{\Delta \sqrt{n_0} - d \sqrt{L}}{\Delta \sqrt{n_0}}\,.
   \label{eq:opt lower bound}
 \end{align*}
-Now 
-
-
+Let $p_t$ be the probability that the column learning algorithm chooses $J_\ast$ at time $t$ and let $\tilde{J}_{\ast, t, i}$ be the permutation of $J_\ast$ for user $i$ at time $t$, according to our row algorithm. Then we can bound the regret from time $n_0$ as
+\begin{align*}
+  R(n)
+  & = \sum_{i = 1}^K \sum_{t = n_0}^n \E\left[1\{i_t = i\} (r_t(i, J_{\ast, i}) - r_t(i, J_{t, i})\right] \\
+  & = \sum_{i = 1}^K \sum_{t = n_0}^n \frac{1}{p_t} \E\left[1\{i_t = i, J_t = J_\ast\} (r_t(i, J_{\ast, i}) - r_t(i, J_{\ast, t, i})\right] \\
+  & \leq \frac{\Delta \sqrt{n_0}}{\Delta \sqrt{n_0} - d \sqrt{L}} \sum_{i = 1}^K R_i(n)\,,
+\end{align*}
+where $R_i(n)$ is the expected $n$-step regret of the row algorithm in row $i$, conditioned on the fact that the column learning algorithm chooses $J_\ast$. One suitable row algorithm would be the weighted majority algorithm, which learns the optimal permutation for each $J$. Then $R_i(n) = O(\log n + \log d!) \approx O(\log n + d \log d)$.
 
 
 %\begin{lemma}
