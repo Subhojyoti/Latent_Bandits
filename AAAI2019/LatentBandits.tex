@@ -40,7 +40,7 @@
 %}
 \maketitle
 \begin{abstract}
-To be written
+In this paper, we study the problem of finding the best item for users who are observed sequentially. The learner suggests some items to the user and receives its feedback on all the recommended items. The user-item preference matrix generating the feedback for user item interaction consists of unobserved latent factors and has a low-rank. While previous methods have tried to reconstruct the preference matrix using various statistical methods from its noisy observations, these are prone to failure and require a broad set of assumptions for the theoretical guarantees to hold. We propose the  Latent Ranked Bandit algorithm which does not try to reconstruct the preference matrix but instead races to find the best item for each user by leveraging the low-rank structure of the preference matrix. To do this, we borrow ideas from the ranking literature into the stochastic low-rank setting and under our modeling assumptions prove that our algorithm performs optimally. We also evaluate the performance of our algorithm in several simulated and real-world large datasets where it outperforms all the existing state-of-the-art algorithms.
 \end{abstract}
 
 
