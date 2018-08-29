@@ -1,8 +1,8 @@
 *.aux
 *.bbl
 *.blg
-*.DS_Store
 *.gz
 *.log
 *.out
 AAAI2019/LatentBandits.pdf
+.DS_Store
