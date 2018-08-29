@@ -47,9 +47,9 @@ Let $p_t$ be the probability that the column learning algorithm chooses $J_\ast$
 \begin{align*}
   R(n)
   & = \sum_{i = 1}^K \E\left[\sum_{t = n_0}^n 1\{i_t = i\}
-  (r_t(i, \pi_{\ast, i_t}(J_\ast)) - r_t(i_t, \pi_{t, i_t}(J_t))\right] \\
+  (r_t(i, \pi_{\ast, i}(J_\ast)) - r_t(i, \pi_{t, i}(J_t))\right] \\
   & = \sum_{i = 1}^K \E\left[\sum_{t = n_0}^n \frac{1}{p_t} 1\{i_t = i, J_t = J_\ast\}
-  (r_t(i, \pi_{\ast, i_t}(J_\ast)) - r_t(i_t, \pi_{t, i_t}(J_\ast))\right] \\
+  (r_t(i, \pi_{\ast, i}(J_\ast)) - r_t(i, \pi_{t, i}(J_\ast))\right] \\
   & \leq \left(1 + \frac{d \sqrt{L}}{\Delta \sqrt{n_0} - d \sqrt{L}}\right) \sum_{i = 1}^K R_i(n)\,,
 \end{align*}
 where $R_i(n)$ is the expected $n$-step regret of the row algorithm in row $i$, conditioned on the fact that the column learning algorithm chooses $J_\ast$. One suitable row algorithm would be the weighted majority algorithm, which learns the optimal permutation for each $J$. Then $R_i(n) = O(\log n + \log d!) \approx O(\log n + d \log d)$.
