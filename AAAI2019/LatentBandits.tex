@@ -40,13 +40,18 @@
 %}
 \maketitle
 \begin{abstract}
-In this paper, we study the problem of finding the best item \todob{Technically speaking, we do not look for the best item. Perhaps a diverse list of items that contains the best item?} for users who are observed sequentially. The learner suggests some items to the user and receives feedback on all the recommended items. The user-item preference matrix generating the feedback for user-item interaction consists of unobserved latent factors and is low rank. While previous methods have tried to reconstruct the preference matrix using various statistical methods from its noisy observations, these are prone to failure and require a broad set of assumptions for the theoretical guarantees to hold. We propose the Latent Ranked Bandit algorithm which does not try to reconstruct the preference matrix but instead races to find the best item for each user by leveraging the low-rank structure of the preference matrix. To do this, we borrow ideas from learning to rank. Under our modeling assumptions, we prove that our algorithm performs optimally. We also evaluate the performance of our algorithm in several simulated and real-world large \todob{Are they really large by today's standards?} datasets where it outperforms all the existing state-of-the-art algorithms. \todob{This is a very long sentence. Shorter sentences and more to the point.}
+In this paper, we study the problem of suggesting  a diverse list of items that contains the best item  for users who are observed sequentially. The learner suggests some items to the user and receives feedback on all the recommended items. The user-item preference matrix generating the feedback for user-item interaction consists of unobserved latent factors and is low rank. While previous methods have tried to reconstruct the preference matrix using various statistical methods from its noisy observations, these are prone to failure and require a broad set of assumptions for the theoretical guarantees to hold. We propose the Latent Ranked Bandit algorithm which does not try to reconstruct the preference matrix but instead races to find the best item for each user by leveraging the low-rank structure of the preference matrix. To do this, we borrow ideas from learning to rank. Under our modeling assumptions, we prove that our algorithm performs optimally. We also evaluate the performance of our algorithm in several simulated and real-world datasets. In all the experiments it outperforms the existing state-of-the-art algorithms. 
+%\todob{This is a very long sentence. Shorter sentences and more to the point.}
+%\todosb{Last sentence is ok I guess. Removed large dataset comment. I wanted to talk abt performance}
 \end{abstract}
 
 
 \section{Introduction}
 \label{intro}
 \input{intro}
+\subsection{Contributions}
+\label{Contribution}
+\input{Contributions}
 
 
 \section{Related Work}
@@ -57,7 +62,7 @@ In this paper, we study the problem of finding the best item \todob{Technically 
 \label{probdef}
 \input{probdef}
 
-\todob{Why would you write contributions here? Contributions need to be clearly stated in Introduction.}
+%\todob{Why would you write contributions here? Contributions need to be clearly stated in Introduction.}
 
 %\newpage
 \section{Proposed Algorithms}
@@ -85,8 +90,8 @@ In this paper, we study the problem of finding the best item \todob{Technically 
 \bibliographystyle{aaai}
 \bibliography{biblio}
 
+
 \appendix
-\label{appendix}
 \input{appendix}
 
 \end{document}

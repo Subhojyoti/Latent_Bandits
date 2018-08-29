@@ -12,7 +12,7 @@ In this section, we compare LRB to several bandit algorithms in three experiment
 %
 %\todosb{Changed this to Independent User Model Algorithms}
 
-\textbf{Matrix Completion Algorithms:} In the matrix completion approach, the algorithms try to reconstruct the user-item preference matrix $M$ from its noisy realization. We use the widely used method to reconstruct partially observed noisy matrices, non-negative matrix factorization. We term the corresponding algorithm as NMF Bandit (NMF-Ban). This algorithm is $\epsilon$-greedy in implementation whereby it reconstructs $M$ with $\epsilon$ probability and with $1-\epsilon$ probability it behaves greedily over the reconstructed matrix and suggest $d$ best item for the $i_t$-th user at every timestep $t$. 
+\textbf{Matrix Completion Algorithms:} In the matrix completion approach, the algorithms try to reconstruct the user-item preference matrix $M$ from its noisy realization. We implement the widely used method to reconstruct partially observed noisy matrices, the non-negative matrix factorization. We term the corresponding algorithm as NMF Bandit (NMF-Ban). This algorithm is $\epsilon$-greedy in implementation whereby it reconstructs $M$ with $\epsilon$ probability and with $1-\epsilon$ probability it behaves greedily over the reconstructed matrix and suggest $d$ best item for the $i_t$-th user at every timestep $t$. 
 
 %LinBan uses ridge regression to reconstruct $M$ from its estimated $d$-best columns while NMF-Ban uses matrix factorization to estimate the $U$ and $V$ matrix and reconstruct $M$ from its noisy realization. \todob{It is absolutely not clear what LinBan does.}
 
