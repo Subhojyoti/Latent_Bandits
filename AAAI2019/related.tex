@@ -26,6 +26,8 @@ subset $S \subseteq V$ a value $f(S)$. We define the gain of the function $f$ as
 \item Submodularity: A set function $f : 2^V \rightarrow \mathbb{R}$ is submodular if for every $A \subseteq B \subseteq V$ and $\lbrace e\rbrace \in V \setminus B$ it holds that $G_f(e | A) \geq G_f(e | B)$.
 \end{enumerate}
 
+\todob{Too much details. None of this is ever used in the paper.}
+
 Intuitively, a submodular function states that after performing a set $A$ of actions, the marginal gain of another action $e$ does not increase the gain for performing other actions in $B \setminus A$. Online submodular function maximization has been studied in \citet{streeter2009online} where the authors propose a general algorithm whereas  \citet{radlinski2008learning} can be considered as special case of it when the payoff is only between $\lbrace 0, 1\rbrace$. Also, in the contextual feature based setup online  submodular maximization has been studied by  \citet{yue2011linear}. An interesting property of submodular function is that a greedy algorithm using it is guaranteed to perform atleast $\left( 1 - \frac{1}{e}\right)$ of the optimal algorithm and this factor $\left( 1 - \frac{1}{e}\right)$ is not improvable by any polynomial time algorithm \citep{nemhauser1978analysis}.
 
 
