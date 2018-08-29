@@ -9,7 +9,7 @@
 \section{Proof}
 \label{sec:proof}
 
-Our learning agent operates in the following setting. Let $i_1, \dots, i_n$ be a fixed sequences of users in $n$ steps, which is unknown to the agent. Let $r_t = U D_t V\transpose$ be the reward matrix at time $t$, where $U$ is a non-negative matrix, $D_t$ is a non-negative diagonal matrix that may change with $t$, and $U$ is a non-negative hott-topics matrix. We assume that $r_t \in [0, 1]^{K \times L}$ at all times $t \in [n]$. The only randomness in our problem is due to the learning agent.
+Our learning agent operates in the following setting. Let $i_1, \dots, i_n$ be a fixed sequences of users in $n$ steps, which is unknown to the agent. Let $r_t = U D_t V\transpose$ be the reward matrix at time $t$, where $U$ is a non-negative matrix, $D_t$ is a non-negative diagonal matrix that may change with $t$, and $V$ is a non-negative hott-topics matrix. We assume that $r_t \in [0, 1]^{K \times L}$ at all times $t \in [n]$. The only randomness in our problem is due to the learning agent.
 
 The reward for recommending $d$ columns $J$ to user $i$ is
 \begin{align*}

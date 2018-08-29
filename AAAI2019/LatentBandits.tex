@@ -13,16 +13,10 @@
 \usepackage{macros}
 
 %%%%%%%%%%%%%For adding comments
-%\usepackage[backgroundcolor=White,textwidth=0.8in]{todonotes}
-%<<<<<<< HEAD
-%\newcommand{\todob}[2][]{\todo[color=cyan!20,size=\tiny,inline,#1]{Bra: #2}} % Brano's comments
-%\newcommand{\todosb}[2][]{\todo[color=green!20,size=\tiny,inline,#1]{Sub: #2}} %
-%\newcommand{\todoan}[2][]{\todo[color=black!20,size=\tiny,inline,#1]{Anup: #2}} %
-%=======
+
 \newcommand{\todob}[2][]{\todo[color=cyan!20,size=\tiny,inline,#1]{B: #2}} % Brano's comments
 \newcommand{\todosb}[2][]{\todo[color=green!20,size=\tiny,inline, #1]{S: #2}} %
 \newcommand{\todoan}[2][]{\todo[color=black!20,size=\tiny,inline, #1]{A: #2}} %
-%>>>>>>> e48bb54faafc4480d69dd6349262dea82c96d358
 
 
 \frenchspacing  %Required
@@ -60,29 +54,42 @@ In this paper, we study the problem of finding the best item for users who are o
 \input{related}
 
 \subsection{Notations, Problem Formulation and Assumptions}
+\label{probdef}
 \input{probdef}
 
 
 \section{Contributions}
+\label{contributions}
 \input{contributions}
 
 %\newpage
 \section{Proposed Algorithms}
+\label{algo}
 \input{Algorithm}
+
+\section{Analysis}
+\label{analysis}
+\input{analysis}
 
 %\newpage
 \section{Experiments}
+\label{expt}
 \input{expt}
 
 
 
 \section{Conclusions and Future Directions}
+\label{conclusions}
 \input{conclusions}
 
-\input{appendix}
+
 
 \newpage
 \bibliographystyle{aaai}
 \bibliography{biblio}
+
+\appendix
+\label{appendix}
+\input{appendix}
 
 \end{document}
