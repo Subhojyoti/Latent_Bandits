@@ -1,33 +1,17 @@
-We propose the algorithm latent ranker algorithm, abbreviated as LRA (see Algorithm \ref{alg:latent-rank}) for solving the personalized ranking problem. This algorithm is made up of a column learning component and a row ranking component. The column learning algorithm recommends a list of $d$ column at every time step. The row ranking algorithm recommends an ordering of these columns. The column learning component is same as in  \citet{radlinski2008learning}, but we exploit the additional structure in our problem to show a stronger regret bound. It consists of $d$ instances of  multi-armed bandit (MAB) algorithms and we denote these by MAB$_1(n)$, MAB$_2(n), \dots,$ MAB$_d(n).$  The row learning component is made up of instances of weighted majority algorithms for each row/user. More precisely, for each user $i$ and each set of columns $J$ of size $d$, we run an instance of the standard weighted majority algorithm WMA$_{i,J}$ with $d!$ arms corresponding to all possible permutations of $J$.  
- Its goal is to suggest a permutation $\pi : [d] \to [d]$ that has the highest reward for $i$ and the set $J$.  
+%!TEX root = paper.tex
 
-%\todoan{complete feedback?} \todosb{kept as total info} 
-%is motivated \todoan{is it just motivated or has this algorithm appeared before?}
+We propose \emph{latent ranker algorithm (LRA)} for solving the personalized ranking problem. The pseudocode of the algorithm is in \cref{alg:latent-rank}. LRA has two components, column learning and row ranking. The column learning algorithm recommends a list of $d$ columns. The row ranking algorithm recommends an ordering of these columns. The column learning algorithm is the same as in  \citet{radlinski2008learning}. But we exploit the additional structure in our problem to show a stronger regret bound. It consists of $d$ instances of multi-armed bandit (MAB) algorithms, which we denote by $\textrm{MAB}_k(n)$ for $k \in [d]$. $\textrm{MAB}_1(n)$ learns the most rewarding column on average, $\textrm{MAB}_2(n)$ learns the most rewarding column on average conditioned on the first learned columns, as so on. The row learning algorithm are multiple instances of the weighted majority algorithm, for each user. More precisely, for each user $i$ and each set of $d$ columns $J$, we have an instance of the weighted majority algorithm $\textrm{WMA}_{i, J}(n)$ with $d!$ arms, which correspond to all possible permutations of $J$. The objective of $\textrm{WMA}_{i, J}(n)$ is to learn a permutation of $J$ with the highest reward, as measured by \eqref{eq:reward}.
 
-LRA proceeds as follows. At every timestep $t\in[n],$ a uniformly random user $i_t$ is revealed by nature. Then, in increasing order of $i,$ MAB$_i(n)$ suggests a column $l_{i,t}$. If MAB$_{i+1}(n)$ happens to suggest a column in $\{l_{1,t},...,l_{i,t} \},$ then $l_{i+1,t}$ is chosen arbitrarily from the remaining columns. %The $d$ column MABs suggests columns $J_t = \lbrace {\ell}_{1}, {\ell}_{2},\dots, {\ell}_{d} \rbrace$ which it deems to be the $d$ best columns and by virtue of our setting, the $d$ hott-topics. If, there is any overlap in the suggestion, an arbitrary column is suggested which has not been selected before. 
-We denote the set of $d$ columns thus selected by $J_t = \{ l_{1,t},...,l_{i,d}\}.$ Then, the weighted majority instance WMA$_{i_t,J_t}$ for the $i_t$-th user and $J_t$ set selects a permutation $\pi_{i_t}: J_t \to J_t$.% by sampling through its distribution over the $d!$ arms and suggests a permutation $\pi_{i_t}(J_t) = \lbrace \tilde{\ell}_{1}, \tilde{\ell}_{2},\dots, \tilde{\ell}_{d}\rbrace$ such that the item in rank $1$ is the best item for the $i_t$-th user with a high probability. 
-%Note, that we leave the implementation of the column MAB to the user which can be any stochastic or adversarial base-bandit algorithm discussed in Section \ref{related}. 
+LRA interacts with the environment as follows. At time $t$, a uniformly random user $i_t$ is revealed to LRA. Then, in the ascending order of $k \in [d]$, $\textrm{MAB}_k(n)$ suggests a column $\ell_{t, k}$. If $\textrm{MAB}_{k + 1}(n)$ suggests a previously suggested column in $\{\ell_{t, 1}, \dots, \ell_{t, k}\}$, then $\ell_{t, k + 1}$ is chosen uniformly at random from the remaining columns. We denote the set of $d$ selected columns by $J_t = \{\ell_{t, 1}, \dots, \ell_{t, d}\}$. Then, the weighted majority instance $\textrm{WMA}_{i_t, J_t}(n)$, for user $i_t$ and columns $J_t$, selects a permutation $\pi_{t, i_t}$ of $J_t$.
 
-
-%\todoan{Might have re-write the row algorithm based on Brano's new algorithm.}
-%\todosb{He is asking to keep things same, have to ask again}
-
-%\todoan{this doesn't make sense to me, global ranking for users?} \todosb{Changed, global ranking of items for all users without personalization}
-
-Finally, after the user feedback is observed for all the columns in  $J_t$, the rewards are used to update all the MABs and  WMA$_{i_t,J_t}(n)$. The $k$-th column MAB$_k(n)$ is updated with feedback $f_{k,t} = \max_{j\in [k]} r_t(i_t, \ell_{j,t}) - \max_{j\in [k-1]} r_t(i_t,\ell_{j,t})$.
-% The intuition behind this update is that first the rank of the $k$-th column will be fixed and then based on that the rank of the $(k-1)$-th column will be determined.  This type of update follows from the fact that the $\max$ function is monotonic and submodular (see  section \ref{related}) and by updating $f_{k,t}$ like this the column MABs are guaranteed to find the $d$ best columns with high probability. Note that RBA is also a special case of submodular bandits such that $f_{k,t}\in\lbrace 0, 1\rbrace$ \citep{streeter2009online}. 
+The user is recommended the permuted list of items, $\pi_{t, i_t}(J_t)$, and LRA observes the individual rewards of all recommended items. After this, we update both column and row learning algorithms. The reward of $\textrm{MAB}_k(n)$, which selects the $k$-th column in $J_t$, is $\max_{j \in [k]} r_t(i_t, \ell_{t, j}) - \max_{j \in [k - 1]} r_t(i_t, \ell_{t, j})$. That is, the reward is the marginal gain of that column over previously chosen columns. Since LRA observes the individual rewards of all recommended items, we can compute the reward of any permutation of $J_t$ in row $i_t$. These rewards are then used to update $\textrm{WMA}_{i_t, J_t}(n)$. An illustrative diagram of the entire learning process is shown in \cref{fig:rankedbandit}.
 
 \begin{figure}
     \includegraphics[scale=0.2]{img/RankedBand.png}
-    \caption{Latent Ranked Bandit in rank $d=2$ scenario.}
+    \caption{Latent Ranked Bandit in rank $d=2$ scenario. \todob{The figure is super confusing. If you want to have it, add a flow chart.}}
     \label{fig:rankedbandit}
     \vspace*{-1em}
 \end{figure}
-
-Since the user feedback is observed on every column in $J_t$, we can compute the reward for all $d!$ permutations of $J_t$. This can be then used to update WMA$_{i_t,J_t}(n)$.    An illustrative diagram of the entire process is shown in Figure \ref{fig:rankedbandit}.
-
-%Since, we observe all the clicks by user $i_t$ (total information),
-
 
 \begin{algorithm}
 \caption{Latent Ranker Algorithm}
