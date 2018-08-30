@@ -51,7 +51,7 @@ Since the user feedback is observed on every column in $J_t$, we can compute the
       %by sorting descendingly according to $w_{i_t,1},w_{i_t,2},\dots,w_{i_t,d}$.
       \State Let  $\{ r_{t}(\ell_{1,t}), r_{t}(\ell_{2,t}),\dots,r_{t}(\ell_{d,t}) \}$ be the user feedback.
       \State Let $\hat{r}_t(\ell_{i,t}) = r_t(\ell_{i,t})$ if $\hat{\ell}_{i,t} = \ell_{i,t}$, else $\hat{r}_t(\ell_{i,t}) = 0.$
-      \State update(MAB$_{k}(n)$, $\{ \hat{r}_t(\ell_{i,t}),...,\hat{r}_t(\ell_{d,t}) \}  $) 
+      \State update(MAB$_{k}(n)$, reward = $\hat{r}_t(\ell_{k,t})$, arm = $\hat{\ell}_{k,t}$)
       \State update(WMA$_{i_t,J_t}$,$\{ r_t(\ell_{1,t}),...,r_t(\ell_{d,t})\}$ )
     \EndFor
 %    \Procedure{UpdateColumnMAB}{}
@@ -74,3 +74,5 @@ Since the user feedback is observed on every column in $J_t$, we can compute the
 %\EndProcedure
   \end{algorithmic}
 \end{algorithm}
+
+\todoan{Probably need to add a bit more explanation about the rewards of MABs}
