@@ -1,14 +1,23 @@
 \begin{theorem}
 \label{thm:LRB}
-The cumulative regret upper bound for Latent Ranked Bandit algorithm is given by....
+The worst case cumulative regret upper bound for latent ranker algorithm is,
+\begin{align*}
+R(n) \leq c^2d \sqrt{L n} + K \log n
+\end{align*}
+
+when $n > L$ and $c$ is a constant such that $c > 2\sqrt{d}$.
 \end{theorem}
 
 \begin{proof} \textbf{(Outline)}
-The proof of Theorem \ref{thm:LRB} is given in Appendix \ref{sec:proof}. 
+The proof of Theorem \ref{thm:LRB} is given in Appendix \ref{sec:proof}. We divide the proof into two parts. The first part deals with the regret incurred due to the column MABs and the minimum number of pulls required before the column MABs starts suggesting the $d$-best columns (and by design the $d$ hott-topics) more often. This analysis follows from the proof of regret bound from \citet{radlinski2008learning} with modifications made to suit our setting. The second part of the proof deals with finding the best permutation amongst the suggested $d$ best items by using WMA. Finally, we combine both these steps to derive the regret upper bound.
 \end{proof}
 
 \begin{discussion}
-\label{disc:proof}
-From the result in Theorem \ref{thm:LRB} we see that...
-\todosb{Need to discuss about result/comparison.}
+\label{disc:proof1}
+From the result in Theorem \ref{thm:LRB} we see that the regret consist of two parts of unequal order. The first part of order $O\left(d^2 \sqrt{L n} \right)$ for $c = 2\sqrt{d}$ is incurred for finding the $d$ best items (hott-topics) with high probability. The second part of order $O\left( K\log n\right)$ is incurred by WMA for finding the best permutation once the column MABs starts suggesting the $d$-best items. Note, that the result has the correct order as it \textit{does not} scale with $O\left(\sqrt{KLn}\right)$ like the independent user model algorithms.
+\end{discussion}
+
+\begin{discussion}
+\label{disc:proof2}
+Note, that for proving the regret bound we need an instance of LRA which uses EXP3 as column MAB. This is because the feedbacks are no longer independent of each other. The feedback $f_{k,t}$ to the $k$-th column MAB  is dependent on the feedback of the $k-1$-th column MAB. Hence, adversarial MABs which can work with any sequence of feedbacks are required for giving theoretical guarantees in this setting.
 \end{discussion}

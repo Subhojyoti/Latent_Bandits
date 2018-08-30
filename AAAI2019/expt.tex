@@ -1,9 +1,10 @@
-In this section, we compare LRB to several bandit algorithms in three experiments. The first two experiments are on simulated dataset where all modeling assumptions hold. The third experiment is on a real-life dataset where we evaluate LRB when our modeling assumptions fail. In all our experiments users come in a Round Robin fashion over all time $[n]$. \todob{This should be random.} All results are averaged over $10$ independent random runs.
+In this section, we compare LRB to several bandit algorithms in three experiments. The first two experiments are on simulated dataset where all modeling assumptions hold. The third experiment is on a real-life dataset where we evaluate LRB when our modeling assumptions fail. In all our experiments users come in a Round Robin fashion over all time $[n]$. All results are averaged over $10$ independent random runs.
 
 %Note, that at every timestep $t$, nature reveals an user $i_t$ and each algorithm suggests $d$ items to it and records all the $d$ feedbacks. \todob{Why do we need this reminding sentence?}
 %\todob{American English is ``modeling''. Not ``modelling''.}
 
-\todosb{I experimented with Round Robin only, do you want uniform randomly. Maybe 2nd expt we can show as unoform randomly}
+%\todob{This should be random.}
+%\todosb{I experimented with Round Robin only, do you want uniform randomly. Maybe 2nd expt we can show as unoform randomly}
 
 \textbf{Independent User Model Algorithms:} In this approach, each user has a separate version of base-bandit algorithm running independent of each other. As base-bandit algorithms we choose two versions of stochastic MAB, UCB1 and Thompson Sampling (TS), abbreviated as Contextual UCB1 (CUCB1) and Contextual TS (CTS) respectively. For UCB1, we choose the confidence interval at timestep $t$ as $c_{i_t, j}(t) = \sqrt{\frac{1.5 \log t}{N_{i_t,j}(t)}}$ for the $i_t$-th user and $j$-th item. Note, that both the vanilla UCB1 and TS is used to find the best item for each user at rank $1$, while for the remaining positions $k= 2,\dots, d$ it suggest previously unselected items by sampling uniform randomly at every timestep $t$. 
 
