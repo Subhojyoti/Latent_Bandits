@@ -25,7 +25,7 @@ Since $D_t$ can change arbitrarily over time, the reward of any item can vary ov
 \begin{align*}
   \argmax_{j \in [L]} r_t(i, j) \in J_\ast\,,
 \end{align*}
-where $J_\ast$ is defined in \eqref{eq:hott-topics}. Therefore, it is possible to learn statistically efficiently the set of all potentially optimal items on average over all users.
+where $J_\ast$ is defined in \eqref{eq:hott-topics}. Therefore, it is possible to learn statistically efficiently the set of optimal items of all users.
 
 Now we are ready to define our notion of optimality and regret. Let $J_\ast$ be the hott items in \eqref{eq:hott-topics} and $\pi_{\ast, i}$ be their permutation that maximizes the reward of user $i$ in hindsight. Let $J_t$ be our recommended items at time $t$ and $\pi_{t, i}$ be their permutation for user $i$, which is computed by some later-defined algorithm (\ref{sec:algorithm}). Then our goal is to minimize the expected $n$-step regret,
 \begin{align*}
