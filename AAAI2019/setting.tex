@@ -9,18 +9,18 @@ We model user preferences by a family of low-rank matrices, which are known as h
   \forall j \in [L] \ \exists \alpha \in A: V(J_\ast, :) \alpha = V(j, :)\,,
   \label{eq:hott topics}
 \end{align}
-where $A = \{a \in [0, 1]^{d \times 1}: \|a\| \leq 1\}$.
+where $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$.
 
-In the context of user modeling, our decomposition of $M$ can be viewed as follows. The rank $d$ is the number of latent topics. The matrix $U$ represents preferences of $L$ users over $d$ topics, such as expected ratings. Without loss of generality, we assume that $U \in [0, 1]^{L \times d}$. The matrix $V$ represents the coordinates of $L$ items in the space of $d$ topics. Without loss of generality, we assume that the coordinates are points in a simplex, $\|V(j, :)\| \leq 1$ for all $j \in [L]$. Finally, we use $D$ to model changing topic preferences over time, such as that some topic becomes suddenly more preferred than others. Without loss of generality, we assume that $D \in [0, 1]^{d \times d}$.
+In the context of user modeling, our decomposition of $M$ can be viewed as follows. The rank $d$ is the number of latent topics. The matrix $U$ represents preferences of $L$ users over $d$ topics. Without loss of generality, we assume that $U \in [0, 1]^{L \times d}$. The matrix $V$ represents the coordinates of $L$ items in the space of $d$ topics. Without loss of generality, we assume that the coordinates are points in a simplex, $\|V(j, :)\|_1 \leq 1$ for all $j \in [L]$. Finally, we use $D$ to model changing topic preferences over time, such as that some topic becomes suddenly more preferred than others. Without loss of generality, we assume that $D \in [0, 1]^{d \times d}$.
 
-We study the following online learning problem. At time $t$, the preferences of users for items are encoded in a $K \times L$ \emph{reward matrix} $r_t = U D_t V\transpose$; where $U$, $D$, and $V$ are defined as above. We assume that matrix $D_t$ can change arbitrarily in time. A random user $i_t \in [K]$ arrives to the recommender system at time $t$ and we recommend $d$ items $J_t$ to this user. The \emph{reward} for these items is $r_t(i_t, J_t)$, where
+We study the following online learning problem. At time $t$, the preferences of users are encoded in a $K \times L$ \emph{reward matrix} $r_t = U D_t V\transpose$; where $U$, $D$, and $V$ are defined as above. We assume that matrix $D_t$ can change arbitrarily in time. A random user $i_t \in [K]$ arrives to the recommender system at time $t$ and we recommend $d$ items $J_t$ to this user. The \emph{reward} for these items is $r_t(i_t, J_t)$, where
 \begin{align*}
   r_t(i, J) =
   \max \, \{\mu(k) \, r_t(i, J(k)): k \in [d]\}
 \end{align*}
 is the reward for recommending items $J$ to user $i$ at time $t$, $J(k)$ is the $k$-th recommended item in $J$, and $\mu(k)$ is the preference for recommending an item at position $k \in [d]$. We assume that higher-ranked positions are more rewarding, $1 \geq \mu(1) \geq \dots \geq \mu(d) \geq 0$. The learning agent \emph{observes} the individual rewards of all recommended items, $r_t(i_t, J_t(k))$ for all $k \in [d]$.
 
-Since $D_t$ can change arbitrarily over time, the reward of any item can vary over time; and the most rewarding item for each user can also change. A remarkable property of our matrices is that for any $D_t$ and any user $i$,
+Since $D_t$ can change arbitrarily over time, the reward of any item can vary over time; and the most rewarding item for any user can also change. Therefore, the problem of learning to recommend items with high rewards seems hard. A remarkable property of our reward matrices is that for any $D_t$ and any user $i$,
 \begin{align*}
   \argmax_{j \in [L]} r_t(i, j) \in J_\ast\,,
 \end{align*}
