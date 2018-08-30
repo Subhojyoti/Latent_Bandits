@@ -50,7 +50,7 @@ Since the user feedback is observed on every column in $J_t$, we can compute the
       \State $(\tilde{\ell}_{1,t},\tilde{\ell}_{2,t},\dots,\tilde{\ell}_{d,t} )\leftarrow$ WMA$_{i_t,\{ l_{1,t},...,l_{d,t} \} }$ %by sampling  according to $p_{i_t,1},p_{i_t,2},\dots,p_{i_t,d!}$.
       %by sorting descendingly according to $w_{i_t,1},w_{i_t,2},\dots,w_{i_t,d}$.
       \State Let  $\{ r_{t}(\ell_{1,t}), r_{t}(\ell_{2,t}),\dots,r_{t}(\ell_{d,t}) \}$ be the user feedback.
-      \State Let $f_t(\ell_{i,t}) = \max \{ r_t(\ell_{1,t}),...,r_t(\ell_{i-1,t}),r_t(\hat{\ell}_{i,t}) \} - \max \{ r_t(\ell_{1,t}),...,r_t(\ell_{i-1,t}) \}$ 
+      \State Let $f_t(\ell_{i,t}) = \max \{ r_t(\ell_{1,t}),...,r_t(\ell_{i-1,t}),r_t({\ell}_{i,t}) \} - \max \{ r_t(\ell_{1,t}),...,r_t(\ell_{i-1,t}) \}$ 
       \State update(MAB$_{k}(n)$, reward = $f_t(\ell_{k,t})$, arm = $\hat{\ell}_{k,t}$)
       \State update(WMA$_{i_t,J_t}$,$\{ r_t(\ell_{1,t}),...,r_t(\ell_{d,t})\}$ )
     \EndFor

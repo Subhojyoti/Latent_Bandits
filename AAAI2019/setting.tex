@@ -7,7 +7,7 @@ Let $[n] = \{1, \dots, n\}$ be the set of the first $n$ positive integers. For a
 We model user preferences by a family of low-rank matrices, which are known as hott-topics \cite{}. We define a \emph{hott-topics matrix} of rank $d$ as $M = U D V\transpose$, where $U$ is a $K \times d$ non-negative matrix, $D$ is a non-negative $d \times d$ diagonal matrix, and $V$ is a $L \times d$ non-negative matrix that gives rise to the hott-topics structure. In particular, we assume that there exist $d$ rows $J_\ast$ of $V$ such that each row of $V$ can be written as a convex combination of rows $J_\ast$ and the zero vector. More precisely,
 \begin{align}
   \forall j \in [L] \ \exists \alpha \in A: V(J_\ast, :) \alpha = V(j, :)\,,
-  \label{eq:hott topics}
+  \label{eq:hott-topics}
 \end{align}
 where $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$.
 
@@ -24,9 +24,9 @@ Since $D_t$ can change arbitrarily over time, the reward of any item can vary ov
 \begin{align*}
   \argmax_{j \in [L]} r_t(i, j) \in J_\ast\,,
 \end{align*}
-where $J_\ast$ is defined in \eqref{eq:hott topics}. Therefore, we can learn statistically efficiently the set of potentially optimal items on average over all users.
+where $J_\ast$ is defined in \ref{eq:hott-topics}. Therefore, we can learn statistically efficiently the set of potentially optimal items on average over all users.
 
-Now we are ready to define our notion of optimality and regret. Let $J_\ast$ be the hott items in \eqref{eq:hott topics} and $\pi_{\ast, i}$ be their permutation that maximizes the reward of user $i$ in hindsight. Let $J_t$ be our recommended items at time $t$ and $\pi_{t, i}$ be their permutation for user $i$, which is computed by some later-defined algorithm (\cref{sec:algorithm}). Then our goal is to minimize the expected $n$-step regret,
+Now we are ready to define our notion of optimality and regret. Let $J_\ast$ be the hott items in \ref{eq:hott-topics} and $\pi_{\ast, i}$ be their permutation that maximizes the reward of user $i$ in hindsight. Let $J_t$ be our recommended items at time $t$ and $\pi_{t, i}$ be their permutation for user $i$, which is computed by some later-defined algorithm (\ref{sec:algorithm}). Then our goal is to minimize the expected $n$-step regret,
 \begin{align*}
   R(n) =
   \sum_{t = 1}^n \E\left[r_t(i_t, \pi_{\ast, i_t}(J_\ast)) - r_t(i_t, \pi_{t, i_t}(J_t))\right]\,,
