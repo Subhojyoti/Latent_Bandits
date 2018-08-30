@@ -40,11 +40,8 @@
 %}
 \maketitle
 \begin{abstract}
-In this paper, we study the problem of suggesting  a diverse list of items that contains the best item  for users who are observed sequentially. The learner suggests some items to the user and receives feedback on all the recommended items. The user-item preference matrix generating the feedback for user-item interaction consists of unobserved latent factors and is low rank. While previous methods have tried to reconstruct the preference matrix using various statistical methods from its noisy observations, these are prone to failure and require a broad set of assumptions for the theoretical guarantees to hold. We propose the Latent Ranked Bandit algorithm which does not try to reconstruct the preference matrix but instead races to find the best item for each user by leveraging the low-rank structure of the preference matrix. To do this, we borrow ideas from learning to rank. Under our modeling assumptions, we prove that our algorithm performs optimally. We also evaluate the performance of our algorithm in several simulated and real-world datasets. In all the experiments it outperforms the existing state-of-the-art algorithms. 
-%\todob{This is a very long sentence. Shorter sentences and more to the point.}
-%\todosb{Last sentence is ok I guess. Removed large dataset comment. I wanted to talk abt performance}
+We study the problem of learning a personalized list of diverse items for multiple users, from sequential observations of user preferences. The user-item preference matrix is non-negative and low-rank. Existing methods for solving similar problems are based on reconstructing the preference matrix from its noisy observations using matrix factorization techniques, and typically require strong assumptions on the reconstructed matrix. We depart from this standard approach and show that a special form of the low-rank structure allows for learning a small set of items, such that the most preferred item of each user is in this set. Then we learn to present this set to each user in a personalized manner, in the order of the descending preferences of items. We propose a computationally-efficient algorithm that implements this procedure, which we call latent ranker (LR), and prove a sublinear bound on its $n$-step regret. We evaluate the algorithm empirically on several synthetic and real-world datasets. In all experiments, we outperform existing state-of-the-art algorithms. 
 \end{abstract}
-
 
 \section{Introduction}
 \label{intro}
