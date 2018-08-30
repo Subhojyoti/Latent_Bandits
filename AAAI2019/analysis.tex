@@ -9,7 +9,9 @@ when $n > L$ and $c$ is a constant such that $c > 2\sqrt{d}$.
 \end{theorem}
 
 \begin{proof} \textbf{(Outline)}
-The proof of Theorem \ref{thm:LRB} is given in Appendix \ref{sec:proof}. The proof relies on the fact the column learning algorithm has  low regret. Since the users come randomly, if column algorithm suggests a sub-optimal set $J_t \neq J*$ too often, then the regret We divide the proof into two parts. The first part deals with the regret incurred due to the column MABs and the minimum number of pulls required before the column MABs starts suggesting the $d$-best columns (and by design the $d$ hott-topics) more often. This analysis follows from the proof of regret bound from \citet{radlinski2008learning} with modifications made to suit our setting. The second part of the proof deals with finding the best permutation amongst the suggested $d$ best items by using WMA. Finally, we combine both these steps to derive the regret upper bound.
+The complete proof of Theorem \ref{thm:LRB} is given in Appendix \ref{sec:proof} and we sketch the main idea here.  We  express the total regret over all time steps as regret over time steps during which column algorithm suggests suboptimal arms and rest of the time steps. We can bound the contribution due to the former term as follows. The column learning algorithm has  low regret. This follows by an analysis similar to as in \cite{radlinski2008learning}. This implies that the column algorithm cannot suggest sub-optimal sets $J_t \neq J^*$ too often. 
+
+The contribution to regret from the remaining time steps can be further decomposed as a sum over the users. We have a weighted majority algorithm for each user, and the regret bound follows by the standard guarantees as in \cite{WMA}.
 \end{proof}
 
 \begin{discussion}
