@@ -7,8 +7,6 @@
 \section{Proof}
 \label{sec:proof}
 
-Our learning agent operates in the following setting. Let $i_t$ be the index of a randomly chosen user at time $t$. Let $r_t = U D_t V\transpose$ be the reward matrix at time $t$, where $U$ is a non-negative matrix, $D_t$ is a non-negative diagonal matrix that may change with $t$, and $V$ is a non-negative hott-topics matrix. We assume that $r_t \in [0, 1]^{K \times L}$ at all times $t \in [n]$. The randomness in our problem is due to both randomly chosen users and the learning agent.
-
 The reward for recommending $d$ columns $J$ to user $i$ is
 \begin{align*}
   r_t(i, J) =
@@ -32,12 +30,35 @@ To decompose the regret into its row and column components, we introduce event $
   & \leq \sum_{t = 1}^n \E\left[1\{J_t \neq J_\ast\}\right] +
   \sum_{i = 1}^K \E\left[\sum_{t = 1}^n 1\{i_t = i, J_t = J_\ast\} (r_t(i, \pi_{\ast, i}(J_\ast)) - r_t(i, \pi_{t, i}(J_\ast)))\right]\,,
 \end{align*}
-where the inequality follows from the fact that the maximum instantaneous regret is $1$. The $n$-step regret of the column learning algorithm is bounded as
+where the inequality follows from the fact that the maximum instantaneous regret is $1$.
+
+The first term in the regret decomposition can be bounded as follows. Let
 \begin{align*}
-  \sum_{t = 1}^n \E\left[\tilde{r}_t(i_t, J_\ast) - \tilde{r}_t(i_t, J_t)\right] \leq
-  d \sqrt{L n}\,,
+  g_{t, i}(J, j) =
+  \tilde{r}_t(i, (J, j)) - \tilde{r}_t(i, J)
 \end{align*}
-which follows from Lemma~\ref{lem:keylem}. Let
+be the gain in reward from adding item $j$ to items $J$, for user $i$ at time $t$. Let $J_\ast$ be defined greedily as
+\begin{align*}
+  J_\ast(k) =
+  \argmax_{j \in [L] \setminus J_\ast(: k - 1)} \sum_{t = 1}^n \sum_{i = 1}^K g_{t, i}(J_\ast(: k - 1), j)
+\end{align*}
+for $k \in [d]$. From the design of our column learning algorithm, for any sequence of users $i_1, \dots, i_n$ and $k \in [d]$,
+\begin{align}
+  \sum_{t = 1}^n \E\left[g_{t, i_t}(J_t(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_t(k))\right] \leq
+  \sqrt{L n}\,.
+  \label{eq:single column regret}
+\end{align}
+Now note that
+\begin{align*}
+  & \sum_{t = 1}^n \E\left[\tilde{r}_t(i_t, J_\ast) - \tilde{r}_t(i_t, J_t)\right] = \\
+  & \quad \sum_{t = 1}^n \sum_{k = 1}^d \E\left[g_{t, i_t}(J_\ast(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_t(k))\right] = \\
+  & \quad \sum_{t = 1}^n \sum_{k = 1}^d \E\left[g_{t, i_t}(J_\ast(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_\ast(k)) +
+  g_{t, i_t}(J_t(: k - 1), J_\ast(k)) g_{t, i_t}(J_t(: k - 1), J_t(k))\right] \leq \\
+  & \quad \sum_{t = 1}^n \sum_{k = 1}^d \E\left[g_{t, i_t}(J_\ast(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_\ast(k))\right] +
+  d \sqrt{L n} \leq \\
+  & \quad d \sqrt{L n}\,,
+\end{align*}
+where the first inequality follows from \eqref{eq:single column regret} and the second inequality is from the greedy construction of $J_\ast$. \todob{We still need to prove the latter claim.} Let
 \begin{align*}
   \Delta =
   \min_{t \in [n]} \min_{J:\, J \neq J_\ast} \E\left[\tilde{r}_t(i, J_\ast)\right] - \E\left[\tilde{r}_t(i, J)\right]
