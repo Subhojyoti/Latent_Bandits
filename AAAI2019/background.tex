@@ -1,0 +1,14 @@
+%!TEX root = paper.tex
+
+\newcommand{\transpose}{^\mathsf{\scriptscriptstyle T}}
+
+Let $[n] = \{1, \dots, n\}$ be the set of the first $n$ positive integers. For any two sets $A$ and $B$, we denote by $A^B$ the set of all vectors whose entries take values from $A$ and are indexed by $B$. Let $M$ be a $K \times L$ matrix. Then $M(I, :)$ is a $|I| \times L$ submatrix of $M$ whose rows are rows $I \subseteq [K]$ in $M$. Similarly, $M(:, J)$ is a $K \times |J|$ submatrix of $M$ whose columns are columns $J \subseteq [L]$ in $M$. Let $\Pi_d$ be the set of all $d$-permutations. For any $\pi \in \Pi_d$ and $d$-dimensional vector $v$, we denote by $v(\pi)$ the permutation of the entries of $v$ according to $\pi$. \todob{Lists should be treated as lists, not sets. We do not learn sets.}
+
+We model user preferences by a family of low-rank matrices, which are known as hott topics. We define a \emph{hott-topics matrix} of rank $d$ as $M = U V\transpose$, where $U$ is a $K \times d$ non-negative matrix and $V$ is a $L \times d$ non-negative matrix that gives rise to the hott-topics structure. In particular, we assume that there exist $d$ rows $J_\ast$ in $V$ such that every row of $V$ can be written as a convex combination of rows $J_\ast$ and the zero vector. More precisely,
+\begin{align}
+  \forall j \in [L] \ \exists \alpha \in A: V(J_\ast, :) \alpha = V(j, :)\,,
+  \label{eq:hott-topics}
+\end{align}
+where $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$.
+
+In the context of user modeling, our factorization of $M$ can be interpreted as follows. The rank $d$ is the number of latent topics. The matrix $U$ are latent preferences of $K$ users over $d$ topics, where $U(i, :)$ are the preferences of user $i \in [K]$. Without loss of generality, we assume that $U \in [0, 1]^{L \times d}$. The matrix $V$ are latent coordinates of $L$ items in the space of $d$ topics, where $V(j, :)$ are the coordinates of item $j \in [L]$. Without loss of generality, we assume that the coordinates are points in a simplex, $\|V(j, :)\|_1 \leq 1$ for all $j \in [L]$.
