@@ -1,30 +1,20 @@
-
+%!TEX root = paper.tex
 
 \begin{theorem}
-\label{thm:LRB}
-The cumulative regret upper bound for latent ranker algorithm is,
+\label{thm:upper bounded} The expected $n$-step regret of LRA is bounded as
 \begin{align*}
- R(n) = O\left(\frac{d \sqrt{L n}}{\Delta} + K \log n + K d \log d\right)
+  R(n) =
+  O\left(\frac{d \sqrt{L n}}{\Delta} + K \log n + K d \log d\right)\,,
 \end{align*}
-
-where the gap $\Delta$ is the minimum gap between the optimal and the sub-optimal columns averaged over all users such that $\Delta =
-  \min_{t \in [n]} \min_{J:\, J \neq J_\ast} \E\left[\tilde{r}_t(i, J_\ast)\right] - \E\left[\tilde{r}_t(i, J)\right]$.
+where $\Delta = \min_{t \in [n]} \min_{J:\, J \neq J_\ast} \E\left[\tilde{r}_t(i, J_\ast)\right] - \E\left[\tilde{r}_t(i, J)\right]$ is an instance-specific factor that measures the minimum gap between the optimal and best suboptimal columns, averaged over all users at any time $t$.
 \end{theorem}
 
-%$n > L$ and $c$ is a constant such that $c > 2\sqrt{d}$
-
 \begin{proof} \textbf{(Outline)}
-The complete proof of Theorem \ref{thm:LRB} is given in Appendix \ref{sec:proof} and we sketch the main idea here.  We  express the total regret over all time steps as regret over time steps during which column algorithm suggests suboptimal arms and rest of the time steps. We can bound the contribution due to the former term as follows. The column learning algorithm has  low regret. This follows by an analysis similar to as in \cite{radlinski2008learning}. This implies that the column algorithm cannot suggest sub-optimal sets $J_t \neq J^*$ too often. 
+The complete proof of this claim is in \cref{sec:proof} and we sketch the main idea here.  We  express the total regret over all time steps as regret over time steps during which column algorithm suggests suboptimal arms and rest of the time steps. We can bound the contribution due to the former term as follows. The column learning algorithm has  low regret. This follows by an analysis similar to as in \cite{radlinski2008learning}. This implies that the column algorithm cannot suggest sub-optimal sets $J_t \neq J^*$ too often. 
 
 The contribution to regret from the remaining time steps can be further decomposed as a sum over the users. We have a weighted majority algorithm for each user, and the regret bound follows by the standard guarantees as in \citet{littlestone1994weighted}.
 \end{proof}
 
-\begin{discussion}
-\label{disc:proof1}
-From the result in Theorem \ref{thm:LRB} we see that the regret consist of several parts. The first part of order $O\left(\frac{d \sqrt{L n}}{\Delta} \right)$ is the regret incurred for finding the $d$ best items (hott-topics) with high probability. The second part of order $O\left( K\log n + K d \log d\right)$ is incurred by WMA for finding the best permutation once the column MABs starts suggesting the $d$-best items. Note, that the result has the correct order as it \textit{does not} scale with $O\left(\sqrt{KLn}\right)$ like the independent user model algorithms.
-\end{discussion}
+From the result in \cref{thm:upper bound} we see that the regret consist of several parts. The first part of order $O\left(\frac{d \sqrt{L n}}{\Delta} \right)$ is the regret incurred for finding the $d$ best items (hott-topics) with high probability. The second part of order $O\left( K\log n + K d \log d\right)$ is incurred by WMA for finding the best permutation once the column MABs starts suggesting the $d$-best items. Note, that the result has the correct order as it \textit{does not} scale with $O\left(\sqrt{KLn}\right)$ like the independent user model algorithms.
 
-\begin{discussion}
-\label{disc:proof2}
 Note, that for proving the regret bound we need an instance of LRA which uses EXP3 \citep{auer2002finite} as column MABs. This is because the feedbacks are no longer independent of each other. The feedback $f_{k,t}$ to the $k$-th column MAB$_k(n)$  is dependent on the feedback of $1$ to $k-1$-th column MABs. Hence, adversarial MABs which can work with any sequence of bounded feedback are required for giving theoretical guarantees in this setting.
-\end{discussion}
