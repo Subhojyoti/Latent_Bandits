@@ -1,20 +1,23 @@
 %!TEX root = paper.tex
 
 \begin{theorem}
-\label{thm:upper bounded} The expected $n$-step regret of LRA is bounded as
+\label{thm:upper bound} Let $\colalg$ and $\rowalg$ in $\latentranker$ be $\expthree$ and the weighted majority algorithm, respectively. Then the expected $n$-step regret of $\latentranker$ is bounded as
 \begin{align*}
   R(n) =
   O\left(\frac{d \sqrt{L n}}{\Delta} + K \log n + K d \log d\right)\,,
 \end{align*}
-where $\Delta = \min_{t \in [n]} \min_{J:\, J \neq J_\ast} \E\left[\tilde{r}_t(i, J_\ast)\right] - \E\left[\tilde{r}_t(i, J)\right]$ is an instance-specific factor that measures the minimum gap between the optimal and best suboptimal columns, averaged over all users at any time $t$.
+where $\Delta = \min_{t \in [n]} \min_{J:\, J \neq J_\ast} \E\left[\tilde{r}_t(i, J_\ast)\right] - \E\left[\tilde{r}_t(i, J)\right]$ is an instance-specific lower bound on the gap in the unweighted expected rewards of the optimal and best suboptimal columns at any time $t \in [n]$, averaged over all users at that time. \todob{We need to define the unweighted reward.}
 \end{theorem}
+\begin{proof}
+The complete proof is in \cref{sec:proof}. We sketch it below. The main idea is to decompose the regret of $\latentranker$ into two parts, where $\colalg$ does not suggest $J_\ast$ and the rest.
 
-\begin{proof} \textbf{(Outline)}
-The complete proof of this claim is in \cref{sec:proof} and we sketch the main idea here.  We  express the total regret over all time steps as regret over time steps during which column algorithm suggests suboptimal arms and rest of the time steps. We can bound the contribution due to the former term as follows. The column learning algorithm has  low regret. This follows by an analysis similar to as in \cite{radlinski2008learning}. This implies that the column algorithm cannot suggest sub-optimal sets $J_t \neq J^*$ too often. 
+The first part is analyzed as follows. $\colalg$ has a sublinear regret, based on a similar analysis to \citet{radlinski2008learning}. Therefore, our upper bound on the probability that $\colalg$ suggests suboptimal columns, which is $O(d \sqrt{L n} / \Delta)$, decreases with time.
 
-The contribution to regret from the remaining time steps can be further decomposed as a sum over the users. We have a weighted majority algorithm for each user, and the regret bound follows by the standard guarantees as in \citet{littlestone1994weighted}.
+The second part is analyzed as follows. Conditioned on the event that $J_t = J_\ast$, the only remaining regret at time $t$ is due to the fact that columns $J_t$ are not ordered optimally for user $i_t$. Since this is a full-information problem where $\rowalg$ is the weighted majority algorithm, the regret due to learning to order columns for $K$ users is $K$ times that of the weighted majority algorithm \citep*{littlestone1994weighted}.
 \end{proof}
 
-From the result in \cref{thm:upper bound} we see that the regret consist of several parts. The first part of order $O\left(\frac{d \sqrt{L n}}{\Delta} \right)$ is the regret incurred for finding the $d$ best items (hott-topics) with high probability. The second part of order $O\left( K\log n + K d \log d\right)$ is incurred by WMA for finding the best permutation once the column MABs starts suggesting the $d$-best items. Note, that the result has the correct order as it \textit{does not} scale with $O\left(\sqrt{KLn}\right)$ like the independent user model algorithms.
+The regret in \cref{thm:upper bound} consists of two main parts. The first part, which is $O(d \sqrt{L n} / \Delta)$, is the regret due to learning the $d$ optimal hott-topics columns with a high probability. The second part, which is $O(K \log n + K d \log d)$, is due to learning the most rewarding permutations of the $d$ optimal columns for all users.
 
-Note, that for proving the regret bound we need an instance of LRA which uses EXP3 \citep{auer2002finite} as column MABs. This is because the feedbacks are no longer independent of each other. The feedback $f_{k,t}$ to the $k$-th column MAB$_k(n)$  is dependent on the feedback of $1$ to $k-1$-th column MABs. Hence, adversarial MABs which can work with any sequence of bounded feedback are required for giving theoretical guarantees in this setting.
+Our regret bound also improves upon a trivial approach where the optimal columns are learned separately for each user. If this problem was solved by RBA \citep{radlinski2008learning}, the regret would be $O(\sqrt{K L n})$.
+
+Finally, we use non-stochastic algorithms for $\colalg$ and $\rowalg$ because our environment is non-stationary. In particular, we assume that user preferences $U_t$, and thus rewards, can change over time $t$. In addition, the rewards in $\colalg(k)$ are non-stationary due to chosen columns at higher positions $1, \dots, k - 1$.
