@@ -18,16 +18,18 @@ The second type of algorithms are the \textit{independent user model algorithms}
 \textbf{Ranking in Click Models:} Several algorithms have been proposed to solve the ranking problem in specific click models. Popular click models that have been studied extensively are Document Click Model (DCM), Position Based Click Model (PBM) and Cascade Click Model (CBM). For a survey of existing click models a reader may look into \citet{chuklin2015click}. While \citet{katariya2017bernoulli}, \citet{katariya2016stochastic} works in PBM, \citet{zoghi2017online} works in both PBM and CBM. Finally, \citet{kveton2017stochastic} can be viewed as a generalization of rank-1 bandits of \citet{katariya2016stochastic} to a higher rank. Note, that the theoretical guarantees of these algorithms does not hold beyond the specific click models.
 
 
-\textbf{Online Sub-modular maximization:} Maximization of submodular functions has wide applications in machine learning, artificial
-intelligence and in recommender systems \citep{nemhauser1978analysis}, \citep{krause2014submodular}. A submodular function $f : 2^V \rightarrow \mathbb{R}$ for a finite ground set $V$ is a set function that assign each
-subset $S \subseteq V$ a value $f(S)$. We define the gain of the function $f$ as $G_f(e|S) = f(S \cup \lbrace e\rbrace) - f(S)$ where the element $\lbrace e\rbrace \in V\setminus S$ and $S \subseteq V$. Also, $f$ satisfies the following two criteria:-
-\begin{enumerate}
-\item Monotonicity: A set function $f : 2^V \rightarrow \mathbb{R}$ is monotone if for every $A \subseteq B \subseteq V, f(A) \leq f(B)$.
-\item Submodularity: A set function $f : 2^V \rightarrow \mathbb{R}$ is submodular if for every $A \subseteq B \subseteq V$ and $\lbrace e\rbrace \in V \setminus B$ it holds that $G_f(e | A) \geq G_f(e | B)$.
-\end{enumerate}
+%%%%%% No longer required sub-modularity
 
-%\todob{Too much details. None of this is ever used in the paper.}
-
-Intuitively, a submodular function states that after performing a set $A$ of actions, the marginal gain of another action $e$ does not increase the gain for performing other actions in $B \setminus A$. Online submodular function maximization has been studied in \citet{streeter2009online} where the authors propose a general algorithm whereas  \citet{radlinski2008learning} can be considered as special case of it when the payoff is only between $\lbrace 0, 1\rbrace$. Also, in the contextual feature based setup online  submodular maximization has been studied by  \citet{yue2011linear}. An interesting property of submodular function is that a greedy algorithm using it is guaranteed to perform atleast $\left( 1 - \frac{1}{e}\right)$ of the optimal algorithm and this factor $\left( 1 - \frac{1}{e}\right)$ is not improvable by any polynomial time algorithm \citep{nemhauser1978analysis}.
+%\textbf{Online Sub-modular maximization:} Maximization of submodular functions has wide applications in machine learning, artificial
+%intelligence and in recommender systems \citep{nemhauser1978analysis}, \citep{krause2014submodular}. A submodular function $f : 2^V \rightarrow \mathbb{R}$ for a finite ground set $V$ is a set function that assign each
+%subset $S \subseteq V$ a value $f(S)$. We define the gain of the function $f$ as $G_f(e|S) = f(S \cup \lbrace e\rbrace) - f(S)$ where the element $\lbrace e\rbrace \in V\setminus S$ and $S \subseteq V$. Also, $f$ satisfies the following two criteria:-
+%\begin{enumerate}
+%\item Monotonicity: A set function $f : 2^V \rightarrow \mathbb{R}$ is monotone if for every $A \subseteq B \subseteq V, f(A) \leq f(B)$.
+%\item Submodularity: A set function $f : 2^V \rightarrow \mathbb{R}$ is submodular if for every $A \subseteq B \subseteq V$ and $\lbrace e\rbrace \in V \setminus B$ it holds that $G_f(e | A) \geq G_f(e | B)$.
+%\end{enumerate}
+%
+%%\todob{Too much details. None of this is ever used in the paper.}
+%
+%Intuitively, a submodular function states that after performing a set $A$ of actions, the marginal gain of another action $e$ does not increase the gain for performing other actions in $B \setminus A$. Online submodular function maximization has been studied in \citet{streeter2009online} where the authors propose a general algorithm whereas  \citet{radlinski2008learning} can be considered as special case of it when the payoff is only between $\lbrace 0, 1\rbrace$. Also, in the contextual feature based setup online  submodular maximization has been studied by  \citet{yue2011linear}. An interesting property of submodular function is that a greedy algorithm using it is guaranteed to perform atleast $\left( 1 - \frac{1}{e}\right)$ of the optimal algorithm and this factor $\left( 1 - \frac{1}{e}\right)$ is not improvable by any polynomial time algorithm \citep{nemhauser1978analysis}.
 
 
