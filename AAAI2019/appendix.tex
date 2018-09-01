@@ -85,7 +85,7 @@ where $R_i(n)$ is the expected $n$-step regret of the row algorithm in row $i$, 
 For a vector $J$, we will use the notation $J[:k]$ to denote the vector $(J(1),...,J(k)).$
 \begin{lemma}
 \label{lem:keylem}
-For any $k \in [d]$,
+For any $k \in [d]$, \todob{$I$ should be $i_t$, right?}
 $$ \sum_t \E \tilde{r}_t(i, J_t[:k]) \geq  \E \sum_t \tilde{r}_t(i, J^*[:k]) - O(k\sqrt{nL}).$$ 
 \end{lemma}
 \begin{proof}
