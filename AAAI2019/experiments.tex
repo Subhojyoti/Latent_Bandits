@@ -1,12 +1,17 @@
 In this section, we compare LRA to several bandit algorithms in three experiments. The first two experiments are on synthetic dataset where all modeling assumptions hold. The third experiment is on a real-life dataset where we evaluate LRA when our modeling assumptions fail. In our first experiments user come uniform randomly while in experiment $2$ and $3$  users come in a Round Robin fashion over all time $[n]$. All results are averaged over $10$ independent random runs.
 
-\textbf{Independent User Model Algorithms:} In this approach, each user has a separate version of base-bandit algorithm running independent of each other. As base-bandit algorithms we choose two versions of stochastic MAB, UCB1 and Thompson Sampling (TS), abbreviated as Contextual UCB1 (CUCB1) and Contextual TS (CTS) respectively. For UCB1, we choose the confidence interval at time $t$ as $c_{i, j}(t) = \sqrt{\frac{1.5 \log t}{N_{i, j}(t)}}$ for user $i$ and item $j$. Here, $N_{i, j}(t)$ denotes the number of times the $j$-th item has been observed by the $i$-th user base-bandit algorithm till timestep $t$. Note, that both the vanilla UCB1 and TS is used to find the best item for each user at rank $1$, while for the remaining positions $k= 2,\dots, d$ it suggest previously unselected items by sampling uniform randomly at each time $t$. \todob{Why? This does not seem fair. We need to change baselines. I have an idea.}
+\textbf{Independent User Model Algorithms:} In this approach, each user has a separate version of base-bandit algorithm running independent of each other. As base-bandit algorithms we choose two variants of the ranked bandit algorithm (RBA) of \citet{radlinski2008learning}. The two variants of RBA uses two types of column MABs, UCB1 and EXP3, abbreviated as RBA-UCB1  and RBA-EXP3 respectively. For RBA-UCB1, we choose the confidence interval at time $t$ as $c_{i, j}(t) = \sqrt{\frac{ \log t}{2N_{i, j}(t)}}$ for user $i$ and item $j$. Here, $N_{i, j}(t)$ denotes the number of times the $j$-th item has been observed by the $i$-th user base-bandit algorithm till timestep $t$. Note, that running independent vanilla UCB1 and EXP3 for every user is not feasible. This is because the vanilla versions are guaranteed to find a single best item for each user at rank $1$, while RBA-UCB1 and RBA-EXP3 will find a diverse list of $d$ best items for each user.
+
+%it suggest previously unselected items by sampling uniform randomly at each time $t$. \todob{Why? This does not seem fair. We need to change baselines. I have an idea.}
+
 
 \textbf{Matrix Completion Algorithms:} In the matrix completion approach, the algorithms try to reconstruct the user-item preference matrix $M$ from its noisy realization. We implement the widely used method to reconstruct partially observed noisy matrices, the non-negative matrix factorization. We term the corresponding algorithm as NMF Bandit (NMF-Ban). This algorithm is $\epsilon$-greedy in implementation whereby it reconstructs $M$ with $\epsilon$ probability and with $1-\epsilon$ probability it behaves greedily over the reconstructed matrix and suggest $d$ best item for the $i_t$-th user at every timestep $t$. Note, that NMF-Ban needs to sufficiently explore the noisy realizations of the matrix $M$ before it reconstructs. For this reason, we set the $\epsilon$ very low such that $\epsilon = 10^{-6}$.
 
 %\todob{I thought that we do explore-exploit. In any case, say what $\epsilon$ / exploration horizon is.}
 
-\textbf{Personalized Ranking Algorithms:} In this approach, we evaluate our proposed algorithm Latent Ranking Bandit (LRA) by using two different types of Column MABs, EXP3 and UCB1. We term them as LREXP3 and LRUCB1 respectively. The row MABs for both of these algorithms is still weighted majority algorithm (WMA). Note that we only show theoretical guarantees for LREXP3. For LREXP3,  we initialize the $k$-th column EXP3 with the column exploration parameter $\gamma_k = \sqrt{\frac{L \log L}{n}}$ and for LRUCB1 we use  a confidence interval of $c_{k, j}(t) = \sqrt{\frac{1.5 \log t}{N_{k,j}(t)}}$  for the $k$-th column MAB and $j$-th item. Here, $N_{k, j}(t)$ denotes the number of times the $j$-th item has been observed by the $k$-th column UCB1 algorithm till timestep $t$.
+\textbf{Personalized Ranking Algorithms:} In this approach, we evaluate our proposed algorithm latent ranking bandit (LRA) by using three different types of column MABs, EXP3, thompson sampling and UCB1. We term them as LR-EXP3, LR-TS and LR-UCB1 respectively. The row ranking components for all of these algorithms is still weighted majority algorithm (WMA). Note that we only show theoretical guarantees for LR-EXP3. We initialize the $k$-th column EXP3 with the column exploration parameter $\gamma_k = \sqrt{\frac{L \log L}{n}}$ as stated in \citet{auer2002nonstochastic}. Similarly, for LR-UCB1 we use  a confidence interval of $c_{k, j}(t) = \sqrt{\frac{\log t}{2N_{k,j}(t)}}$  for the $k$-th column MAB and $j$-th item. Here, $N_{k, j}(t)$ denotes the number of times the $j$-th item has been observed by the $k$-th column UCB1 algorithm till timestep $t$.
+
+Note, that for all the versions of UCB1 used in several types of algorithms we use an aggressive confidence interval to enhance the performance of these  algorithms. This is contrary to the conservative confidence interval used to prove theoretical guarantees in \citet{auer2002finite}.
 
 %\todob{$\gamma_k$ was never defined before. Why do you need to introduce it now?}
 
@@ -22,7 +27,9 @@ In this section, we compare LRA to several bandit algorithms in three experiment
 
 %\todob{What? We do not do this anymore, no? Why is it here? It makes no sense to use a bandit algorithm since we are in the full-observation setting. No UCB1 please. Exp3 should be weighted majority.}
 
-\textbf{Experiment 1:} This experiment is conducted to test the performance of LRA over small number of users and items. This simulated testbed consist of $500$ users, $50$ items, and rank$(M) = 2$. The vectors spanning $U$ and $V$, generating the user-item preference matrix $M$, are shown Figure \ref{fig:1}. The users are divided into a $70:30$ split such that $70\%$ of users prefer item $1$ and $30\%$ users prefer item  $2$. The item hott-topics are $V(1,:) = (0,1)$ and $V(2,:) = (1, 0)$ while remaining $70\%$ of items has feature $V(j',:) = (0.45, 0.55)$ and the rest have $V(j,:) = (0.55, 0.45)$. We create the user feature matrix $U$ similarly having a $70:30$ split such that $U(1,:) = (0,1)$, $U(2,:) = (0.2,0.8)$ and the remaining $70\%$ users having $U(i,:) = (0,0.8)$ and $30\%$ users having $U(i',:) = (0.7,0)$. The resulting matrix $M =UV^{\intercal}$ is such that algorithms that quickly find the easily identifiable hott-topics perform very well. From Figure \ref{fig:2} we can clearly see that both LREXP3 and LRUCB1 outperforms all the other algorithms. Their regret curve flattens, indicating that they have learned the best items for each user.  NMF-Ban performs poorly as it fails to get a reasonable approximation of $M$ although it performs better than CUCB1. Contextual algorithm CUCB1 performs poorly as the number of items per user is too large and the gaps are also small. Although CTS performs well in this small testbed, its performance eventually degrades for larger environments. 
+\textbf{Experiment 1:} This experiment is conducted to test the performance of LRA over small number of users and items. This simulated testbed consist of $500$ users, $50$ items, and rank$(M) = 2$. The vectors spanning $U$ and $V$, generating the user-item preference matrix $M$, are shown Figure \ref{fig:1}. The users are divided into a $70:30$ split such that $70\%$ of users prefer item $1$ and $30\%$ users prefer item  $2$. The item hott-topics are $V(1,:) = (0,1)$ and $V(2,:) = (1, 0)$ while remaining $70\%$ of items has feature $V(j',:) = (0.45, 0.55)$ and the rest have $V(j,:) = (0.55, 0.45)$. We create the user feature matrix $U$ similarly having a $70:30$ split such that $U(1,:) = (0,1)$, $U(2,:) = (0.2,0.8)$ and the remaining $70\%$ users having $U(i,:) = (0,0.8)$ and $30\%$ users having $U(i',:) = (0.7,0)$. The resulting matrix $M =UV^{\intercal}$ is such that algorithms that quickly find the easily identifiable hott-topics perform very well. From Figure \ref{fig:2} we can clearly see that LR-EXP3, LR-TS and LR-UCB1 outperforms all the other algorithms. Their regret curve flattens, indicating that they have learned the best items for each user.  NMF-Ban performs poorly as it fails to get a reasonable approximation of $M$ although it performs better than RBA-UCB1. Independent user model algorithms RBA-UCB1 and RBA-EXP3  perform poorly as the number of items per user is too large and the gaps are also small. 
+
+%Although CTS performs well in this small testbed, its performance eventually degrades for larger environments. 
 
 %\todob{Again, we never defined $j^\ast_1$ and $j^\ast_2$ before. Why do you think that an unexplained notation is better than explaining this in plain English?}
 
@@ -59,13 +66,16 @@ In this section, we compare LRA to several bandit algorithms in three experiment
         cycle list name=exotic,
   		legend style={at={(0.5,1.4)},anchor=north, legend columns=3} ]
       	% UCB
-		\addplot table{results/NewExpt1/Expt11/comp_subsampled_CTS0RR1S.txt};
-		\addplot table{results/NewExpt1/Expt11/comp_subsampled_LRUCB0RR1S.txt};
-		\addplot table{results/NewExpt1/Expt11/comp_subsampled_LREXP30RR1S.txt};
-		\addplot table{results/NewExpt1/Expt11/comp_subsampled_NMF0RR1S.txt};
+		%\addplot table{results/NewExpt1/Expt11/comp_subsampled_CTS0RR1S.txt};
+		\addplot table{results/NewExpt2/Expt1/comp_subsampled_RBAEXP30RR1S.txt};
+		\addplot table{results/NewExpt2/Expt1/comp_subsampled_LRTS0RR1S.txt};
+		\addplot table{results/NewExpt2/Expt1/comp_subsampled_LRUCB0RR1S.txt};
+		\addplot table{results/NewExpt2/Expt1/comp_subsampled_LREXP30RR1S.txt};
+		\addplot table{results/NewExpt2/Expt1/comp_subsampled_NMF0RR1S.txt};
 		%\addplot table{results/NewExpt1/Expt1/comp_subsampled_LinBan0RR1S.txt};
-		\addplot table{results/NewExpt1/Expt11/comp_subsampled_CUCB10RR1S.txt};
-		\legend{CTS, LRUCB1, LREXP3, NMF-Ban, CUCB1} 
+		%\addplot table{results/NewExpt1/Expt11/comp_subsampled_CUCB10RR1S.txt};
+		\addplot table{results/NewExpt2/Expt1/comp_subsampled_RBAUCB10RR1S.txt};
+		\legend{RBA-EXP3, LR-TS, LR-UCB1, LR-EXP3, NMF-Ban, RBA-UCB1} 
       	\end{axis}
       	\end{tikzpicture}
   		\label{fig:2}
@@ -99,13 +109,16 @@ In this section, we compare LRA to several bandit algorithms in three experiment
         cycle list name=exotic,
   		legend style={at={(0.5,1.4)},anchor=north, legend columns=3} ]
       	% UCB
-		\addplot table{results/NewExpt1/Expt2/comp_subsampled_CTS0RR1S.txt};
-		\addplot table{results/NewExpt1/Expt2/comp_subsampled_LRUCB0RR1S.txt};
-		\addplot table{results/NewExpt1/Expt2/comp_subsampled_LREXP30RR1S.txt};
-		\addplot table{results/NewExpt1/Expt2/comp_subsampled_NMF0RR1S.txt};
-		%\addplot table{results/NewExpt1/Expt2/comp_subsampled_LinBan0RR1S.txt};
-		\addplot table{results/NewExpt1/Expt2/comp_subsampled_CUCB10RR1S.txt};
-		\legend{CTS, LRUCB1, LREXP3, NMF-Ban, CUCB1} 
+		%\addplot table{results/NewExpt1/Expt11/comp_subsampled_CTS0RR1S.txt};
+		\addplot table{results/NewExpt2/Expt2/comp_subsampled_RBAEXP30RR1S.txt};
+		\addplot table{results/NewExpt2/Expt2/comp_subsampled_LRTS0RR1S.txt};
+		\addplot table{results/NewExpt2/Expt2/comp_subsampled_LRUCB0RR1S.txt};
+		\addplot table{results/NewExpt2/Expt2/comp_subsampled_LREXP30RR1S.txt};
+		\addplot table{results/NewExpt2/Expt2/comp_subsampled_NMF0RR1S.txt};
+		%\addplot table{results/NewExpt1/Expt1/comp_subsampled_LinBan0RR1S.txt};
+		%\addplot table{results/NewExpt1/Expt11/comp_subsampled_CUCB10RR1S.txt};
+		\addplot table{results/NewExpt2/Expt2/comp_subsampled_RBAUCB10RR1S.txt};
+		\legend{RBA-EXP3, LR-TS, LR-UCB1, LR-EXP3, NMF-Ban, RBA-UCB1} 
       	\end{axis}
       	\end{tikzpicture}
   		\label{fig:4}
@@ -119,13 +132,17 @@ In this section, we compare LRA to several bandit algorithms in three experiment
 %\todob{Why two pictures? Why do you subindex some $V$ with $\ell_j$?}]
 %\todob{Why two pictures? Why do you subindex some $V$ with $\ell_j$?}]
 
-\textbf{Experiment 2:} We conduct the second experiment on a larger simulated database of $1500$ users, $100$ items and rank$(M)=3$. The vectors spanning $U$ and $V$, generating the user-item preference matrix $M$ is shown Figure \ref{fig:3}. The users are divided into a $60:30:10$ split such that $60\%$ of the users prefer item item $1$, $30\%$ prefer item $2$ and $10\%$ prefer item $3$.  Here, hott-topics are $V(1,:) = (1,0,0)$, $V(2,:) = (0,1, 0)$ and $V(3,:) = (0,0,1)$. The remaining $60\%$ of items have feature  $V(j,:) = (0.5, 0.25,0.25)$, $30\%$ have $V(j',:) = (0.25, 0.5, 0.25)$ and rest have $V(j^{''},:) = (0.25, 0.25, 0.5)$. We create the user feature matrix $U$ similarly having a $60:30:10$ split and the vectors spanning $U$ are only of the type that spans the simplex, i.e $U(i,:)=(1,0,0)$, $U(i',:)=(1,0,0)$ and $U(i^{''},:)=(1,0,0)$. Again, the resultant matrix $M =UV^{\intercal}$ is such that algorithms that quickly spot the easily identifiable hott-topics outperform others. From Figure \ref{fig:4} we can see that both LREXP3 and LRUCB1 again outperforms all the other algorithms. Their regret curve flattens much before all the other algorithms indicating that they have learned the best items for each user. The matrix completion algorithm NMF-Ban again fails to get a reasonable approximation of $M$ and performs poorly. Also, we see that both the contextual algorithms CUCB1 and CTS perform poorly as the number of users and the number of items per user is too large and the independent base-bandits are not sharing information between themselves. In both the simulated datasets, we see that stochastic column MAB (UCB1) is outperforming adversarial column MAB (EXP3) as the user preference over the best item is not changing over time. This has also been observed by \citet{radlinski2008learning}.
+\textbf{Experiment 2:} We conduct the second experiment on a larger simulated database of $1500$ users, $100$ items and rank$(M)=3$. The vectors spanning $U$ and $V$, generating the user-item preference matrix $M$ is shown Figure \ref{fig:3}. The users are divided into a $60:30:10$ split such that $60\%$ of the users prefer item item $1$, $30\%$ prefer item $2$ and $10\%$ prefer item $3$.  Here, hott-topics are $V(1,:) = (1,0,0)$, $V(2,:) = (0,1, 0)$ and $V(3,:) = (0,0,1)$. The remaining $60\%$ of items have feature  $V(j,:) = (0.5, 0.25,0.25)$, $30\%$ have $V(j',:) = (0.25, 0.5, 0.25)$ and rest have $V(j^{''},:) = (0.25, 0.25, 0.5)$. We create the user feature matrix $U$ similarly having a $60:30:10$ split and the vectors spanning $U$ are only of the type that spans the simplex, i.e $U(i,:)=(1,0,0)$, $U(i',:)=(1,0,0)$ and $U(i^{''},:)=(1,0,0)$. Again, the resultant matrix $M =UV^{\intercal}$ is such that algorithms that quickly spot the easily identifiable hott-topics outperform others. From Figure \ref{fig:4} we can see that both LR-EXP3, LR-TS and LR-UCB1 again outperforms all the other algorithms. Their regret curve flattens much before all the other algorithms indicating that they have learned the best items for each user. The matrix completion algorithm NMF-Ban again fails to get a reasonable approximation of $M$ and performs poorly. Also, we see that both the independent user model algorithms RBA-UCB1 and RBA-EXP3 perform poorly as the number of users and the number of items per user is too large and the independent base-bandits (RBA) are not sharing information between themselves. In both the simulated datasets, we see that stochastic column MAB (UCB1) is outperforming adversarial column MAB (EXP3) as the user preference over the best item is not changing over time. This has also been observed by \citet{radlinski2008learning}.
 
 %which stems from the fact that all the user, 
 
-\textbf{Experiment 3:} We conduct the third experiment to test the performance of LRA when our modelling assumptions are violated. We use the Jester dataset \citep{goldberg2001eigentaste} which consist of over 4.1 million continuous ratings of 100 jokes from 73,421 users collected over 5 years. We sample randomly $2000$ users from this dataset and use singular value decomposition (SVD) to obtain a rank $2$ approximation of this user-joke rating matrix $M$. The rank $2$ approximation of $M$ of  is shown in Figure \ref{fig:5}, where we can clearly see the red stripes spanning the matrix indicating the low-rank structure of $M$. \todob{The rank should be chosen using cross-validation. How do you know that rank $2$ is good?} Furthermore, in this experiment we assume that the noise is independent Bernoulli over the entries of $M$ and hence this experiment deviates from our modeling assumptions. From \ref{fig:6} again we see that LREXP3 outperforms other algorithms. The regret curve of LRUCB1 does not flatten out which we attribute to the fact that LRUCB1 uses too large a confidence interval. The contextual and matrix completion algorithms perform significantly worse in this large testbed.
+%%%%%%% Rank 4 grouping %%%%
+%[548, 99], [266, 93], [262, 96], [250, 28], [142, 59], [135, 79], [96, 88], [55, 78], [52, 9], [26, 52], [24, 76], [23, 67], [23, 68], [23, 95], [20, 97], [19, 66], [10, 40], [9, 7], [9, 85], [3, 1], [3, 17], [2, 61]
 
 
+\textbf{Experiment 3:} We conduct the third experiment to test the performance of LRA when our modelling assumptions are violated. We use the Jester dataset \citep{goldberg2001eigentaste} which consist of over 4.1 million continuous ratings of 100 jokes from 73,421 users collected over 5 years. We sample randomly $2000$ users from this dataset and use singular value decomposition (SVD) to obtain a rank $4$ approximation of this user-joke rating matrix $M$. In the resultant matrix $M$, most of the users belong to the four classes preferring jokes 99, 93, 96 and 28, while a very small percentage of users prefer some other jokes. Note, that this condition results from the fact that this real-life dataset does not have the hott-topics structure. The rank $4$ approximation of $M$ of  is shown in Figure \ref{fig:5}, where we can clearly see the red stripes spanning the matrix indicating the low-rank structure of $M$. Furthermore, in this experiment we assume that the noise is independent Bernoulli over the entries of $M$ and hence this experiment deviates from our modeling assumptions. From \ref{fig:6} again we see that LR-EXP3, LR-TA and LR-UCB1 outperforms other algorithms. The regret curve of LRUCB1 does not flatten out which we attribute to the fact that LRUCB1 uses too large a confidence interval. The contextual and matrix completion algorithms perform significantly worse in this large testbed.
+
+%\todob{The rank should be chosen using cross-validation. How do you know that rank $2$ is good?}
 
 %[[1104, 99], [896, 93],[0,0][0,0]}
 
@@ -133,10 +150,10 @@ In this section, we compare LRA to several bandit algorithms in three experiment
 \centering
 \begin{tabular}{cc}
 \setlength{\tabcolsep}{0.1pt}
-\subfigure[0.25\textwidth][Expt-$3$: $2000$ Users, $100$ items, Rank $2$ approximation of Jester Dataset]
+\subfigure[0.25\textwidth][Expt-$3$: $2000$ Users, $100$ items, Rank $4$ approximation of Jester Dataset]
     %with $r_{i_{{i}\neq {*}}}=0.07$ and $r^{*}=0.1$
     {
-    \includegraphics[scale=0.08]{img/jester_rank2.png}
+    \includegraphics[scale=0.08]{img/jester_rank4.png}
     	\label{fig:5}
     }
     &
@@ -161,14 +178,16 @@ In this section, we compare LRA to several bandit algorithms in three experiment
         %clip mode=individual,grid,grid style={gray!30},
   		legend style={at={(0.5,1.4)},anchor=north, legend columns=3} ]
       	% UCB
-		
-		\addplot table{results/NewExpt1/Expt3/comp_subsampled_CTS0RR1S.txt};
-		\addplot table{results/NewExpt1/Expt3/comp_subsampled_LRUCB0RR1S.txt};
-		\addplot table{results/NewExpt1/Expt3/comp_subsampled_LREXP30RR1S.txt};
-		\addplot table{results/NewExpt1/Expt3/comp_subsampled_NMF0RR1S.txt};
-		\addplot table{results/NewExpt1/Expt3/comp_subsampled_LinBan0RR1S.txt};
-		%\addplot table{results/NewExpt1/Expt3/comp_subsampled_CUCB10RR1S.txt};
-		\legend{CTS, LRUCB1, LREXP3, NMF-Ban, CUCB1} 
+		%\addplot table{results/NewExpt1/Expt11/comp_subsampled_CTS0RR1S.txt};
+		\addplot table{results/NewExpt2/Expt3/comp_subsampled_RBAEXP30RR1S.txt};
+		\addplot table{results/NewExpt2/Expt3/comp_subsampled_LRTS0RR1S.txt};
+		\addplot table{results/NewExpt2/Expt3/comp_subsampled_LRUCB0RR1S.txt};
+		\addplot table{results/NewExpt2/Expt3/comp_subsampled_LREXP30RR1S.txt};
+		\addplot table{results/NewExpt2/Expt3/comp_subsampled_NMF0RR1S.txt};
+		%\addplot table{results/NewExpt1/Expt1/comp_subsampled_LinBan0RR1S.txt};
+		%\addplot table{results/NewExpt1/Expt11/comp_subsampled_CUCB10RR1S.txt};
+		\addplot table{results/NewExpt2/Expt3/comp_subsampled_RBAUCB10RR1S.txt};
+		\legend{RBA-EXP3, LR-TS, LR-UCB1, LR-EXP3, NMF-Ban, RBA-UCB1} 
       	\end{axis}
       	\end{tikzpicture}
   		\label{fig:6}
