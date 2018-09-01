@@ -63,12 +63,14 @@ where the inequality follows from the fact that the maximum instantaneous regret
  Let
 \begin{align*}
   \Delta =
-  \min_{t \in [n]} \min_{J:\, J \neq J_\ast} \E\left[\tilde{r}_t(i, J_\ast)\right] - \E\left[\tilde{r}_t(i, J)\right]
+  \min_{t \in [n]} \min_{J:\, J \neq J_\ast} \E\left[\tilde{r}_t(i, J^\ast)\right] - \E\left[\tilde{r}_t(i, J)\right]
 \end{align*}
 be the minimum gap between the optimal and best suboptimal columns, averaged over users. Then by Lemma~\ref{lem:keylem}, we have
+$$    \sum_t \E \tilde{r}_t(i_t, J^*) -  \E \tilde{r}_t(i_t, J_t) \leq   O(d\sqrt{nL}).$$ 
+Combining with with the definition of $\Delta$, we get
 \begin{align*}
   \sum_{t = 1}^n \E\left[1\{J_t \neq J_\ast\}\right] \leq
-  \frac{d \sqrt{L n}}{\Delta}\,.
+ O \left(  \frac{d \sqrt{L n}}{\Delta} \right) \,.
 \end{align*}
 The second term in the regret decomposition can be bounded as
 \begin{align*}
@@ -82,28 +84,27 @@ where $R_i(n)$ is the expected $n$-step regret of the row algorithm in row $i$, 
 
 \todob{Before the we submit the paper, I will add discussion on $\Delta$ and also prove a bound where we integrate it out.}
 
-For a vector $J$, we will use the notation $J[:k]$ to denote the vector $(J(1),...,J(k)).$
+For a vector $J$, we will use the notation $J(:k)$ to denote the vector $(J(1),...,J(k)).$
 \begin{lemma}
 \label{lem:keylem}
 For any $k \in [d]$,
-$$ \sum_t \E \tilde{r}_t(i, J_t[:k]) \geq  \E \sum_t \tilde{r}_t(i, J^*[:k]) - O(k\sqrt{nL}).$$ 
+$$ \sum_t \E \tilde{r}_t(i_t, J_t[:k]) \geq  \E \sum_t \tilde{r}_t(i_t, J^*[:k]) - O(k\sqrt{nL}).$$ 
 \end{lemma}
 \begin{proof}
 We will show this by induction. Note that there are $d$ column MABs. The base case when $k=1$ follows because of the guarantees of MAB$_1(n)$.
-Let $J^* = (j_1^*,j_2^*,...,j_d^*).$   We will now assume that the result is true for $k-1$ for some $k>1.$
+We have by definition $J^*(1) = \max_j   \E \sum_t  {r}_t(i_t, j) $ and $J^*(k) = \max_{j} \E \sum_t   \max \{  \tilde{r}_t(i_t, J^*(:k-1)), r_t(i_t,j) \}$ for $1 < k \leq d$.   We will now assume that the result is true for $k-1$ for some $k>1.$
 We have 
 \begin{align}
-& \E  \sum_t \tilde{r}_t(i, J_t(:k))   \\
-&\geq \max_{j_k} \E \sum_t   \max \{ \tilde{r}_t(i, J_t(:k-1)), r_t(i_t,j_k) \}  - O\left(\sqrt{nL}\right) \\
-&\geq \max_{j_k} \E \sum_t   \max \{  \tilde{r}_t(i, J^*(:k-1)), r_t(i_t,j_k) \}   - O\left( \sqrt{nL} \right) - O\left( (k-1)\sqrt{nL} \right)   \\
+& \E  \sum_t \tilde{r}_t(i_t, J_t(:k))   \\
+&\geq \max_{j} \E \sum_t   \max \{ \tilde{r}_t(i_t, J_t(:k-1)), r_t(i_t,j) \}  - O\left(\sqrt{nL}\right) \\
+&\geq \max_{j} \E \sum_t   \max \{  \tilde{r}_t(i_t, J^*(:k-1)), r_t(i_t,j) \}   - O\left( \sqrt{nL} \right) - O\left( (k-1)\sqrt{nL} \right)   \\
 \label{eq:result}
-& =  \E \sum_t  \tilde{r}_t(i, J^*(:k))  - O\left( k\sqrt{nL} \right).
+& =  \E \sum_t  \tilde{r}_t(i_t, J^*(:k))  - O\left( k\sqrt{nL} \right).
 \end{align}
 %\todob{The last term in the first line misses $\max$. But a more important question is why do we need that term at all. The term is constant throughout the derivation.}
-
-The last equality follows from Lemma~\ref{thm:hott}.  \todoan{Need a (simple) lemma about hott topics structure}
+The last inequality follows from the definition of $J^*.$
 The first inequality is from the guarantees of MAB$_k(n)$. \todob{State the regret bound of Exp3 in a lemma.} The crucial step is  the second inequality. It says that we can replace $J(:k-1)$ with $J^*(:k-1)$ by just losing another additive $O\left( (k-1) \sqrt{nL} \right)$ term. This follows from induction hypothesis and Lemma~\ref{lem:keyinequality}. We note that from Equation~\ref{eq:result}, we have
-$$ \max  \sum_t \tilde{r}_t(i, J_t[:k])  \geq  \E \sum_t \max  \sum_t \tilde{r}_t(i, J^*[:k])  - O\left( k \sqrt{nL} \right),$$
+$$ \max  \sum_t \tilde{r}_t(i, J_t(:k))  \geq  \E \sum_t \tilde{r}_t(i, J^*(:k))  - O\left( k \sqrt{nL} \right),$$
 which concludes the proof.
 \end{proof}
 
