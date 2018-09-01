@@ -32,38 +32,40 @@ To decompose the regret into its row and column components, we introduce event $
 \end{align*}
 where the inequality follows from the fact that the maximum instantaneous regret is $1$.
 
-The first term in the regret decomposition can be bounded as follows. Let
-\begin{align*}
-  g_{t, i}(J, j) =
-  \tilde{r}_t(i, (J, j)) - \tilde{r}_t(i, J)
-\end{align*}
-be the gain in reward from adding item $j$ to items $J$, for user $i$ at time $t$. Let $J_\ast$ be defined greedily as
-\begin{align*}
-  J_\ast(k) =
-  \argmax_{j \in [L] \setminus J_\ast(: k - 1)} \sum_{t = 1}^n \sum_{i = 1}^K g_{t, i}(J_\ast(: k - 1), j)
-\end{align*}
-for $k \in [d]$. From the design of our column learning algorithm, for any sequence of users $i_1, \dots, i_n$ and $k \in [d]$,
-\begin{align}
-  \sum_{t = 1}^n \E\left[g_{t, i_t}(J_t(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_t(k))\right] \leq
-  \sqrt{L n}\,.
-  \label{eq:single column regret}
-\end{align}
-Now note that
-\begin{align*}
-  & \sum_{t = 1}^n \E\left[\tilde{r}_t(i_t, J_\ast) - \tilde{r}_t(i_t, J_t)\right] = \\
-  & \quad \sum_{t = 1}^n \sum_{k = 1}^d \E\left[g_{t, i_t}(J_\ast(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_t(k))\right] = \\
-  & \quad \sum_{t = 1}^n \sum_{k = 1}^d \E\left[g_{t, i_t}(J_\ast(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_\ast(k)) +
-  g_{t, i_t}(J_t(: k - 1), J_\ast(k)) g_{t, i_t}(J_t(: k - 1), J_t(k))\right] \leq \\
-  & \quad \sum_{t = 1}^n \sum_{k = 1}^d \E\left[g_{t, i_t}(J_\ast(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_\ast(k))\right] +
-  d \sqrt{L n} \leq \\
-  & \quad d \sqrt{L n}\,,
-\end{align*}
-where the first inequality follows from \eqref{eq:single column regret}, and the second inequality is from the greedy selection of $J_\ast(: k - 1)$ and $J_\ast(k)$. \todob{We still need to prove the latter claim.} Let
+%The first term in the regret decomposition can be bounded as follows. 
+%Let
+%\begin{align*}
+%  g_{t, i}(J, j) =
+%  \tilde{r}_t(i, (J, j)) - \tilde{r}_t(i, J)
+%\end{align*}
+%be the gain in reward from adding item $j$ to items $J$, for user $i$ at time $t$. Let $J_\ast$ be defined greedily as
+%\begin{align*}
+%  J_\ast(k) =
+%  \argmax_{j \in [L] \setminus J_\ast(: k - 1)} \sum_{t = 1}^n \sum_{i = 1}^K g_{t, i}(J_\ast(: k - 1), j)
+%\end{align*}
+%for $k \in [d]$. From the design of our column learning algorithm, for any sequence of users $i_1, \dots, i_n$ and $k \in [d]$,
+%\begin{align}
+%  \sum_{t = 1}^n \E\left[g_{t, i_t}(J_t(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_t(k))\right] \leq
+%  \sqrt{L n}\,.
+%  \label{eq:single column regret}
+%\end{align}
+%Now note that
+%\begin{align*}
+%  & \sum_{t = 1}^n \E\left[\tilde{r}_t(i_t, J_\ast) - \tilde{r}_t(i_t, J_t)\right] = \\
+%  & \quad \sum_{t = 1}^n \sum_{k = 1}^d \E\left[g_{t, i_t}(J_\ast(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_t(k))\right] = \\
+%  & \quad \sum_{t = 1}^n \sum_{k = 1}^d \E\left[g_{t, i_t}(J_\ast(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_\ast(k)) +
+%  g_{t, i_t}(J_t(: k - 1), J_\ast(k)) g_{t, i_t}(J_t(: k - 1), J_t(k))\right] \leq \\
+%  & \quad \sum_{t = 1}^n \sum_{k = 1}^d \E\left[g_{t, i_t}(J_\ast(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_\ast(k))\right] +
+%  d \sqrt{L n} \leq \\
+%  & \quad d \sqrt{L n}\,,
+%\end{align*}
+%where the first inequality follows from \eqref{eq:single column regret}, and the second inequality is from the greedy selection of $J_\ast(: k - 1)$ and $J_\ast(k)$. \todob{We still need to prove the latter claim.}
+ Let
 \begin{align*}
   \Delta =
   \min_{t \in [n]} \min_{J:\, J \neq J_\ast} \E\left[\tilde{r}_t(i, J_\ast)\right] - \E\left[\tilde{r}_t(i, J)\right]
 \end{align*}
-be the minimum gap between the optimal and best suboptimal columns, averaged over users. Then
+be the minimum gap between the optimal and best suboptimal columns, averaged over users. Then by Lemma~\ref{lem:keylem}, we have
 \begin{align*}
   \sum_{t = 1}^n \E\left[1\{J_t \neq J_\ast\}\right] \leq
   \frac{d \sqrt{L n}}{\Delta}\,.
@@ -91,18 +93,44 @@ We will show this by induction. Note that there are $d$ column MABs. The base ca
 Let $J^* = (j_1^*,j_2^*,...,j_d^*).$   We will now assume that the result is true for $k-1$ for some $k>1.$
 We have 
 \begin{align}
-& \E  \sum_t \tilde{r}_t(i, J_t[:k])   \\
-&\geq \max_{j_k} \E \sum_t   \max \{ \tilde{r}_t(i, J_t[:k-1]), r_t(i_t,j^*_k) \}  - O\left(\sqrt{nL}\right) \\
-&\geq \max_{j_k} \E \sum_t   \max \{  \tilde{r}_t(i, J_t[:k]), r_t(i_t,J_t(k)) \}   - O\left( \sqrt{nL} \right) - O\left( (k-1)\sqrt{nL} \right)   \\
+& \E  \sum_t \tilde{r}_t(i, J_t(:k))   \\
+&\geq \max_{j_k} \E \sum_t   \max \{ \tilde{r}_t(i, J_t(:k-1)), r_t(i_t,j_k) \}  - O\left(\sqrt{nL}\right) \\
+&\geq \max_{j_k} \E \sum_t   \max \{  \tilde{r}_t(i, J^*(:k-1)), r_t(i_t,j_k) \}   - O\left( \sqrt{nL} \right) - O\left( (k-1)\sqrt{nL} \right)   \\
 \label{eq:result}
-& =  \E \sum_t  \tilde{r}_t(i, J^*[:k])  - O\left( k\sqrt{nL} \right).
+& =  \E \sum_t  \tilde{r}_t(i, J^*(:k))  - O\left( k\sqrt{nL} \right).
 \end{align}
 %\todob{The last term in the first line misses $\max$. But a more important question is why do we need that term at all. The term is constant throughout the derivation.}
 
-The last equality follows from Lemma~\ref{thm:hott}.  \todoan{Need a lemma about hott topics structure}
-The first inequality is from the guarantees of MAB$_k(n)$. \todob{State the regret bound of Exp3 in a lemma.} The crucial step is  the second inequality. It says that we can replace $J_t[:k-1]$ with $J^*[:k-1]$ by just losing another additive $O\left( (k-1) \sqrt{nL} \right)$ term. This follows from induction hypothesis and Lemma~\ref{lem:keyinequality}. We note that from Equation~\ref{eq:result}, we have
+The last equality follows from Lemma~\ref{thm:hott}.  \todoan{Need a (simple) lemma about hott topics structure}
+The first inequality is from the guarantees of MAB$_k(n)$. \todob{State the regret bound of Exp3 in a lemma.} The crucial step is  the second inequality. It says that we can replace $J(:k-1)$ with $J^*(:k-1)$ by just losing another additive $O\left( (k-1) \sqrt{nL} \right)$ term. This follows from induction hypothesis and Lemma~\ref{lem:keyinequality}. We note that from Equation~\ref{eq:result}, we have
 $$ \max  \sum_t \tilde{r}_t(i, J_t[:k])  \geq  \E \sum_t \max  \sum_t \tilde{r}_t(i, J^*[:k])  - O\left( k \sqrt{nL} \right),$$
 which concludes the proof.
+\end{proof}
+
+
+\begin{lemma}
+\label{lem:keyinequality}
+Suppose
+ $$ \E \sum_t \tilde{r}_t(i_t, J_t(:k-1) \geq  \E \sum_t \tilde{r}_t(i_t, J^*(:k-1))  - C$$
+ %\todob{Define $C$. Why not just $C$?}
+  and let $j_k \in [L].$ Then,
+$$ \E \sum_t \max \{ \tilde{r}_t(i_t, J_t(:k-1)), r_t(i_t,j_k) \} \geq \E \sum_t  \max \{ \tilde{r}_t(i_t, J^*(:k-1)), r_t(i_t,j_k) \} - O\left((k-1) \sqrt{nL} \right).$$
+%\myworries{Both Brano and I have confused ourselves over variants of this lemma. Definitely helpful for everyone to verify if the proof is correct.}
+\end{lemma}
+
+\begin{proof}
+ Let $T_1 = \{ t \, | \tilde r_t(i_t,J^*(:k-1)) < r_t(i_t,j_k) \}$ and $T_2 = [n] \backslash T_1 .$ We then have 
+\begin{align*}
+  & \E \sum_t \max \{ \tilde{r}_t(i_t,J_t(:k-1)),r_t(i_t,j_k) \} \\
+  & \quad = \E\sum_{t \in T_1} \max \{ \tilde{r}_t(i_t,J_t(:k-1)),r_t(i_t,j_k) \} + \E\sum_{t \in T_2} \max \{ \tilde{r}_t(i_t,J_t(:k-1)),r_t(i_t,j_k) \}  \\
+  & \quad \geq \sum_{t \in T_1} \max \{ \tilde{r}_t(i_t,J^*(:k-1)),r_t(i_t,j_k) \} + \E\sum_{t \in T_2} \max \{ \tilde{r}_t(i_t,J_t(:k-1)),r_t(i_t,j_k) \} \\
+  & \quad \geq \sum_{t \in T_1} \max \{ \tilde{r}_t(i_t,J^*(:k-1)),r_t(i_t,j_k) \}) + \E\sum_{t \in T_2} \tilde{r}_t(i_t,J_t(:k-1)) \\
+  & \quad \geq \sum_{t \in T_1}\max \{ \tilde{r}_t(i_t,J^*(:k-1)),r_t(i_t,j_k) \} + \sum_{t \in T_2} \tilde{r}_t(i_t,J^*(:k-1)) - C \\
+  & \quad = \sum_{t \in T_1} \max \{ \tilde{r}_t(i_t,J^*(:k-1)),r_t(i_t,j_k) \} + \sum_{t \in T_2} \max \{ \tilde{r}_t(i_t,J^*(:k-1)),r_t(i_t,j_k) \} - C \\
+  & \quad = \sum_{t \in [n]}  \max \{ \tilde{r}_t(i_t,J^*(:k-1)),r_t(i_t,j_k) \} - C.
+\end{align*}
+%\todob{$(j_1^*,j_2)$ should be $(J^*[1:k-1],j_k)$. $j_2$ should be $j_k$. The same below.}
+The first inequality is easy because $\max R_t(i_t,(J^*[1:k-1],j_k) = R_t(i_t,j_k)$ for $t \in T_1$. Second inequality is trivial. Third inequality follows from the assumption. The next equality holds because of the definition of $T_2$.  
 \end{proof}
 
 
