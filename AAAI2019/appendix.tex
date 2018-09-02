@@ -105,7 +105,7 @@ We have
 \end{align}
 %\todob{The last term in the first line misses $\max$. But a more important question is why do we need that term at all. The term is constant throughout the derivation.}
 The last inequality follows from the definition of $J^*.$
-The first inequality is from the guarantees of MAB$_k(n)$. \todob{State the regret bound of Exp3 in a lemma.} The crucial step is  the second inequality. It says that we can replace $J(:k-1)$ with $J^*(:k-1)$ by just losing another additive $O\left( (k-1) \sqrt{nL} \right)$ term. This follows from induction hypothesis and Lemma~\ref{lem:keyinequality}. We note that from Equation~\ref{eq:result}, we have
+The first inequality is from the guarantees of MAB$_k(n)$. \todob{State the regret bound of Exp3 in a lemma.} The second inequality follows from induction hypothesis and Lemma~\ref{lem:keyinequality}. We note that from Equation~\ref{eq:result}, we have
 $$ \max  \sum_t \tilde{r}_t(i_t, J_t(:k))  \geq  \E \sum_t \tilde{r}_t(i_t, J^*(:k))  - O\left( k \sqrt{nL} \right),$$
 which concludes the proof.
 \end{proof}
@@ -114,26 +114,35 @@ which concludes the proof.
 \begin{lemma}
 \label{lem:keyinequality}
 Suppose
- $$ \E \sum_t \tilde{r}_t(i_t, J_t(:k-1) \geq  \E \sum_t \tilde{r}_t(i_t, J^*(:k-1))  - C$$
+ $$ \E \sum_t \tilde{r}_t(i_t, J_t(:k) \geq  \E \sum_t \tilde{r}_t(i_t, J^*(:k))  - C$$
  %\todob{Define $C$. Why not just $C$?}
-  and let $j_k \in [L].$ Then,
-$$ \E \sum_t \max \{ \tilde{r}_t(i_t, J_t(:k-1)), r_t(i_t,j_k) \} \geq \E \sum_t  \max \{ \tilde{r}_t(i_t, J^*(:k-1)), r_t(i_t,j_k) \} - O\left((k-1) \sqrt{nL} \right).$$
+  for some $k \in [d-1]$ and let $j \in [L].$ Then,
+$$ \E \sum_t \max \{ \tilde{r}_t(i_t, J_t(:k)), r_t(i_t,j) \} \geq \E \sum_t  \max \{ \tilde{r}_t(i_t, J^*(:k)), r_t(i_t,j) \} - C.$$
 %\myworries{Both Brano and I have confused ourselves over variants of this lemma. Definitely helpful for everyone to verify if the proof is correct.}
 \end{lemma}
 
 \begin{proof}
- Let $T_1 = \{ t \, | \tilde r_t(i_t,J^*(:k-1)) < r_t(i_t,j_k) \}$ and $T_2 = [n] \backslash T_1 .$ We then have 
+%For any $a,b,c \in \mathbb{R}$ we have $\max \{ a, b\} \geq \max \{ a, c \} +  (b - c).$ Using this, we have
+%\begin{align*}
+%  & \E \sum_t \max \{ \tilde{r}_t(i_t,J_t(:k)),r_t(i_t,j) \} \\
+%  & \quad = \E\sum_{t } \max \{ \tilde{r}_t(i_t,J_t(:k)),r_t(i_t,j) \} \\
+%  &  \quad \geq \E \sum_{t } \max \{ \tilde{r}_t(i_t,J_t(:k)),\tilde{r}_t(i_t,J^*(k)), r_t(i_t,j) \} + \tilde{r}_t(i_t,J_t(:k)) - \tilde{r}_t(i_t,J^*(k)) \\
+%   &  \quad \geq \E \sum_{t } \max \{ \tilde{r}_t(i_t,J_t(:k)),\tilde{r}_t(i_t,J^*(k)), r_t(i_t,j) \} +  \E \sum_{t }  \tilde{r}_t(i_t,J_t(:k)) - \tilde{r}_t(i_t,J^*(k)) \\
+%   &  \quad \geq \E \sum_{t } \max \{ \tilde{r}_t(i_t,J^*(k)), r_t(i_t,j) \} - C.
+%  \end{align*}
+  
+   Let $T_1 = \{ t \, | \tilde r_t(i_t,J^*(:k)) < r_t(i_t,j) \}$ and $T_2 = [n] \backslash T_1 .$ We then have 
 \begin{align*}
-  & \E \sum_t \max \{ \tilde{r}_t(i_t,J_t(:k-1)),r_t(i_t,j_k) \} \\
-  & \quad = \E\sum_{t \in T_1} \max \{ \tilde{r}_t(i_t,J_t(:k-1)),r_t(i_t,j_k) \} + \E\sum_{t \in T_2} \max \{ \tilde{r}_t(i_t,J_t(:k-1)),r_t(i_t,j_k) \}  \\
-  & \quad \geq \sum_{t \in T_1} \max \{ \tilde{r}_t(i_t,J^*(:k-1)),r_t(i_t,j_k) \} + \E\sum_{t \in T_2} \max \{ \tilde{r}_t(i_t,J_t(:k-1)),r_t(i_t,j_k) \} \\
-  & \quad \geq \sum_{t \in T_1} \max \{ \tilde{r}_t(i_t,J^*(:k-1)),r_t(i_t,j_k) \}) + \E\sum_{t \in T_2} \tilde{r}_t(i_t,J_t(:k-1)) \\
-  & \quad \geq \sum_{t \in T_1}\max \{ \tilde{r}_t(i_t,J^*(:k-1)),r_t(i_t,j_k) \} + \sum_{t \in T_2} \tilde{r}_t(i_t,J^*(:k-1)) - C \\
-  & \quad = \sum_{t \in T_1} \max \{ \tilde{r}_t(i_t,J^*(:k-1)),r_t(i_t,j_k) \} + \sum_{t \in T_2} \max \{ \tilde{r}_t(i_t,J^*(:k-1)),r_t(i_t,j_k) \} - C \\
-  & \quad = \sum_{t \in [n]}  \max \{ \tilde{r}_t(i_t,J^*(:k-1)),r_t(i_t,j_k) \} - C.
+  & \E \sum_t \max \{ \tilde{r}_t(i_t,J_t(:k)),r_t(i_t,j) \} \\
+  & \quad = \E\sum_{t \in T_1} \max \{ \tilde{r}_t(i_t,J_t(:k)),r_t(i_t,j) \} + \E\sum_{t \in T_2} \max \{ \tilde{r}_t(i_t,J_t(:k)),r_t(i_t,j) \}  \\
+  & \quad \geq \E \sum_{t \in T_1} \max \{ \tilde{r}_t(i_t,J^*(:k)),r_t(i_t,j) \} + \E\sum_{t \in T_2} \max \{ \tilde{r}_t(i_t,J_t(:k)),r_t(i_t,j) \} \\
+  & \quad \geq \E \sum_{t \in T_1} \max \{ \tilde{r}_t(i_t,J^*(:k)),r_t(i_t,j) \}) + \E\sum_{t \in T_2} \tilde{r}_t(i_t,J_t(:k)) \\
+  & \quad \geq \E \sum_{t \in T_1}\max \{ \tilde{r}_t(i_t,J^*(:k)),r_t(i_t,j) \} +  \E \sum_{t \in T_2} \tilde{r}_t(i_t,J^*(:k)) - C \\
+  & \quad = \E \sum_{t \in T_1} \max \{ \tilde{r}_t(i_t,J^*(:k)),r_t(i_t,j) \} + \E \sum_{t \in T_2} \max \{ \tilde{r}_t(i_t,J^*(:k)),r_t(i_t,j) \} - C \\
+  & \quad = \E \sum_{t \in [n]}  \max \{ \tilde{r}_t(i_t,J^*(:k)),r_t(i_t,j) \} - C.
 \end{align*}
 %\todob{$(j_1^*,j_2)$ should be $(J^*[1:k-1],j_k)$. $j_2$ should be $j_k$. The same below.}
-The first inequality is easy because $\max R_t(i_t,(J^*[1:k-1],j_k) = R_t(i_t,j_k)$ for $t \in T_1$. Second inequality is trivial. Third inequality follows from the assumption. The next equality holds because of the definition of $T_2$.  
+%The first inequality is easy because $\max R_t(i_t,(J^*[1:k-1],j) = R_t(i_t,j)$ for $t \in T_1$. Second inequality is trivial. Third inequality follows from the assumption. The next equality holds because of the definition of $T_2$.  
 \end{proof}
 
 
