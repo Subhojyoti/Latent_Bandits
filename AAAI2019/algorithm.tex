@@ -14,14 +14,16 @@ The row ranking algorithm permutes columns suggested by the column learning algo
 
 $\latentranker$ interacts with the environment as follows. At time $t$, a random user $i_t$ is revealed to $\latentranker$. Then, in the ascending order of $k \in [d]$, $\colalg(k)$ suggests column $\ell_k$. If $\colalg(k)$ suggests one of the previously suggested columns $\ell_1, \dots, \ell_{k - 1}$, then $\ell_k$ is chosen uniformly at random from the remaining columns. We denote the vector of $d$ suggested columns  by $J_t$. Then $\rowalg(i_t, J_t)$, the row learning algorithm for user $i_t$ and columns $J_t$, selects permutation $\pi_{t, i_t}$ of $J_t$.
 
-The user is recommended a permuted list $\pi_{t, i_t}(J_t)$ and $\latentranker$ observes the individual rewards of all recommended items. Then we update both column and row learning algorithms. The reward of the arm in $\colalg(k)$, which selects the $k$-th column in $J_t$, is updated as follows. If the arm was not one of the previously suggested columns, its reward is $\max \, \{M_t(i_t, J_t(a)): a \in [k]\} - \max \, \{M_t(i_t, J_t(a)): a \in [k - 1]\}$. Otherwise, we update the initially suggested arm with reward $0$. Since $\latentranker$ observes the individual rewards of all recommended items, we can compute the reward of any permutation of $J_t$ in row $i_t$. These rewards are then used to update $\rowalg(i_t, J_t)$. An illustrative diagram of the entire learning process is shown in \cref{fig:rankedbandit}.
+The user is recommended a permuted list $\pi_{t, i_t}(J_t)$ and $\latentranker$ observes the individual rewards of all recommended items. Then we update both column and row learning algorithms. The reward of the arm in $\colalg(k)$, which selects the $k$-th column in $J_t$, is updated as follows. If the arm was not one of the previously suggested columns, its reward is $\max \, \{M_t(i_t, J_t(a)): a \in [k]\} - \max \, \{M_t(i_t, J_t(a)): a \in [k - 1]\}$. Otherwise, we update the initially suggested arm with reward $0$. Since $\latentranker$ observes the individual rewards of all recommended items, we can compute the reward of any permutation of $J_t$ in row $i_t$. These rewards are then used to update $\rowalg(i_t, J_t)$. 
 
-\begin{figure}
-    \includegraphics[scale=0.2]{img/RankedBand.png}
-    \caption{Latent Ranked Bandit in rank $d=2$ scenario. \todob{The figure is super confusing. If you want to have it, add a flow chart.}}
-    \label{fig:rankedbandit}
-    \vspace*{-1em}
-\end{figure}
+%An illustrative diagram of the entire learning process is shown in \cref{fig:rankedbandit}.
+
+%\begin{figure}
+%    \includegraphics[scale=0.2]{img/RankedBand.png}
+%    \caption{Latent Ranked Bandit in rank $d=2$ scenario. \todob{The figure is super confusing. If you want to have it, add a flow chart.}}
+%    \label{fig:rankedbandit}
+%    \vspace*{-1em}
+%\end{figure}
 
 \begin{algorithm}[t]
   \caption{Latent Ranker Algorithm ($\latentranker$)}
