@@ -6,7 +6,7 @@
   R(n) =
   O\left(\frac{d \sqrt{L n}}{\Delta} + K \log n + K d \log d\right)\,,
 \end{align*}
-where $\Delta = \min_{t \in [n]} \min_{J:\, J \neq J_\ast} \E\left[\tilde{r}_t(i, J_\ast)\right] - \E\left[\tilde{r}_t(i, J)\right]$ is an instance-specific lower bound on the gap in the unweighted expected rewards of the optimal and best suboptimal columns at any time $t \in [n]$, averaged over all users at that time. \todob{We need to define the unweighted reward.}
+where $\Delta = \min_{t \in [n]} \min_{J:\, J \neq J_\ast} \E\left[\tilde{r}_t(i, J_\ast)\right] - \E\left[\tilde{r}_t(i, J)\right]$ is an instance-specific lower bound on the gap in the unweighted expected rewards of the optimal and best suboptimal columns at any time $t \in [n]$, averaged over all users at that time.  \todob{We need to define the unweighted reward.}
 \end{theorem}
 \begin{proof}
 The complete proof is in \cref{sec:proof}. We sketch it below. The main idea is to decompose the regret of $\latentranker$ into two parts, where $\colalg$ does not suggest $J_\ast$ and the rest.
