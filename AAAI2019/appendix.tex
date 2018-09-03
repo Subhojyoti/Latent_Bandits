@@ -32,35 +32,39 @@ To decompose the regret into its row and column components, we introduce event $
 \end{align*}
 where the inequality follows from the fact that the maximum instantaneous regret is $1$.
 
-%The first term in the regret decomposition can be bounded as follows. 
-%Let
-%\begin{align*}
-%  g_{t, i}(J, j) =
-%  \tilde{r}_t(i, (J, j)) - \tilde{r}_t(i, J)
-%\end{align*}
-%be the gain in reward from adding item $j$ to items $J$, for user $i$ at time $t$. Let $J_\ast$ be defined greedily as
-%\begin{align*}
-%  J_\ast(k) =
-%  \argmax_{j \in [L] \setminus J_\ast(: k - 1)} \sum_{t = 1}^n \sum_{i = 1}^K g_{t, i}(J_\ast(: k - 1), j)
-%\end{align*}
-%for $k \in [d]$. From the design of our column learning algorithm, for any sequence of users $i_1, \dots, i_n$ and $k \in [d]$,
-%\begin{align}
-%  \sum_{t = 1}^n \E\left[g_{t, i_t}(J_t(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_t(k))\right] \leq
-%  \sqrt{L n}\,.
-%  \label{eq:single column regret}
-%\end{align}
-%Now note that
-%\begin{align*}
-%  & \sum_{t = 1}^n \E\left[\tilde{r}_t(i_t, J_\ast) - \tilde{r}_t(i_t, J_t)\right] = \\
-%  & \quad \sum_{t = 1}^n \sum_{k = 1}^d \E\left[g_{t, i_t}(J_\ast(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_t(k))\right] = \\
-%  & \quad \sum_{t = 1}^n \sum_{k = 1}^d \E\left[g_{t, i_t}(J_\ast(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_\ast(k)) +
-%  g_{t, i_t}(J_t(: k - 1), J_\ast(k)) g_{t, i_t}(J_t(: k - 1), J_t(k))\right] \leq \\
-%  & \quad \sum_{t = 1}^n \sum_{k = 1}^d \E\left[g_{t, i_t}(J_\ast(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_\ast(k))\right] +
-%  d \sqrt{L n} \leq \\
-%  & \quad d \sqrt{L n}\,,
-%\end{align*}
-%where the first inequality follows from \eqref{eq:single column regret}, and the second inequality is from the greedy selection of $J_\ast(: k - 1)$ and $J_\ast(k)$. \todob{We still need to prove the latter claim.}
- Let
+\todob{This is where the old analysis starts.}
+
+The first term in the regret decomposition can be bounded as follows. Let
+\begin{align*}
+  g_{t, i}(J, j) =
+  \tilde{r}_t(i, (J, j)) - \tilde{r}_t(i, J)
+\end{align*}
+be the gain in reward from adding item $j$ to items $J$, for user $i$ at time $t$. Let $J_\ast$ be defined greedily as
+\begin{align*}
+  J_\ast(k) =
+  \argmax_{j \in [L] \setminus J_\ast(: k - 1)} \sum_{t = 1}^n \sum_{i = 1}^K g_{t, i}(J_\ast(: k - 1), j)
+\end{align*}
+for $k \in [d]$. Then from the design of our column learning algorithm, for any sequence of users $i_1, \dots, i_n$ and $k \in [d]$,
+\begin{align}
+  \sum_{t = 1}^n \E\left[g_{t, i_t}(J_t(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_t(k))\right] \leq
+  \sqrt{L n}\,.
+  \label{eq:single column regret}
+\end{align}
+Now note that
+\begin{align*}
+  & \sum_{t = 1}^n \E\left[\tilde{r}_t(i_t, J_\ast) - \tilde{r}_t(i_t, J_t)\right] = \\
+  & \quad \sum_{t = 1}^n \sum_{k = 1}^d \E\left[g_{t, i_t}(J_\ast(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_t(k))\right] = \\
+  & \quad \sum_{t = 1}^n \sum_{k = 1}^d \E\left[g_{t, i_t}(J_\ast(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_\ast(k)) +
+  g_{t, i_t}(J_t(: k - 1), J_\ast(k)) g_{t, i_t}(J_t(: k - 1), J_t(k))\right] \leq \\
+  & \quad \sum_{t = 1}^n \sum_{k = 1}^d \E\left[g_{t, i_t}(J_\ast(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_\ast(k))\right] +
+  d \sqrt{L n} \leq \\
+  & \quad d \sqrt{L n}\,,
+\end{align*}
+where the first inequality follows from \eqref{eq:single column regret}, and the second inequality is from the greedy selection of $J_\ast(: k - 1)$ and $J_\ast(k)$. \todob{We still need to prove the latter claim.}
+
+\todob{This is where the old analysis ends.}
+
+Let
 \begin{align*}
   \Delta =
   \min_{t \in [n]} \min_{J:\, J \neq J_\ast} \E\left[\tilde{r}_t(i, J^\ast)\right] - \E\left[\tilde{r}_t(i, J)\right]
