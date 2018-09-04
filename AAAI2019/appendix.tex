@@ -32,37 +32,52 @@ To decompose the regret into its row and column components, we introduce event $
 \end{align*}
 where the inequality follows from the fact that the maximum instantaneous regret is $1$.
 
-\todob{This is where the old analysis starts.}
-
 The first term in the regret decomposition can be bounded as follows. Let
 \begin{align*}
-  g_{t, i}(J, j) =
-  \tilde{r}_t(i, (J, j)) - \tilde{r}_t(i, J)
+  C_{t, i}(J, k) =
+  \max \, \{r_t(i, J(\ell)): \ell \in [k]\}\,, \quad
+  g_{t, i}(J, k) =
+  C_{t, i}(J, k) -   C_{t, i}(J, k - 1)\,.
 \end{align*}
-be the gain in reward from adding item $j$ to items $J$, for user $i$ at time $t$. Let $J_\ast$ be defined greedily as
+Let $J_\ast$ be defined greedily as
 \begin{align*}
   J_\ast(k) =
-  \argmax_{j \in [L] \setminus J_\ast(: k - 1)} \sum_{t = 1}^n \sum_{i = 1}^K g_{t, i}(J_\ast(: k - 1), j)
+  \argmax_{j \in [L]} \sum_{t = 1}^n \E\left[g_{t, i_t}(J_\ast(: k - 1) \oplus j, k)\right]
 \end{align*}
-for $k \in [d]$. Then from the design of our column learning algorithm, for any sequence of users $i_1, \dots, i_n$ and $k \in [d]$,
-\begin{align}
-  \sum_{t = 1}^n \E\left[g_{t, i_t}(J_t(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_t(k))\right] \leq
-  \sqrt{L n}\,.
-  \label{eq:single column regret}
-\end{align}
-Now note that
+for $k \in [d]$. Then from the design of our column learning algorithm,
 \begin{align*}
-  & \sum_{t = 1}^n \E\left[\tilde{r}_t(i_t, J_\ast) - \tilde{r}_t(i_t, J_t)\right] = \\
-  & \quad \sum_{t = 1}^n \sum_{k = 1}^d \E\left[g_{t, i_t}(J_\ast(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_t(k))\right] = \\
-  & \quad \sum_{t = 1}^n \sum_{k = 1}^d \E\left[g_{t, i_t}(J_\ast(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_\ast(k)) +
-  g_{t, i_t}(J_t(: k - 1), J_\ast(k)) g_{t, i_t}(J_t(: k - 1), J_t(k))\right] \leq \\
-  & \quad \sum_{t = 1}^n \sum_{k = 1}^d \E\left[g_{t, i_t}(J_\ast(: k - 1), J_\ast(k)) - g_{t, i_t}(J_t(: k - 1), J_\ast(k))\right] +
-  d \sqrt{L n} \leq \\
-  & \quad d \sqrt{L n}\,,
+  \max_{j \in [L]} \sum_{t = 1}^n \E\left[g_{t, i_t}(J_t(: k - 1) \oplus j, k)\right] -
+  \sum_{t = 1}^n \E\left[g_{t, i_t}(J_t, k)\right] \leq
+  \sqrt{L n}
 \end{align*}
-where the first inequality follows from \eqref{eq:single column regret}, and the second inequality is from the greedy selection of $J_\ast(: k - 1)$ and $J_\ast(k)$. \todob{We still need to prove the latter claim.}
-
-\todob{This is where the old analysis ends.}
+for any $k \in [d]$. This implies that
+\begin{align*}
+  \sum_{t = 1}^n \E\left[g_{t, i_t}(J_t, k)\right]
+  & \geq \max_{j \in [L]} \sum_{t = 1}^n \E\left[g_{t, i_t}(J_t(: k - 1) \oplus j, k)\right] - \sqrt{L n} \\
+  & \geq \frac{1}{d} \sum_{j \in J_\ast} \sum_{t = 1}^n \E\left[g_{t, i_t}(J_t(: k - 1) \oplus j, k)\right] - \sqrt{L n} \\
+  & = \frac{1}{d} \sum_{t = 1}^n \E\left[\sum_{j \in J_\ast} g_{t, i_t}(J_t(: k - 1) \oplus j, k)\right] - \sqrt{L n} \\
+  & \geq \frac{1}{d} \sum_{t = 1}^n \E\left[C_{t, i_t}(J^\ast, d)\right] - \sqrt{L n}\,.
+\end{align*}
+\todob{The last step is false. The rest of the analysis goes through.} Now we prove for any $k \in [d]$,
+\begin{align*}
+  \sum_{t = 1}^n \E\left[C_{t, i_t}(J^\ast, d)\right] - \sum_{t = 1}^n \E\left[C_{t, i_t}(J_t, k)\right] \leq
+  \frac{d - k}{d} \sum_{t = 1}^n \E\left[C_{t, i_t}(J^\ast, d)\right] + k \sqrt{L n}\,.
+\end{align*}
+The above claim clearly holds for $k = 0$. Now for $k > 0$,
+\begin{align*}
+  \sum_{t = 1}^n \E\left[C_{t, i_t}(J^\ast, d)\right] - \sum_{t = 1}^n \E\left[C_{t, i_t}(J_t, k)\right]
+  & = \sum_{t = 1}^n \E\left[C_{t, i_t}(J^\ast, d)\right] - \sum_{t = 1}^n \E\left[C_{t, i_t}(J_t, k - 1)\right] -
+  \sum_{t = 1}^n \E\left[g_{t, i_t}(J_t, k)\right] \\
+  & \leq \frac{d - k + 1}{d} \sum_{t = 1}^n \E\left[C_{t, i_t}(J^\ast, d)\right] + (k - 1) \sqrt{L n} -
+  \sum_{t = 1}^n \E\left[g_{t, i_t}(J_t, k)\right] \\
+  & \leq \frac{d - k}{d} \sum_{t = 1}^n \E\left[C_{t, i_t}(J^\ast, d)\right] + k \sqrt{L n}\,,
+\end{align*}
+where the first inequality is from our induction hypothesis and the last inequality is from our lower bound on $C_{t, i_t}(J_\ast, d)$. For $k = d$, the claim we have that
+\begin{align*}
+  \sum_{t = 1}^n \E\left[C_{t, i_t}(J^\ast, d)\right] - \sum_{t = 1}^n \E\left[C_{t, i_t}(J_t, k)\right] \leq
+  d \sqrt{L n}\,,
+\end{align*}
+This is what we needed.
 
 Let
 \begin{align*}
@@ -88,121 +103,121 @@ where $R_i(n)$ is the expected $n$-step regret of the row algorithm in row $i$, 
 
 \todob{Before the we submit the paper, I will add discussion on $\Delta$ and also prove a bound where we integrate it out.}
 
-For a vector $J$, we will use the notation $J(:k)$ to denote the vector $(J(1),...,J(k)).$
-\begin{lemma}
-\label{lem:keylem}
-
-For any $k \in [d]$,
-$$ \sum_t \E \tilde{r}_t(i_t, J_t[:k]) \geq  \E \sum_t \tilde{r}_t(i_t, J^*[:k]) - O(k\sqrt{nL}).$$ 
-
-\end{lemma}
-\begin{proof}
-We will show this by induction. Note that there are $d$ column MABs. The base case when $k=1$ follows because of the guarantees of MAB$_1(n)$.
-We have by definition $J^*(1) = \max_j   \E \sum_t  {r}_t(i_t, j) $ and $J^*(k) = \max_{j} \E \sum_t   \max \{  \tilde{r}_t(i_t, J^*(:k-1)), r_t(i_t,j) \}$ for $1 < k \leq d$.   We will now assume that the result is true for $k-1$ for some $k>1.$
-We have 
-\begin{align}
-& \E  \sum_t \tilde{r}_t(i_t, J_t(:k))   \\
-&\geq \max_{j} \E \sum_t   \max \{ \tilde{r}_t(i_t, J_t(:k-1)), r_t(i_t,j) \}  - O\left(\sqrt{nL}\right) \\
-&\geq \max_{j} \E \sum_t   \max \{  \tilde{r}_t(i_t, J^*(:k-1)), r_t(i_t,j) \}   - O\left( \sqrt{nL} \right) - O\left( (k-1)\sqrt{nL} \right)   \\
-\label{eq:result}
-& =  \E \sum_t  \tilde{r}_t(i_t, J^*(:k))  - O\left( k\sqrt{nL} \right).
-\end{align}
-%\todob{The last term in the first line misses $\max$. But a more important question is why do we need that term at all. The term is constant throughout the derivation.}
-The last inequality follows from the definition of $J^*.$
-The first inequality is from the guarantees of MAB$_k(n)$. \todob{State the regret bound of Exp3 in a lemma.} The second inequality follows from induction hypothesis and Lemma~\ref{lem:keyinequality}. We note that from Equation~\ref{eq:result}, we have
-$$ \max  \sum_t \tilde{r}_t(i_t, J_t(:k))  \geq  \E \sum_t \tilde{r}_t(i_t, J^*(:k))  - O\left( k \sqrt{nL} \right),$$
-which concludes the proof.
-\end{proof}
-
-
-\begin{lemma}
-\label{lem:keyinequality}
-Suppose
- $$ \E \sum_t \tilde{r}_t(i_t, J_t(:k) \geq  \E \sum_t \tilde{r}_t(i_t, J^*(:k))  - C$$
- %\todob{Define $C$. Why not just $C$?}
-  for some $k \in [d-1]$ and let $j \in [L].$ Then,
-$$ \E \sum_t \max \{ \tilde{r}_t(i_t, J_t(:k)), r_t(i_t,j) \} \geq \E \sum_t  \max \{ \tilde{r}_t(i_t, J^*(:k)), r_t(i_t,j) \} - C.$$
-%\myworries{Both Brano and I have confused ourselves over variants of this lemma. Definitely helpful for everyone to verify if the proof is correct.}
-\end{lemma}
-
-\begin{proof}
-%For any $a,b,c \in \mathbb{R}$ we have $\max \{ a, b\} \geq \max \{ a, c \} +  (b - c).$ Using this, we have
+%For a vector $J$, we will use the notation $J(:k)$ to denote the vector $(J(1),...,J(k)).$
+%\begin{lemma}
+%\label{lem:keylem}
+%
+%For any $k \in [d]$,
+%$$ \sum_t \E \tilde{r}_t(i_t, J_t[:k]) \geq  \E \sum_t \tilde{r}_t(i_t, J^*[:k]) - O(k\sqrt{nL}).$$ 
+%
+%\end{lemma}
+%\begin{proof}
+%We will show this by induction. Note that there are $d$ column MABs. The base case when $k=1$ follows because of the guarantees of MAB$_1(n)$.
+%We have by definition $J^*(1) = \max_j   \E \sum_t  {r}_t(i_t, j) $ and $J^*(k) = \max_{j} \E \sum_t   \max \{  \tilde{r}_t(i_t, J^*(:k-1)), r_t(i_t,j) \}$ for $1 < k \leq d$.   We will now assume that the result is true for $k-1$ for some $k>1.$
+%We have 
+%\begin{align}
+%& \E  \sum_t \tilde{r}_t(i_t, J_t(:k))   \\
+%&\geq \max_{j} \E \sum_t   \max \{ \tilde{r}_t(i_t, J_t(:k-1)), r_t(i_t,j) \}  - O\left(\sqrt{nL}\right) \\
+%&\geq \max_{j} \E \sum_t   \max \{  \tilde{r}_t(i_t, J^*(:k-1)), r_t(i_t,j) \}   - O\left( \sqrt{nL} \right) - O\left( (k-1)\sqrt{nL} \right)   \\
+%\label{eq:result}
+%& =  \E \sum_t  \tilde{r}_t(i_t, J^*(:k))  - O\left( k\sqrt{nL} \right).
+%\end{align}
+%%\todob{The last term in the first line misses $\max$. But a more important question is why do we need that term at all. The term is constant throughout the derivation.}
+%The last inequality follows from the definition of $J^*.$
+%The first inequality is from the guarantees of MAB$_k(n)$. \todob{State the regret bound of Exp3 in a lemma.} The second inequality follows from induction hypothesis and Lemma~\ref{lem:keyinequality}. We note that from Equation~\ref{eq:result}, we have
+%$$ \max  \sum_t \tilde{r}_t(i_t, J_t(:k))  \geq  \E \sum_t \tilde{r}_t(i_t, J^*(:k))  - O\left( k \sqrt{nL} \right),$$
+%which concludes the proof.
+%\end{proof}
+%
+%
+%\begin{lemma}
+%\label{lem:keyinequality}
+%Suppose
+% $$ \E \sum_t \tilde{r}_t(i_t, J_t(:k) \geq  \E \sum_t \tilde{r}_t(i_t, J^*(:k))  - C$$
+% %\todob{Define $C$. Why not just $C$?}
+%  for some $k \in [d-1]$ and let $j \in [L].$ Then,
+%$$ \E \sum_t \max \{ \tilde{r}_t(i_t, J_t(:k)), r_t(i_t,j) \} \geq \E \sum_t  \max \{ \tilde{r}_t(i_t, J^*(:k)), r_t(i_t,j) \} - C.$$
+%%\myworries{Both Brano and I have confused ourselves over variants of this lemma. Definitely helpful for everyone to verify if the proof is correct.}
+%\end{lemma}
+%
+%\begin{proof}
+%%For any $a,b,c \in \mathbb{R}$ we have $\max \{ a, b\} \geq \max \{ a, c \} +  (b - c).$ Using this, we have
+%%\begin{align*}
+%%  & \E \sum_t \max \{ \tilde{r}_t(i_t,J_t(:k)),r_t(i_t,j) \} \\
+%%  & \quad = \E\sum_{t } \max \{ \tilde{r}_t(i_t,J_t(:k)),r_t(i_t,j) \} \\
+%%  &  \quad \geq \E \sum_{t } \max \{ \tilde{r}_t(i_t,J_t(:k)),\tilde{r}_t(i_t,J^*(k)), r_t(i_t,j) \} + \tilde{r}_t(i_t,J_t(:k)) - \tilde{r}_t(i_t,J^*(k)) \\
+%%   &  \quad \geq \E \sum_{t } \max \{ \tilde{r}_t(i_t,J_t(:k)),\tilde{r}_t(i_t,J^*(k)), r_t(i_t,j) \} +  \E \sum_{t }  \tilde{r}_t(i_t,J_t(:k)) - \tilde{r}_t(i_t,J^*(k)) \\
+%%   &  \quad \geq \E \sum_{t } \max \{ \tilde{r}_t(i_t,J^*(k)), r_t(i_t,j) \} - C.
+%%  \end{align*}
+%  
+%   Let $T_1 = \{ t \, | \tilde r_t(i_t,J^*(:k)) < r_t(i_t,j) \}$ and $T_2 = [n] \backslash T_1 .$ We then have 
 %\begin{align*}
 %  & \E \sum_t \max \{ \tilde{r}_t(i_t,J_t(:k)),r_t(i_t,j) \} \\
-%  & \quad = \E\sum_{t } \max \{ \tilde{r}_t(i_t,J_t(:k)),r_t(i_t,j) \} \\
-%  &  \quad \geq \E \sum_{t } \max \{ \tilde{r}_t(i_t,J_t(:k)),\tilde{r}_t(i_t,J^*(k)), r_t(i_t,j) \} + \tilde{r}_t(i_t,J_t(:k)) - \tilde{r}_t(i_t,J^*(k)) \\
-%   &  \quad \geq \E \sum_{t } \max \{ \tilde{r}_t(i_t,J_t(:k)),\tilde{r}_t(i_t,J^*(k)), r_t(i_t,j) \} +  \E \sum_{t }  \tilde{r}_t(i_t,J_t(:k)) - \tilde{r}_t(i_t,J^*(k)) \\
-%   &  \quad \geq \E \sum_{t } \max \{ \tilde{r}_t(i_t,J^*(k)), r_t(i_t,j) \} - C.
-%  \end{align*}
-  
-   Let $T_1 = \{ t \, | \tilde r_t(i_t,J^*(:k)) < r_t(i_t,j) \}$ and $T_2 = [n] \backslash T_1 .$ We then have 
-\begin{align*}
-  & \E \sum_t \max \{ \tilde{r}_t(i_t,J_t(:k)),r_t(i_t,j) \} \\
-  & \quad = \E\sum_{t \in T_1} \max \{ \tilde{r}_t(i_t,J_t(:k)),r_t(i_t,j) \} + \E\sum_{t \in T_2} \max \{ \tilde{r}_t(i_t,J_t(:k)),r_t(i_t,j) \}  \\
-  & \quad \geq \E \sum_{t \in T_1} \max \{ \tilde{r}_t(i_t,J^*(:k)),r_t(i_t,j) \} + \E\sum_{t \in T_2} \max \{ \tilde{r}_t(i_t,J_t(:k)),r_t(i_t,j) \} \\
-  & \quad \geq \E \sum_{t \in T_1} \max \{ \tilde{r}_t(i_t,J^*(:k)),r_t(i_t,j) \}) + \E\sum_{t \in T_2} \tilde{r}_t(i_t,J_t(:k)) \\
-  & \quad \geq \E \sum_{t \in T_1}\max \{ \tilde{r}_t(i_t,J^*(:k)),r_t(i_t,j) \} +  \E \sum_{t \in T_2} \tilde{r}_t(i_t,J^*(:k)) - C \\
-  & \quad = \E \sum_{t \in T_1} \max \{ \tilde{r}_t(i_t,J^*(:k)),r_t(i_t,j) \} + \E \sum_{t \in T_2} \max \{ \tilde{r}_t(i_t,J^*(:k)),r_t(i_t,j) \} - C \\
-  & \quad = \E \sum_{t \in [n]}  \max \{ \tilde{r}_t(i_t,J^*(:k)),r_t(i_t,j) \} - C.
-\end{align*}
-%\todob{$(j_1^*,j_2)$ should be $(J^*[1:k-1],j_k)$. $j_2$ should be $j_k$. The same below.}
-%The first inequality is easy because $\max R_t(i_t,(J^*[1:k-1],j) = R_t(i_t,j)$ for $t \in T_1$. Second inequality is trivial. Third inequality follows from the assumption. The next equality holds because of the definition of $T_2$.  
-\end{proof}
-
-
-%\newcommand{\transpose}{^\mathsf{\scriptscriptstyle T}}
+%  & \quad = \E\sum_{t \in T_1} \max \{ \tilde{r}_t(i_t,J_t(:k)),r_t(i_t,j) \} + \E\sum_{t \in T_2} \max \{ \tilde{r}_t(i_t,J_t(:k)),r_t(i_t,j) \}  \\
+%  & \quad \geq \E \sum_{t \in T_1} \max \{ \tilde{r}_t(i_t,J^*(:k)),r_t(i_t,j) \} + \E\sum_{t \in T_2} \max \{ \tilde{r}_t(i_t,J_t(:k)),r_t(i_t,j) \} \\
+%  & \quad \geq \E \sum_{t \in T_1} \max \{ \tilde{r}_t(i_t,J^*(:k)),r_t(i_t,j) \}) + \E\sum_{t \in T_2} \tilde{r}_t(i_t,J_t(:k)) \\
+%  & \quad \geq \E \sum_{t \in T_1}\max \{ \tilde{r}_t(i_t,J^*(:k)),r_t(i_t,j) \} +  \E \sum_{t \in T_2} \tilde{r}_t(i_t,J^*(:k)) - C \\
+%  & \quad = \E \sum_{t \in T_1} \max \{ \tilde{r}_t(i_t,J^*(:k)),r_t(i_t,j) \} + \E \sum_{t \in T_2} \max \{ \tilde{r}_t(i_t,J^*(:k)),r_t(i_t,j) \} - C \\
+%  & \quad = \E \sum_{t \in [n]}  \max \{ \tilde{r}_t(i_t,J^*(:k)),r_t(i_t,j) \} - C.
+%\end{align*}
+%%\todob{$(j_1^*,j_2)$ should be $(J^*[1:k-1],j_k)$. $j_2$ should be $j_k$. The same below.}
+%%The first inequality is easy because $\max R_t(i_t,(J^*[1:k-1],j) = R_t(i_t,j)$ for $t \in T_1$. Second inequality is trivial. Third inequality follows from the assumption. The next equality holds because of the definition of $T_2$.  
+%\end{proof}
 %
-%\section{Proof}
-%\label{sec:proof}
 %
-%Our learning agent operates in the following setting. Let $i_1, \dots, i_n$ be a fixed sequences of users in $n$ steps, which is unknown to the agent. Let $r_t = U D_t V\transpose$ be the reward matrix at time $t$, where $U$ is a non-negative matrix, $D_t$ is a non-negative diagonal matrix that may change with $t$, and $V$ is a non-negative hott-topics matrix. We assume that $r_t \in [0, 1]^{K \times L}$ at all times $t \in [n]$. The only randomness in our problem is due to the learning agent.
-%
-%The reward for recommending $d$ columns $J$ to user $i$ is
-%\begin{align*}
-%  r_t(i, J) =
-%  \max \, \{\mu(k) \, r_t(i, J(k)): k \in [d]\}
-%\end{align*}
-%for weights $\mu(1) \geq \dots \geq \mu(d) > 0$. We also define the corresponding unweighted reward as
-%\begin{align*}
-%  \tilde{r}_t(i, J) =
-%  \max \, \{r_t(i, J(k)): k \in [d]\}\,.
-%\end{align*}
-%Let $J_\ast$ be the indices of hott topics and $\pi_{\ast, i}$ be their highest-reward permutation for user $i$. Let $J_t$ be our recommended columns at time $t$ and $\pi_{t, i}$ be their permutation for user $i$, which is computed by some later-defined row algorithm. The expected $n$-step regret, where the only randomness is due to the learning agent, is
-%\begin{align*}
-%  R(n) =
-%  \E\left[\sum_{t = 1}^n r_t(i_t, \pi_{\ast, i_t}(J_\ast))\right] - \E\left[\sum_{t = 1}^n r_t(i_t, \pi_{t, i_t}(J_t))\right]\,.
-%\end{align*}
-%The regret of the column learning algorithm in $n_0$ steps is bounded as
-%\begin{align*}
-%  \E\left[\sum_{t = 1}^{n_0} \tilde{r}_t(i_t, J_\ast)\right] - \E\left[\sum_{t = 1}^{n_0} \tilde{r}_t(i_t, J_t)\right] \leq
-%  d \sqrt{L n_0}
-%\end{align*}
-%for any $n_0$, based on a similar analysis to ranked bandits. Let
-%\begin{align*}
-%  \Delta = \min_{i \in [K], t \in [n]} \left(\tilde{r}_t(i, J_\ast) - \max_{J:\, J \neq J_\ast} \tilde{r}_t(i, J)\right)
-%\end{align*}
-%be the minimum gap. \todob{The above definition of the gap needs to be adjusted. It is zero whenever $J$ contains the optimal column for user $i$. Our algorithm is sound and learns $J^\ast$. So this is just a technicality.} Then, based on the above inequalities, the probability that the column learning algorithm chooses $J_\ast$ at any time $t \geq n_0$ is bounded from below by
-%\begin{align}
-%  1 - \frac{d \sqrt{L n_0}}{\Delta n_0} =
-%  \frac{\Delta \sqrt{n_0} - d \sqrt{L}}{\Delta \sqrt{n_0}}
-%  \label{eq:opt lower bound}
-%\end{align}
-%for any $\Delta \geq d \sqrt{L / n_0}$.
-%
-%Let $p_t$ be the probability that the column learning algorithm chooses $J_\ast$ at time $t$ and let $\pi_{t, i}(J_\ast)$ be its permutation for user $i$ at time $t$, according to our row algorithm. Then we can bound the regret from time $n_0$ as
-%\begin{align*}
-%  R(n)
-%  & = \sum_{i = 1}^K \E\left[\sum_{t = n_0}^n 1\{i_t = i\}
-%  (r_t(i, \pi_{\ast, i}(J_\ast)) - r_t(i, \pi_{t, i}(J_t))\right] \\
-%  & = \sum_{i = 1}^K \E\left[\sum_{t = n_0}^n \frac{1}{p_t} 1\{i_t = i, J_t = J_\ast\}
-%  (r_t(i, \pi_{\ast, i}(J_\ast)) - r_t(i, \pi_{t, i}(J_\ast))\right] \\
-%  & \leq \left(1 + \frac{d \sqrt{L}}{\Delta \sqrt{n_0} - d \sqrt{L}}\right) \sum_{i = 1}^K R_i(n)\,,
-%\end{align*}
-%where $R_i(n)$ is the expected $n$-step regret of the row algorithm in row $i$, conditioned on the fact that the column learning algorithm chooses $J_\ast$. One suitable row algorithm would be the weighted majority algorithm, which learns the optimal permutation for each $J$. Then $R_i(n) = O(\log n + \log d!) \approx O(\log n + d \log d)$.
-%
-%In the first $n_0$ steps, we bound the regret trivially by $n_0$. Then the expected $n$-step regret is bounded up to log factors as
-%\begin{align*}
-%  R(n) \leq
-%  n_0 + \left(1 + \frac{d \sqrt{L}}{\Delta \sqrt{n_0} - d \sqrt{L}}\right) K\,.
-%\end{align*}
-%The bound can be interpreted as follows. Choose some reasonable $n_0$ that makes the regret comparable to ranked bandits, such as $n_0 = c^2 d \sqrt{L n}$ for some $c > 0$. Then the multiplier at $K$ becomes smaller than $2$, for instance, when $\Delta c d^\frac{1}{2} L^\frac{1}{4} n^\frac{1}{4} \geq 2 d L^\frac{1}{2}$. Under the assumption that $n \geq L$, this happens when $\Delta \geq 2 \sqrt{d} / c$, which makes sense for $c > 2 \sqrt{d}$\,.
+%%\newcommand{\transpose}{^\mathsf{\scriptscriptstyle T}}
+%%
+%%\section{Proof}
+%%\label{sec:proof}
+%%
+%%Our learning agent operates in the following setting. Let $i_1, \dots, i_n$ be a fixed sequences of users in $n$ steps, which is unknown to the agent. Let $r_t = U D_t V\transpose$ be the reward matrix at time $t$, where $U$ is a non-negative matrix, $D_t$ is a non-negative diagonal matrix that may change with $t$, and $V$ is a non-negative hott-topics matrix. We assume that $r_t \in [0, 1]^{K \times L}$ at all times $t \in [n]$. The only randomness in our problem is due to the learning agent.
+%%
+%%The reward for recommending $d$ columns $J$ to user $i$ is
+%%\begin{align*}
+%%  r_t(i, J) =
+%%  \max \, \{\mu(k) \, r_t(i, J(k)): k \in [d]\}
+%%\end{align*}
+%%for weights $\mu(1) \geq \dots \geq \mu(d) > 0$. We also define the corresponding unweighted reward as
+%%\begin{align*}
+%%  \tilde{r}_t(i, J) =
+%%  \max \, \{r_t(i, J(k)): k \in [d]\}\,.
+%%\end{align*}
+%%Let $J_\ast$ be the indices of hott topics and $\pi_{\ast, i}$ be their highest-reward permutation for user $i$. Let $J_t$ be our recommended columns at time $t$ and $\pi_{t, i}$ be their permutation for user $i$, which is computed by some later-defined row algorithm. The expected $n$-step regret, where the only randomness is due to the learning agent, is
+%%\begin{align*}
+%%  R(n) =
+%%  \E\left[\sum_{t = 1}^n r_t(i_t, \pi_{\ast, i_t}(J_\ast))\right] - \E\left[\sum_{t = 1}^n r_t(i_t, \pi_{t, i_t}(J_t))\right]\,.
+%%\end{align*}
+%%The regret of the column learning algorithm in $n_0$ steps is bounded as
+%%\begin{align*}
+%%  \E\left[\sum_{t = 1}^{n_0} \tilde{r}_t(i_t, J_\ast)\right] - \E\left[\sum_{t = 1}^{n_0} \tilde{r}_t(i_t, J_t)\right] \leq
+%%  d \sqrt{L n_0}
+%%\end{align*}
+%%for any $n_0$, based on a similar analysis to ranked bandits. Let
+%%\begin{align*}
+%%  \Delta = \min_{i \in [K], t \in [n]} \left(\tilde{r}_t(i, J_\ast) - \max_{J:\, J \neq J_\ast} \tilde{r}_t(i, J)\right)
+%%\end{align*}
+%%be the minimum gap. \todob{The above definition of the gap needs to be adjusted. It is zero whenever $J$ contains the optimal column for user $i$. Our algorithm is sound and learns $J^\ast$. So this is just a technicality.} Then, based on the above inequalities, the probability that the column learning algorithm chooses $J_\ast$ at any time $t \geq n_0$ is bounded from below by
+%%\begin{align}
+%%  1 - \frac{d \sqrt{L n_0}}{\Delta n_0} =
+%%  \frac{\Delta \sqrt{n_0} - d \sqrt{L}}{\Delta \sqrt{n_0}}
+%%  \label{eq:opt lower bound}
+%%\end{align}
+%%for any $\Delta \geq d \sqrt{L / n_0}$.
+%%
+%%Let $p_t$ be the probability that the column learning algorithm chooses $J_\ast$ at time $t$ and let $\pi_{t, i}(J_\ast)$ be its permutation for user $i$ at time $t$, according to our row algorithm. Then we can bound the regret from time $n_0$ as
+%%\begin{align*}
+%%  R(n)
+%%  & = \sum_{i = 1}^K \E\left[\sum_{t = n_0}^n 1\{i_t = i\}
+%%  (r_t(i, \pi_{\ast, i}(J_\ast)) - r_t(i, \pi_{t, i}(J_t))\right] \\
+%%  & = \sum_{i = 1}^K \E\left[\sum_{t = n_0}^n \frac{1}{p_t} 1\{i_t = i, J_t = J_\ast\}
+%%  (r_t(i, \pi_{\ast, i}(J_\ast)) - r_t(i, \pi_{t, i}(J_\ast))\right] \\
+%%  & \leq \left(1 + \frac{d \sqrt{L}}{\Delta \sqrt{n_0} - d \sqrt{L}}\right) \sum_{i = 1}^K R_i(n)\,,
+%%\end{align*}
+%%where $R_i(n)$ is the expected $n$-step regret of the row algorithm in row $i$, conditioned on the fact that the column learning algorithm chooses $J_\ast$. One suitable row algorithm would be the weighted majority algorithm, which learns the optimal permutation for each $J$. Then $R_i(n) = O(\log n + \log d!) \approx O(\log n + d \log d)$.
+%%
+%%In the first $n_0$ steps, we bound the regret trivially by $n_0$. Then the expected $n$-step regret is bounded up to log factors as
+%%\begin{align*}
+%%  R(n) \leq
+%%  n_0 + \left(1 + \frac{d \sqrt{L}}{\Delta \sqrt{n_0} - d \sqrt{L}}\right) K\,.
+%%\end{align*}
+%%The bound can be interpreted as follows. Choose some reasonable $n_0$ that makes the regret comparable to ranked bandits, such as $n_0 = c^2 d \sqrt{L n}$ for some $c > 0$. Then the multiplier at $K$ becomes smaller than $2$, for instance, when $\Delta c d^\frac{1}{2} L^\frac{1}{4} n^\frac{1}{4} \geq 2 d L^\frac{1}{2}$. Under the assumption that $n \geq L$, this happens when $\Delta \geq 2 \sqrt{d} / c$, which makes sense for $c > 2 \sqrt{d}$\,.
