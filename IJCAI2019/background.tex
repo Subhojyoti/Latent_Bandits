@@ -1,0 +1,14 @@
+%!TEX root = paper.tex
+
+\newcommand{\transpose}{^\mathsf{\scriptscriptstyle T}}
+
+Let $[n] = \{1, \dots, n\}$ be the set of the first $n$ positive integers. For any two sets $A$ and $B$, we denote by $A^B$ the set of all vectors whose entries take values from $A$ and are indexed by $B$. Let $M$ be any $m \times n$ matrix. We index the rows and columns of matrices by vectors. For any $d$ and $I \in [m]^d$, $M(I, :)$ denotes a $d \times n$ submatrix of $M$ whose $i$-th row is $M(I(i), :)$. Similarly, for any $d$ and $J \in [n]^d$, $M(:, J)$ denotes a $m \times d$ submatrix of $M$ whose $j$-th column is $M(:, J(j))$. Let $\Pi_d$ be the set of all $d$-permutations. For any $\pi \in \Pi_d$ and $d$-dimensional vector $v$, we denote by $\pi(v)$ the permutation of the entries of $v$ according to $\pi$.
+
+We focus on a family of low-rank matrices, which are known as hott topics. We define a \emph{hott-topics matrix} of rank $d$ as $M = U V\transpose$, where $U$ is a $K \times d$ non-negative matrix and $V$ is a $L \times d$ non-negative matrix that gives rise to the hott-topics structure. In particular, we assume that there exist $d$ rows $J^\ast$ in $V$ such that each row of $V$ can be expressed as a convex combination of rows $J^\ast$ and the zero vector,
+\begin{align}
+  \forall j \in [L] \ \exists \alpha \in A: V(J^\ast, :) \alpha = V(j, :)\,,
+  \label{eq:hott topics}
+\end{align}
+where $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$.
+
+The matrix $M$ represents preferences of users for items, $M(i, j)$ is the preference of user $i$ for item $j$. The rank $d$ of $M$ is the number of latent topics. The matrix $U$ are latent preferences of $K$ users over $d$ topics, where $U(i, :)$ are the preferences of user $i \in [K]$. Without loss of generality, we assume that $U \in [0, 1]^{L \times d}$. The matrix $V$ are latent preferences of $L$ items in the space of $d$ topics, where $V(j, :)$ are the coordinates of item $j \in [L]$. We assume that the coordinates are points in a simplex, that is $\|V(j, :)\|_1 \leq 1$ for all $j \in [L]$. Note that our assumptions imply that $M(i, j) \geq 0$ for any $i \in [K]$ and $j \in [L]$.

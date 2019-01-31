@@ -1,0 +1,128 @@
+%%%% ijcai19-multiauthor.tex
+
+\typeout{IJCAI-19 Multiple authors example}
+
+% These are the instructions for authors for IJCAI-19.
+
+\documentclass{article}
+\pdfpagewidth=8.5in
+\pdfpageheight=11in
+% The file ijcai19.sty is NOT the same than previous years'
+\usepackage{ijcai19}
+
+% Use the postscript times font!
+\usepackage{times}
+\usepackage{soul}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[small]{caption}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\urlstyle{same}
+
+
+
+%%%%%%%%%%%%% ADD CUSTOM PACKAGES TO macros.sty
+\usepackage{macros}
+
+
+
+\newcommand{\colalg}{{\tt ColAlg}}
+\newcommand{\expthree}{{\tt Exp3}}
+\newcommand{\latentranker}{{\tt LRB}}
+\newcommand{\rowalg}{{\tt RowAlg}}
+\newcommand{\ucb}{{\tt UCB1}}
+
+\newcommand{\RBAEXP}{{\tt RBA-EXP3}}
+\newcommand{\RBA}{{\tt RBA}}
+\newcommand{\RBAUCB}{{\tt RBA-UCB1}}
+\newcommand{\LRAUCB}{{\tt LRA-UCB1}}
+\newcommand{\LRAEXP}{{\tt LRA-EXP3}}
+\newcommand{\LRATS}{{\tt LRA-TS}}
+\newcommand{\NMFBan}{{\tt NMF-Ban}}
+\newcommand{\WMA}{{\tt WMA}}
+
+
+%%%%%%%%%%%%%For adding comments
+
+\newcommand{\todob}[2][]{\todo[color=cyan!20,size=\tiny,inline,#1]{B: #2}} % Brano's comments
+\newcommand{\todosb}[2][]{\todo[color=green!20,size=\tiny,inline, #1]{S: #2}} %
+\newcommand{\todoan}[2][]{\todo[color=black!20,size=\tiny,inline, #1]{A: #2}} %
+
+% the following package is optional:
+%\usepackage{latexsym} 
+
+% Following comment is from ijcai97-submit.tex:
+% The preparation of these files was supported by Schlumberger Palo Alto
+% Research, AT\&T Bell Laboratories, and Morgan Kaufmann Publishers.
+% Shirley Jowell, of Morgan Kaufmann Publishers, and Peter F.
+% Patel-Schneider, of AT\&T Bell Laboratories collaborated on their
+% preparation.
+
+% These instructions can be modified and used in other conferences as long
+% as credit to the authors and supporting agencies is retained, this notice
+% is not changed, and further modification or reuse is not restricted.
+% Neither Shirley Jowell nor Peter F. Patel-Schneider can be listed as
+% contacts for providing assistance without their prior permission.
+
+% To use for other conferences, change references to files and the
+% conference appropriate and use other authors, contacts, publishers, and
+% organizations.
+% Also change the deadline and address for returning papers and the length and
+% page charge instructions.
+% Put where the files are available in the appropriate places.
+
+\title{Non-stochastic Low Rank Bandit}
+
+\author{Author names withheld}
+
+\begin{document}
+
+\maketitle
+\begin{abstract}
+We study the problem of learning the maximum entry of a low-rank non-negative matrix, from sequential observations. In this setting, the learner chooses a pair of row and column at every timestep and observes the product of their values. The main challenge in this setting is that the learner does not observe the individual latent values of rows and columns as its feedback. Diverging from previous work we assume that the preference matrix is non-stochastic and hence our setting is more general in nature. Existing methods for solving similar problems are based on constructing conservative confidence interval with the strong assumption that underlying distributions are stochastic and i.i.d. We depart from this standard approach and consider the case when the best row and column pair can be learned jointly with help of two separate bandit algorithms working individually on rows and columns. We propose a simple and computationally efficient algorithm that implements this procedure, which we call Low-Rank Bandit (LRB), and prove a sublinear bound on its $n$-step regret. We evaluate the algorithm empirically on several synthetic and real-world datasets. In all experiments, we outperform existing state-of-the-art algorithms.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:introduction}
+\input{introduction}
+
+\section{Background}
+\label{sec:background}
+\input{background}
+
+\section{Setting}
+\label{sec:setting}
+\input{setting}
+
+\section{Algorithm}
+\label{sec:algorithm}
+\input{algorithm}
+
+\section{Analysis}
+\label{sec:analysis}
+\input{analysis}
+
+\section{Experiments}
+\label{sec:experiments}
+\input{experiments}
+
+\section{Related Work}
+\label{sec:related work}
+\input{relatedwork}
+
+\section{Conclusions}
+\label{sec:conclusions}
+\input{conclusions}
+
+%\newpage
+\bibliographystyle{named}
+\bibliography{biblio}
+
+%\appendix
+%\input{appendix}
+
+\end{document}
+

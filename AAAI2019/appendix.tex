@@ -58,7 +58,8 @@ for any $k \in [d]$. This implies that
   & = \frac{1}{d} \sum_{t = 1}^n \E\left[\sum_{j \in J_\ast} g_{t, i_t}(J_t(: k - 1) \oplus j, k)\right] - \sqrt{L n} \\
   & \geq \frac{1}{d} \sum_{t = 1}^n \E\left[C_{t, i_t}(J^\ast, d)\right] - \sqrt{L n}\,.
 \end{align*}
-\todob{The last step is false. The rest of the analysis goes through.} Now we prove for any $k \in [d]$,
+%\todob{The last step is false. The rest of the analysis goes through.} 
+Now we prove for any $k \in [d]$,
 \begin{align*}
   \sum_{t = 1}^n \E\left[C_{t, i_t}(J^\ast, d)\right] - \sum_{t = 1}^n \E\left[C_{t, i_t}(J_t, k)\right] \leq
   \frac{d - k}{d} \sum_{t = 1}^n \E\left[C_{t, i_t}(J^\ast, d)\right] + k \sqrt{L n}\,.
@@ -101,7 +102,7 @@ where $R_i(n)$ is the expected $n$-step regret of the row algorithm in row $i$, 
   R(n) = O\left(\frac{d \sqrt{L n}}{\Delta} + K \log n + K d \log d\right)\,.
 \end{align*}
 
-\todob{Before the we submit the paper, I will add discussion on $\Delta$ and also prove a bound where we integrate it out.}
+%\todob{Before the we submit the paper, I will add discussion on $\Delta$ and also prove a bound where we integrate it out.}
 
 %For a vector $J$, we will use the notation $J(:k)$ to denote the vector $(J(1),...,J(k)).$
 %\begin{lemma}
@@ -221,3 +222,60 @@ where $R_i(n)$ is the expected $n$-step regret of the row algorithm in row $i$, 
 %%  n_0 + \left(1 + \frac{d \sqrt{L}}{\Delta \sqrt{n_0} - d \sqrt{L}}\right) K\,.
 %%\end{align*}
 %%The bound can be interpreted as follows. Choose some reasonable $n_0$ that makes the regret comparable to ranked bandits, such as $n_0 = c^2 d \sqrt{L n}$ for some $c > 0$. Then the multiplier at $K$ becomes smaller than $2$, for instance, when $\Delta c d^\frac{1}{2} L^\frac{1}{4} n^\frac{1}{4} \geq 2 d L^\frac{1}{2}$. Under the assumption that $n \geq L$, this happens when $\Delta \geq 2 \sqrt{d} / c$, which makes sense for $c > 2 \sqrt{d}$\,.
+
+
+\section{Rank 2 case}
+
+\begin{assumption} \textbf{(Distinguishable hott-topics)}
+We assume that we have distinguishable hott-topics in $V$ such that for a  $V(J^*,:)$ where rows in $V$ are convex-combination of rows of $J^*$ we have,
+\begin{align*}
+\|J^*(:,1)\|_1 > \|J^*(:,2)\|_1 > \ldots > \|J^*(:,d)\|_1 .
+\end{align*}
+\end{assumption}
+
+
+	\textbf{Noise Model:} At every timestep $t$ we generate the matrix $M_{t} = UD_t V^{\intercal}$, where $D_t$ is a diagonal matrix of dimension $d$.
+
+\begin{assumption} \textbf{(Piecewise i.i.d)} We assume that there exist $g = 1,2,\ldots,G$ changepoints at $t_1 < t_2 < \ldots < t_G$ such that for the each time $t\in [t_{g-1}, t_g]$, $D_t(i,i)\sim \mathcal{X}_g (\mu(D(i,i)),\sigma^2)$. We assume $\mathcal{X}_g (\mu(D(i,i)),\sigma^2)$ is a sub-Gaussian distribution with mean $\mu$ and variance $\sigma^2$.
+\end{assumption}
+
+We have to show that timestep $t=1,2,\ldots,n$ the hott-topics structure is maintained even though user preference changes over time in our noisy model. Now we device a worst-case scenario such that the time horizon $n$ is divided into $G$ equal slices, each of length $\dfrac{n}{G}$. Then we show that for each of these time slices the hott-topics structure is maintained with high probability.
+
+%Let $S_t(i,j) = \sum_{i=1}^{d}\sum_{j=1}^{d} U(i,j) D_t(i,j)$ be a random variable. 
+
+Let $S_t = UD_t$. Then we can show that for a $\Delta = \sqrt{\dfrac{L\log(n/G)}{n/G}}$,
+
+\begin{align*}
+\sum_{t=1}^{n/G}\Pb\lbrace  S_t(i,j) > U(i,j) \mu(D(i,j)) + \Delta\rbrace &\leq \sum_{t=1}^{n/G}\exp(-2\Delta^2 t)\\
+%%%%%%%%%%%%%%%%%%
+& \leq \sum_{t=1}^{n/G}\exp(-\dfrac{L\log(n/G)}{n/G}\dfrac{n}{G})\\
+%%%%%%%%%%%%%%%%%%
+& = \sum_{t=1}^{n/G}\left(\dfrac{G}{n}\right)^L =\left(\dfrac{n}{G}\right)^{1-L}
+\end{align*}
+
+Similarly, we can calculate for the other tail, 
+
+\begin{align*}
+\sum_{t=1}^{n/G}\Pb\lbrace  S_t(i,j) < U(i,j) \mu(D(i,j)) + \Delta\rbrace &\leq \sum_{t=1}^{n/G}\exp(-2\Delta^2 t) = \left(\dfrac{n}{G}\right)^{1-L}
+\end{align*}
+
+So, for every $n/G$ such slices we can show that the hott-topics structure is maintained for $\dfrac{n}{G} - 2\left(\dfrac{n}{G}\right)^{1-L}$ of the timesteps.
+
+
+
+%\subsection{Problem Complexity}
+%
+%Without loss of generality we can assume that $1\geq \mu(1) > \mu(2) \geq 0$. Let $\Delta_{i,j} = \mu(i,1) - \mu(i,j)$. Following \citet{audibert2010best} we define the problem complexity of our setting as 
+%
+%\begin{align*}
+%H_{1} = \sum_{j=1}^{L}\dfrac{1}{\Delta_{i,j}}
+%\end{align*} 
+%
+%
+%
+%Case 1: $d$ items in 
+
+
+
+
+

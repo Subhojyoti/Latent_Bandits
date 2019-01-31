@@ -1,0 +1,54 @@
+%!TEX root = paper.tex
+
+\clearpage
+\onecolumn
+\appendix
+
+\section{Proof}
+\label{sec:proof}
+
+Let, $(u_t v_t\transpose)_{t = 1}^n$ be a sequence of n non-negative rank-1 matrices such that $u_t \in [0, 1]^{K \times 1}, v_t \in [0, 1]^{L \times 1}$, and the highest entry is $(1, 1)$. Let,
+
+\begin{align*}
+((i_t, j_t))_{t = 1}^n
+\end{align*}
+
+be a sequence of $n$ row-column pairs chosen by a learning agent. Then the expected n-step regret of the agent is,
+
+\begin{align*}
+R(n) = \sum_{t = 1}^n \E{u_t(1) v_t(1) - u_t(i_t) v_t(j_t)}
+\end{align*}
+
+where the expectation is over the randomness of the agent. Now note that for any $u$, $v$, $i$, and $j$ in our problem we can show that,
+
+\begin{align*}
+2 (u(1) v(1) - u(i) v(j))
+& = 2 u(1) v(1) - u(i) v(1) - u(1) v(j) + u(i) v(1) + u(1) v(j) - 2 u(i) v(j) \\
+& = u(1) (v(1) - v(j)) + v(1) (u(1) - u(i)) + u(i) (v(1) - v(j)) + v(j) (u(1) - u(i)) \\
+& = (u(1) + u(i)) (v(1) - v(j)) + (v(1) + v(j)) (u(1) - u(i))
+\end{align*}
+
+Therefore, the expected n-step regret can be decomposed as
+
+\begin{align*}
+R(n) = \sum_{t = 1}^n \E{(v_t(1) + v_t(j_t)) (u_t(1) - u_t(i_t))} + \sum_{t = 1}^n \E{(u_t(1) + u_t(i_t)) (v_t(1) - v_t(j_t))}
+\end{align*}
+
+Now suppose that all entries of $u_t$ and $v_t$ for all $t=1,2,\ldots, n$ are bounded from below by some $\Delta > 0$. Then we get that,
+
+\begin{align*}
+R(n)
+& = \sum_{t = 1}^n \E{(1 + v_t(1) / v_t(j_t)) v_t(j_t) (u_t(1) - u_t(i_t))} +
+\sum_{t = 1}^n \E{(1 + u_t(1) / u_t(i_t)) u_t(i_t) (v_t(1) - v_t(j_t))} \\
+& \leq (1 + \frac{1}{\Delta}) \left[\sum_{t = 1}^n \E{u_t(1) v_t(j_t) - u_t(i_t) v_t(j_t)} +
+\sum_{t = 1}^n \E{u_t(i_t) v_t(1) - u_t(i_t) v_t(j_t)}\right]
+\end{align*}
+
+Finally, we can show from the result of \citet{auer2002nonstochastic} that the $\colalg$ using $\expthree$ chooses the column $j_t$ at time $t$ and observe reward is $u_t(i_t) v_t(j_t)$. Therefore, the first sum above is bounded by $\sqrt{L n}$ for any sequence of $j_t$, and thus also in expectation over the randomness in $j_t$. Similarly $\rowalg$ using $\expthree$ chooses the row $i_t$ at time $t$, and observe reward is $u_t(i_t) v_t(j_t)$. Therefore, the second sum above is bounded by $\sqrt{K n}$ for any sequence of $i_t$, and thus also in expectation over the randomness in $i_t$. Therefore we get the final regret as,
+
+\begin{align*}
+  R(n) = O\left(\frac{\left(\sqrt{L } + \sqrt{K }\right)n}{\Delta}\right)
+\end{align*}
+
+
+%If \alpha is treated as a constant, we get a O((\sqrt{K} + \sqrt{L}) \sqrt{n}) regret bound.

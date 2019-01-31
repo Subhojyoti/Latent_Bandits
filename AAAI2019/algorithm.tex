@@ -83,8 +83,8 @@ The proposed $\latentranker$ algorithm only has to update/look through $(Kd + d)
 %\todob{Discuss time and space complexities of $\latentranker$.}
 
 
-\todob{Say how we hack $\rowalg$. 
-We do not have one row Exp3 for each user and any combination of columns, right? This is how LRA is proposed. This needs to be said.}
+%\todob{Say how we hack $\rowalg$. 
+%We do not have one row Exp3 for each user and any combination of columns, right? %This is how LRA is proposed. This needs to be said.}
 
 
 Note, that we leave the implementation of the $\colalg$ and $\rowalg$ to the users. For theoretical guarantees we use non-stochastic algorithm $\expthree$ as $\colalg$ and $\WMA$ as $\rowalg$ which will be explained in detail in section \cref{sec:analysis}. For experimental purposes, stochastic algorithms like $\ucb$ or thompson sampling can also be used to improve the performance of $\latentranker$. This has also been explored in \citet{radlinski2008learning} where $\RBA$ uses $\ucb$ for ranking items.

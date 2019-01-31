@@ -1,0 +1,52 @@
+We propose \emph{Low Rank Bandit ($\latentranker$)} for solving the family of non-stochastic, non-negative and low-rank matrices where the goal is to identify the best pair of rows and columns. The pseudocode of $\latentranker$ is in \cref{alg:LRB}. $\latentranker$ has two main components, column learning and row learning algorithm. 
+
+At every timestep $t$, the column learning algorithm recommends a column $j_t$ and a row $i_t$. It then observes the reward $u_t(i_t)v_t(j_t)$. The $\colalg$ learns the most rewarding column on average, while $\rowalg$ learns the most rewarding row on average. Once it observes the reward it updates the statistics of each algorithm with the reward $u_t(i_t)v_t(j_t)$.
+
+%The column learning algorithm recommends a list of $d$ columns and is the same as in \citet{radlinski2008learning}. But we exploit an additional structure in our problem to show that we learn the optimal columns $J_\ast$. The column learning algorithm are $d$ instances of multi-armed bandit algorithms, which we denote by $\colalg(k)$ for algorithm $k \in [d]$. $\colalg(1)$ learns the most rewarding column on average, $\colalg(2)$ learns the second most rewarding column on average conditioned on the first learned column, and so on.
+%
+%The row ranking algorithm permutes columns suggested by the column learning algorithm. It consists of multiple instances of full-information algorithms. More precisely, for each user $i \in [K]$ and set of $d$ columns $J$, we have algorithm $\rowalg(i, J)$ with $d!$ arms, which correspond to all possible permutations of $J$. The objective of $\rowalg(i, J)$ is to learn a permutation of $J$ with the highest reward, as measured by \eqref{eq:reward}.
+%
+%$\latentranker$ interacts with the environment as follows. At time $t$, a random user $i_t$ is revealed to $\latentranker$. Then, in the ascending order of $k \in [d]$, $\colalg(k)$ suggests column $\ell_k$. If $\colalg(k)$ suggests one of the previously suggested columns $\ell_1, \dots, \ell_{k - 1}$, then $\ell_k$ is chosen uniformly at random from the remaining columns. We denote the vector of $d$ suggested columns  by $J_t$. Then $\rowalg(i_t, J_t)$, the row learning algorithm for user $i_t$ and columns $J_t$, selects permutation $\pi_{t, i_t}$ of $J_t$.
+%
+%The user is recommended a permuted list $\pi_{t, i_t}(J_t)$ and $\latentranker$ observes the individual rewards of all recommended items. Then we update both column and row learning algorithms. The reward of the arm in $\colalg(k)$, which selects the $k$-th column in $J_t$, is updated as follows. If the arm was not one of the previously suggested columns, its reward is $\max \, \{M_t(i_t, J_t(a)): a \in [k]\} - \max \, \{M_t(i_t, J_t(a)): a \in [k - 1]\}$. Otherwise, we update the initially suggested arm with reward $0$. Since $\latentranker$ observes the individual rewards of all recommended items, we can compute the reward of any permutation of $J_t$ in row $i_t$. These rewards are then used to update $\rowalg(i_t, J_t)$. 
+
+
+\begin{algorithm}[t]
+  \caption{Low Rank Bandit ($\latentranker$) (Rank-1 case)}
+  \label{alg:LRB}
+  \begin{algorithmic}[1]
+    \State \textbf{Input:} Time horizon $n$
+    \Comment{Initialization}
+      \State Initialize $\colalg$
+      \State Initialize $\rowalg$
+    \For{$t = 1, \dots, n$}
+        \State Suggest column $j_t$ by $\colalg$ \Comment{Generate response}
+        \State Suggest row $i_t$ by $\rowalg$
+        \State Observe feedback $u_t(i_t)v_t(j_t)$ \Comment{Update statistics}
+        \State Update arm $j_t$ of $\colalg$ with reward $u_t(i_t)v_t(j_t)$ 
+        \State Update arm $i_t$ of $\rowalg$ with reward $u_t(i_t)v_t(j_t)$
+     \EndFor
+%      \ForAll{arms $\pi$ in $\rowalg(i_t, J_t)$}
+%        \State Update arm $\pi$ with reward $r_t(i_t, \pi(J_t))$ in \eqref{eq:reward}
+%      \EndFor
+%    \EndFor
+  \end{algorithmic}
+\end{algorithm}
+
+
+\subsection{Practical Considerations}
+\label{sec:practical considerations}
+
+%The proposed $\latentranker$ algorithm only has to update/look through $(Kd + d)$ items for each of the $d$ $\colalg$ and the i-th $\rowalg$ at every timestep $t$. This is in stark contrast to some of the existing matrix completion algorithms which has to reconstruct a $K\times L$ matrix \citep{sen2016contextual} or calculate second or third order tensors \citep{gopalan2016low}. 
+%\todob{Discuss time and space complexities of $\latentranker$.}
+
+
+%\todob{Say how we hack $\rowalg$. 
+%We do not have one row Exp3 for each user and any combination of columns, right? %This is how LRA is proposed. This needs to be said.}
+
+
+Note, that we leave the implementation of the $\colalg$ and $\rowalg$ to the users. For theoretical guarantees we use non-stochastic algorithm $\expthree$ as $\colalg$ and $\rowalg$ which will be explained in detail in section \cref{sec:analysis}. For experimental purposes, stochastic algorithms like $\ucb$ or thompson sampling can also be used to improve the performance of $\latentranker$. This has also been explored in \citet{radlinski2008learning} where $\RBA$ uses $\ucb$ for ranking items.
+
+%This is ok. I will write about col Exp3 and row WMA and why they are needed. Great. Also mention that previous works considered UCB1 and we do that as well.
+
+%\todob{Discuss suitable choices for $\colalg$ and $\rowalg$.}
