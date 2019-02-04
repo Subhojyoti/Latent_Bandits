@@ -1,6 +1,6 @@
 %!TEX root = paper.tex
 
-\begin{theorem}
+\begin{theorem} \textbf{(Rank-1 Case)}
 \label{thm:upper bound} Let $\colalg$ and $\rowalg$ in $\latentranker$ be $\expthree$ algorithm, respectively. Then the expected $n$-step regret of $\latentranker$ is bounded as
 \begin{align*}
   R(n) = O\left(\frac{\left(\sqrt{L } + \sqrt{K }\right)n}{\Delta}\right)
@@ -53,7 +53,6 @@ R(n)
 \end{align*}
 
 Finally, we can show from the result of \citet{auer2002nonstochastic} that the $\colalg$ using $\expthree$ chooses the column $j_t$ at time $t$ and observe reward is $u_t(i_t) v_t(j_t)$. Therefore, the first sum above is bounded by $\sqrt{L n}$ for any sequence of $j_t$, and thus also in expectation over the randomness in $j_t$. Similarly $\rowalg$ using $\expthree$ chooses the row $i_t$ at time $t$, and observe reward is $u_t(i_t) v_t(j_t)$. Therefore, the second sum above is bounded by $\sqrt{K n}$ for any sequence of $i_t$, and thus also in expectation over the randomness in $i_t$. Therefore we get the final regret as,
-
 \begin{align*}
   R(n) = O\left(\frac{\left(\sqrt{L } + \sqrt{K }\right)n}{\Delta}\right)
 \end{align*}

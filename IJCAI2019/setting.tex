@@ -1,32 +1,43 @@
-%!TEX root = paper.tex
-
-We study an online learning to rank problem, which we call a \emph{latent ranked bandit}. At time $t$, the preferences of users are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V\transpose$, where $M$, $U_t$, and $V$ are defined as in \cref{sec:background}. We assume that user preferences $U_t$ can change with time $t$. A random user $i_t \in [K]$ arrives to the recommender system at time $t$ and we recommend $d$ items $J_t$ to this user. The \emph{reward} for recommending these items is $r_t(i_t, J_t)$, where
+We study the online learning problem of finding the maximum entry of a non-stochastic, low-rank and non-negative matrix which we call as a \emph{non-stochastic low-rank bandit problem}. At time $t$, the preferences of users over items are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V\transpose$, where $M$, $U_t$, and $V$ are defined as in \cref{sec:background}. We assume that user preferences $U_t$ can change with time $t$. At every timestep $t$ the learner chooses $d$-pairs of rows and columns from $M_t$ denoted by $(I_t,J_t)\in \Pi_d([K])\times \Pi_d([L])$. It then observes a noisy realization of the matrix $M_{t}(I_t,J_t)$ for all $i_t\in I_t$ and $j_t \in J_t$. The \emph{reward} for the agent for choosing arms $(I_t,J_t)$ at time $t$ is denoted by $r_t(i^\ast(I_t,J_t),j^\ast(I_t,J_t))$ such that,
 \begin{align}
-  r_t(i, J) =
-  \max \, \{\mu(k) \, M_t(i, J(k)): k \in [d]\}
+  (i^\ast(I,J),j^\ast(I,J)) = \argmax_{(i,j) \in (I\times J)} M_{t}(i,j)
   \label{eq:reward}
 \end{align}
-is the reward for recommending items $J$ to user $i$ at time $t$, $J(k)$ is the $k$-th item in $J$, and $\mu(k)$ is the weight of position $k \in [d]$. We assume that higher-ranked positions are more rewarding, $1 \geq \mu(1) \geq \dots \geq \mu(d) \geq 0$. The learning agent \emph{observes} the individual rewards of all recommended items, $M_t(i_t, J_t(k))$ for all $k \in [d]$.
+
+
+%We study an online learning to rank problem, which we call a \emph{latent ranked bandit}. At time $t$, the preferences of users are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V\transpose$, where $M$, $U_t$, and $V$ are defined as in \cref{sec:background}. We assume that user preferences $U_t$ can change with time $t$. A random user $i_t \in [K]$ arrives to the recommender system at time $t$ and we recommend $d$ items $J_t$ to this user. The \emph{reward} for recommending these items is $r_t(i_t, J_t)$, where
+%\begin{align}
+%  r_t(i, J) =
+%  \max \, \{\mu(k) \, M_t(i, J(k)): k \in [d]\}
+%  \label{eq:reward}
+%\end{align}
+%is the reward for recommending items $J$ to user $i$ at time $t$, $J(k)$ is the $k$-th item in $J$, and $\mu(k)$ is the weight of position $k \in [d]$. We assume that higher-ranked positions are more rewarding, $1 \geq \mu(1) \geq \dots \geq \mu(d) \geq 0$. The learning agent \emph{observes} the individual rewards of all recommended items, $M_t(i_t, J_t(k))$ for all $k \in [d]$.
 
 %\todob{We need to motivate \eqref{eq:reward} from the user-modeling point of view. This should be the same motivation as in ranked bandits, except that $\mu$ enforces personalization, in the sense that the order matters.} \todoan{See the above comment. To motivate the fractional reward, how about saying that it can correspond to the length of the video the user watches. Like, we recommend a movie/video and if the user watches only half of the video, then the reward is 0.5.}
 
-Since $U_t$ can change arbitrarily over time, the reward in \eqref{eq:reward} is maximized by lists $J$ with highly rewarding items that are diverse, in the sense that they attain high rewards at different times $t \in [n]$. Because the rewards are weighted by $\mu$, more frequent highly-rewarding items should be placed at higher positions. A remarkable property of our user-item preference matrices $M_t$ is that for any user $i \in [K]$ at any time $t$,
+Since $U_t$ can change arbitrarily over time, the reward in \eqref{eq:reward} is maximized by lists $J$ with highly rewarding items that are diverse, in the sense that they attain high rewards at different times $t \in [n]$. A remarkable property of our user-item preference matrices $M_t$ is that for any user $i \in [K]$ and any item $j \in [L]$ at any time $t$,
 \begin{align*}
-  \argmax_{j \in [L]} M_t(i, j) \in J_\ast\,,
+  \argmax_{(i, j) \in ([K] \times [L])} M_t(i, j) \in (I^\ast, J^\ast),
 \end{align*}
-where $J_\ast$ is defined in \eqref{eq:hott topics}. Therefore, it is possible to learn all potentially most rewarding items statistically efficiently.
-
-Now we are ready to define our notion of optimality and regret. Let $J_\ast$ be the hott-topics items in \eqref{eq:hott topics} and $\pi_{\ast, i}$ be their permutation that maximizes the reward of user $i$ in hindsight,
-\begin{align*}
-  \pi_{\ast, i} =
-  \argmax_{\pi \in \Pi_d} \sum_{t = 1}^n r_t(i, \pi(J_\ast))\,.
-\end{align*}
-Let $J_t$ be our recommended items at time $t$ and $\pi_{t, i}$ be their permutation for user $i$, both of which are learned. Then our goal is to minimize the expected $n$-step regret,
+where $I^\ast$ and $J^\ast$ is defined in \eqref{eq:hott topics} and \eqref{eq:hott topics1}. Therefore, it is possible to learn all potentially most rewarding pairs of rows and columns statistically efficiently. Now we are ready to define our notion of optimality and regret.  Our goal is to minimize the expected $n$-step regret,
 \begin{align}
   R(n) =
-  \sum_{t = 1}^n \E\left[r_t(i_t, \pi_{\ast, i_t}(J_\ast)) - r_t(i_t, \pi_{t, i_t}(J_t))\right]\,,
+  \sum_{t = 1}^n \E\left[r_t(i^\ast_t, j^\ast_t) - r_t(i^\ast(I,J),j^\ast(I,J))\right]\,,
   \label{eq:regret}
 \end{align}
-where the expectation is with respect to both randomly arriving users and potential randomness in the learning algorithm.
+where the expectation is with respect to both randomly choosing rows $(I_t)$ and columns $(J_t)$ by the learning algorithm and potential randomness in the environment.
+
+%Now we are ready to define our notion of optimality and regret. Let $J_\ast$ be the hott-topics items in \eqref{eq:hott topics} and $\pi_{\ast, i}$ be their permutation that maximizes the reward of user $i$ in hindsight,
+%\begin{align*}
+%  \pi_{\ast, i} =
+%  \argmax_{\pi \in \Pi_d} \sum_{t = 1}^n r_t(i, \pi(J_\ast))\,.
+%\end{align*}
+%Let $J_t$ be our recommended items at time $t$ and $\pi_{t, i}$ be their permutation for user $i$, both of which are learned. Then our goal is to minimize the expected $n$-step regret,
+%\begin{align}
+%  R(n) =
+%  \sum_{t = 1}^n \E\left[r_t(i_t, \pi_{\ast, i_t}(J_\ast)) - r_t(i_t, \pi_{t, i_t}(J_t))\right]\,,
+%  \label{eq:regret}
+%\end{align}
+%where the expectation is with respect to both randomly arriving users and potential randomness in the learning algorithm.
 
 %\todob{We do not really need the greedy definition of $J_\ast$ until the proof.}

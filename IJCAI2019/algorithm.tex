@@ -1,6 +1,21 @@
-We propose \emph{Low Rank Bandit ($\latentranker$)} for solving the family of non-stochastic, non-negative and low-rank matrices where the goal is to identify the best pair of rows and columns. The pseudocode of $\latentranker$ is in \cref{alg:LRB}. $\latentranker$ has two main components, column learning and row learning algorithm. 
+We propose \emph{Low Rank Bandit ($\latentranker$)} for solving the family of non-stochastic, non-negative and low-rank matrices where the goal is to identify the maximum entry of the matrix by quickly identifying the $d$-best rows or columns. The pseudocode of $\latentranker$ is in \cref{alg:LRB}. $\latentranker$ has two main components, column learning and row learning algorithm. 
 
-At every timestep $t$, the column learning algorithm recommends a column $j_t$ and a row $i_t$. It then observes the reward $u_t(i_t)v_t(j_t)$. The $\colalg$ learns the most rewarding column on average, while $\rowalg$ learns the most rewarding row on average. Once it observes the reward it updates the statistics of each algorithm with the reward $u_t(i_t)v_t(j_t)$.
+At every timestep $t$, the row learning algorithm recommends a list of $d$ rows and is the same as the Ranked Bandit Algorithm (RBA) in \citet{radlinski2008learning}. But we exploit an additional structure in our problem to show that we learn the optimal rows $I^\ast$. The row learning algorithm are $d$ instances of multi-armed bandit algorithms, which we denote by $\rowalg(k)$ for algorithm $k \in [d]$. $\rowalg(1)$ learns the most rewarding row on average, $\rowalg(2)$ learns the second most rewarding row on average conditioned on the first learned column, and so on.
+
+
+Similarly, column learning algorithm recommends a a list of $d$ columns by exploiting the same structure in our rewards. Again the goal of the column learning algorithm $\colalg$ is to learn the optimal set of columns $J^\ast$. Hence, $\colalg(1),\dots,\colalg(d)$ learns the most rewarding columns $\lbrace j_1,j_2,\dots,j_d \rbrace$ on average. Note, that this sequence of learning the rows or columns first does not matter because the \emph{hott-topics} structure is defined on both $U$ and $V$ matrix generating $M_t = U_t V^\intercal$, and so we will be learning the $d$-best rows or columns in average. Another way of looking at this is to first realize that if we fix the column selection strategy, which is simply some distribution over $d$-tuples of chosen columns then for any such distribution, the $d$ hott-topic rows are the optimal solution to the row selection problem. By symmetry, the same is true for the column selection problem. If we run both in parallel, and the distributions in the other dimensions do not change too fast (this is true by our design), then $i_1, \dots, i_d$ and $j_1, \dots, j_d$ would slowly converge to the $d$ hott-topic rows and columns.
+
+
+%Here is an informal argument for the correctness of the algorithm. Fix the column selection strategy, which is simply some distribution over d-tuples of chosen columns. For any such distribution, the d hott topic rows are the optimal solution to the row selection problem. By symmetry, the same is true for the column selection problem. If we run both in parallel, and the distributions in the other dimensions do not change too fast (this is true by our design), I would think that i_1, \dots, i_d and j_1, \dots, j_d would slowly converge to the d hott topic rows and columns.
+
+
+Finally, $\latentranker$ observes the individual rewards of $M(i,j)$ for all $(i,j)\in (I_t, J_t)$. Then we update both column and row learning algorithms. The reward of the arm in $\rowalg(k)$, which selects the $k$-th row in $I_t$, is updated as follows. If the arm  was not previously suggested row its reward is updated twice, $\max_{k \leq k_1} M_t(i_k, j_{k_2}) - \max_{k < k_1} M_t(i_k, j_{k_2})$ for all $k_1,k_2 \in [d]$. By the choice of our design and previous argument a similar update is performed on the column learning algorithm such that its reward is also updated twice, $\max_{k \leq k_2} M_t(i_{k_1}, j_k)  - \max_{k < k_2} M_t(i_{k_1}, j_k)$ for all $k_1,k_2 \in [d]$. Otherwise, if any of the row or column has been previously selected we update it with reward $0$.
+
+
+%The reward of the arm in $\colalg(k)$, which selects the $k$-th column in $J_t$, is updated as follows. If the arm was not one of the previously suggested columns, its reward is $\max \, \{M_t(i_t, J_t(a)): a \in [k]\} - \max \, \{M_t(i_t, J_t(a)): a \in [k - 1]\}$. Otherwise, we update the initially suggested arm with reward $0$. Since $\latentranker$ observes the individual rewards of all recommended items, we can compute the reward of any permutation of $J_t$ in row $i_t$. These rewards are then used to update $\rowalg(i_t, J_t)$. 
+
+
+%It then observes the reward $u_t(i_t)v_t(j_t)$. The $\colalg$ learns the most rewarding column on average, while $\rowalg$ learns the most rewarding row on average. Once it observes the reward it updates the statistics of each algorithm with the reward $u_t(i_t)v_t(j_t)$.
 
 %The column learning algorithm recommends a list of $d$ columns and is the same as in \citet{radlinski2008learning}. But we exploit an additional structure in our problem to show that we learn the optimal columns $J_\ast$. The column learning algorithm are $d$ instances of multi-armed bandit algorithms, which we denote by $\colalg(k)$ for algorithm $k \in [d]$. $\colalg(1)$ learns the most rewarding column on average, $\colalg(2)$ learns the second most rewarding column on average conditioned on the first learned column, and so on.
 %
@@ -12,24 +27,52 @@ At every timestep $t$, the column learning algorithm recommends a column $j_t$ a
 
 
 \begin{algorithm}[t]
-  \caption{Low Rank Bandit ($\latentranker$) (Rank-1 case)}
+  \caption{Low Rank Bandit ($\latentranker$)}
   \label{alg:LRB}
   \begin{algorithmic}[1]
-    \State \textbf{Input:} Time horizon $n$
+    \State \textbf{Input:} Time horizon $n$, Rank $d$
+    \For{$k = 1, \dots, d$}
     \Comment{Initialization}
-      \State Initialize $\colalg$
-      \State Initialize $\rowalg$
+      \State Initialize $\rowalg (k)$
+      \State Initialize $\colalg (k)$
+    \EndFor
     \For{$t = 1, \dots, n$}
-        \State Suggest column $j_t$ by $\colalg$ \Comment{Generate response}
-        \State Suggest row $i_t$ by $\rowalg$
-        \State Observe feedback $u_t(i_t)v_t(j_t)$ \Comment{Update statistics}
-        \State Update arm $j_t$ of $\colalg$ with reward $u_t(i_t)v_t(j_t)$ 
-        \State Update arm $i_t$ of $\rowalg$ with reward $u_t(i_t)v_t(j_t)$
+    \For{$k = 1, \dots, d$}
+      \Comment{Generate response}
+        \State $\hat{b}_k \gets$ Suggested row $i_t$ by $\rowalg(k)$
+        \If{$\hat{b}_k \in \{b_1, \dots, b_{k - 1}\}$}
+          \State $b_k \gets$ Random row not in $\{b_1, \dots, b_{k - 1}\}$
+        \Else
+          \State $b_k \gets \hat{b}_k$
+        \EndIf
+        \State $\hat{\ell}_k \gets$ Suggested column $j_t$ by $\colalg(k)$
+        \If{$\hat{\ell}_k \in \{\ell_1, \dots, \ell_{k - 1}\}$}
+          \State $\ell_k \gets$ Random column not in $\{\ell_1, \dots, \ell_{k - 1}\}$
+        \Else
+          \State $\ell_k \gets \hat{\ell}_k$
+        \EndIf
+      \EndFor
+      \State $I_t \gets (b_1, \dots, b_d)$
+      \State $J_t \gets (\ell_1, \dots, \ell_d)$
+      \State Observe $M_t(I_t(k), J_t(k))$ for all $k \in [d]$
+      \For{$k_1 = 1, \dots, d$}
+      \For{$k_2 = 1, \dots, d$}
+      \Comment{Update statistics}
+        \If{$b_{k} = \hat{b}_{k}$ or $\ell_{k} = \hat{\ell}_{k}$}
+    \State Update arm $b_{k}$ of $\rowalg(k)$ with reward
+    \begin{align*}
+    &\qquad \qquad \max_{k \leq k_1} M_t(i_k, j_{k_2}) - \max_{k < k_1} M_t(i_k, j_{k_2})
+    \end{align*}
+    \State Update arm $\ell_{k}$ of $\colalg(k)$ with reward
+    \begin{align*}
+    &\qquad \qquad \max_{k \leq k_2} M_t(i_{k_1}, j_k)  - \max_{k < k_2} M_t(i_{k_1}, j_k)
+    \end{align*}
+        \Else
+          \State Update arm $\hat{b}_k$ of $\rowalg(k)$ with reward $0$ or arm $\hat{\ell}_k$ of $\colalg(k)$ with reward $0$
+        \EndIf
+      \EndFor
+      \EndFor
      \EndFor
-%      \ForAll{arms $\pi$ in $\rowalg(i_t, J_t)$}
-%        \State Update arm $\pi$ with reward $r_t(i_t, \pi(J_t))$ in \eqref{eq:reward}
-%      \EndFor
-%    \EndFor
   \end{algorithmic}
 \end{algorithm}
 
