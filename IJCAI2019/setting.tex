@@ -19,7 +19,7 @@ Since $U_t$ can change arbitrarily over time, the reward in \eqref{eq:reward} is
 \begin{align*}
   \argmax_{(i, j) \in ([K] \times [L])} M_t(i, j) \in (I^\ast, J^\ast),
 \end{align*}
-where $I^\ast$ and $J^\ast$ is defined in \eqref{eq:hott topics} and \eqref{eq:hott topics1}. Therefore, it is possible to learn all potentially most rewarding pairs of rows and columns statistically efficiently. Now we are ready to define our notion of optimality and regret.  Our goal is to minimize the expected $n$-step regret,
+where $I^\ast$ and $J^\ast$ is defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. Therefore, it is possible to learn all potentially most rewarding pairs of rows and columns statistically efficiently. Now we are ready to define our notion of optimality and regret.  Our goal is to minimize the expected $n$-step regret,
 \begin{align}
   R(n) =
   \sum_{t = 1}^n \E\left[r_t(i^\ast_t, j^\ast_t) - r_t(i^\ast(I,J),j^\ast(I,J))\right]\,,
