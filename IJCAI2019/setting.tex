@@ -1,9 +1,12 @@
-We study the online learning problem of finding the maximum entry of a non-stochastic, low-rank and non-negative matrix which we call as a \emph{non-stochastic low-rank bandit problem}. At time $t$, the preferences of users over items are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V_t\transpose$, where $M$, $U_t$, and $V_t$ are defined as in \cref{sec:background}. We assume that user and item preferences ($U_t$ and $V_t$ respectively) can change with time $t$. At every timestep $t$ the learner chooses $d$-pairs of rows and columns from $M_t$ denoted by $(I_t,J_t)\in \Pi_d([K])\times \Pi_d([L])$. It then observes a noisy realization of the matrix $M_{t}(I_t,J_t)$ for all $i_t\in I_t$ and $j_t \in J_t$. The \emph{reward} for the agent for choosing arms $(I_t,J_t)$ at time $t$ is denoted by $r_t(i^\ast(I_t,J_t),j^\ast(I_t,J_t))$ such that,
+%!TEX root = bandit_paper.tex
+
+We study the online learning problem of finding the maximum entry of a non-stochastic, low-rank and non-negative matrix which we call as a \emph{non-stochastic low-rank bandit problem}. At time $t$, the preferences of users over items are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V_t\transpose$, where $M$, $U_t$, and $V_t$ are defined as in \cref{sec:background}. We assume that user and item preferences ($U_t$ and $V_t$ respectively) can change with time $t$. At every timestep $t$ the learner chooses $d$-pairs of rows and columns from $M_t$ denoted by $(I_t,J_t)\in \Pi_d([K])\times \Pi_d([L])$. It then observes a noisy \todob{We do not have any noise, right?} realization of the matrix $M_{t}(I_t,J_t)$ for all $i_t\in I_t$ and $j_t \in J_t$. The \emph{reward} for the agent for choosing arms $(I_t,J_t)$ at time $t$ is denoted by $r_t(i^\ast(I_t,J_t),j^\ast(I_t,J_t))$ such that,
 \begin{align}
   (i^\ast(I,J),j^\ast(I,J)) = \argmax_{(i,j) \in (I\times J)} M_{t}(i,j)
   \label{eq:reward}
 \end{align}
 
+\todob{Say how the hott topics assumption simplifies the problem of finding the maximum entry of a matrix. Write it formally.}
 
 %We study an online learning to rank problem, which we call a \emph{latent ranked bandit}. At time $t$, the preferences of users are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V\transpose$, where $M$, $U_t$, and $V$ are defined as in \cref{sec:background}. We assume that user preferences $U_t$ can change with time $t$. A random user $i_t \in [K]$ arrives to the recommender system at time $t$ and we recommend $d$ items $J_t$ to this user. The \emph{reward} for recommending these items is $r_t(i_t, J_t)$, where
 %\begin{align}
@@ -15,11 +18,15 @@ We study the online learning problem of finding the maximum entry of a non-stoch
 
 %\todob{We need to motivate \eqref{eq:reward} from the user-modeling point of view. This should be the same motivation as in ranked bandits, except that $\mu$ enforces personalization, in the sense that the order matters.} \todoan{See the above comment. To motivate the fractional reward, how about saying that it can correspond to the length of the video the user watches. Like, we recommend a movie/video and if the user watches only half of the video, then the reward is 0.5.}
 
-Since $U_t$ can change arbitrarily over time, the reward in \eqref{eq:reward} is maximized by lists $J$ with highly rewarding items that are diverse, in the sense that they attain high rewards at different times $t \in [n]$. A remarkable property of our user-item preference matrices $M_t$ is that for any user $i \in [K]$ and any item $j \in [L]$ at any time $t$,
+Since $U_t$ can change arbitrarily over time \todob{This obviously cannot be arbitrary. The assumption is that all $M_t$ have the same hott topics rows and columns. Write it formally.}, the reward in \eqref{eq:reward} is maximized by lists $J$ with highly rewarding items that are diverse, in the sense that they attain high rewards at different times $t \in [n]$. A remarkable property of our user-item preference matrices $M_t$ is that for any user $i \in [K]$ and any item $j \in [L]$ at any time $t$,
 \begin{align*}
   \argmax_{(i, j) \in ([K] \times [L])} M_t(i, j) \in (I^\ast, J^\ast),
 \end{align*}
-where $I^\ast$ and $J^\ast$ is defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. Therefore, it is possible to learn all potentially most rewarding pairs of rows and columns statistically efficiently. Now we are ready to define our notion of optimality and regret.  Our goal is to minimize the expected $n$-step regret,
+where $I^\ast$ and $J^\ast$ is defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. Therefore, it is possible to learn all potentially most rewarding pairs of rows and columns statistically efficiently.
+
+\todob{The definition of the regret below is incorrect for $d > 1$. We need to think about this. Actually, do we need the definition of the regret for $d > 1$ if we never bound it? We should use determinants and then intuitively explain what they mean. The rank $1$ case is intuitive and easy to explain.}
+
+Now we are ready to define our notion of optimality and regret.  Our goal is to minimize the expected $n$-step regret,
 \begin{align}
   R(n) =
   \sum_{t = 1}^n \E\left[r_t(i^\ast_t, j^\ast_t) - r_t(i^\ast(I,J),j^\ast(I,J))\right]\,,
