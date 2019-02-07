@@ -82,7 +82,7 @@
 
 \maketitle
 \begin{abstract}
-We study the problem of learning the maximum entry of a low-rank non-negative matrix, from sequential observations. In this setting, the learner chooses $d$ pairs of rows and columns at every timestep and observes the product of their values. The main challenge in this setting is that the learner does not observe the individual latent values of rows and columns as its feedback. Diverging from previous work we assume that the preference matrix is non-stochastic and hence our setting is more general in nature. Existing methods for solving similar problems rely on UCB-type algorithms based on constructing conservative confidence interval with the strong assumption that underlying distributions are stochastic and i.i.d. We depart from this standard approach and consider the case when the best row and column pair can be learned jointly with help of two separate bandit algorithms working individually on rows and columns. We propose a simple and computationally efficient algorithm that implements this procedure, which we call Low-Rank Bandit (LRB), and prove a sub-linear bound on its $n$-step regret in the rank-1 special case. We evaluate the algorithm empirically on several synthetic and real-world datasets. In all experiments, we outperform existing state-of-the-art algorithms.
+We study the problem of learning the maximum entry of a low-rank non-negative matrix, from sequential observations. In this setting, the learner chooses pairs of rows and columns at every timestep and observes the product of their values. The main challenge in this setting is that the learner does not observe the individual latent values of rows and columns as its feedback. Diverging from previous work we assume that the preference matrix is non-stochastic and hence our setting is more general in nature. Existing methods for solving similar problems rely on UCB-type algorithms based on constructing conservative confidence interval with the strong assumption that underlying distributions are stochastic and i.i.d. We depart from this standard approach and consider the case when the best row and column pair can be learned jointly with help of two separate bandit algorithms working individually on rows and columns. We propose a simple and computationally efficient algorithm that implements this procedure, which we call Low-Rank Bandit (LRB), and prove a sub-linear bound on its $n$-step regret in the rank-1 special case. We evaluate the algorithm empirically on several synthetic and real-world datasets. In all experiments, we outperform existing state-of-the-art algorithms.
 \end{abstract}
 
 \section{Introduction}
@@ -97,11 +97,15 @@ We study the problem of learning the maximum entry of a low-rank non-negative ma
 \label{sec:setting}
 \input{setting}
 
-\section{Algorithm}
+\section{Rank $1$ Problem}
+\label{sec:rank1}
+\input{rank1}
+
+\section{Algorithm for Rank $d$ Setting}
 \label{sec:algorithm}
 \input{algorithm}
 
-\section{Analysis}
+\section{Analysis of Rank $1$ Setting}
 \label{sec:analysis}
 \input{analysis}
 
