@@ -41,39 +41,42 @@ Finally, $\latentranker$ observes the individual rewards of $M(i,j)$ for all $(i
     \For{$t = 1, \dots, n$}
     \For{$k = 1, \dots, d$}
       \Comment{Generate response}
-        \State $\hat{b}_k \gets$ Suggested row $i_t$ by $\rowalg(k)$
-        \todob{$\hat{b}$ for rows is very confusing. What about $\hat{i}$? The same goes for $b$.}
-        \If{$\hat{b}_k \in \{b_1, \dots, b_{k - 1}\}$}
-          \State $b_k \gets$ Random row not in $\{b_1, \dots, b_{k - 1}\}$
+        \State $\hat{i}_k \gets$ Suggested row $i_t$ by $\rowalg(k)$
+        %\todob{$\hat{b}$ for rows is very confusing. What about $\hat{i}$? The same goes for $b$.}
+        \If{$\hat{i}_k \in \{i_1, \dots, i_{k - 1}\}$}
+          \State $i_k \gets$ Random row not in $\{i_1, \dots, i_{k - 1}\}$
         \Else
-          \State $b_k \gets \hat{b}_k$
+          \State $i_k \gets \hat{i}_k$
         \EndIf
-        \State $\hat{\ell}_k \gets$ Suggested column $j_t$ by $\colalg(k)$
-        \todob{$\hat{\ell}$ for columns is very confusing. What about $\hat{j}$? The same goes for $\ell$.}
-        \If{$\hat{\ell}_k \in \{\ell_1, \dots, \ell_{k - 1}\}$}
-          \State $\ell_k \gets$ Random column not in $\{\ell_1, \dots, \ell_{k - 1}\}$
+        \State $\hat{j}_k \gets$ Suggested column $j_t$ by $\colalg(k)$
+        %\todob{$\hat{\ell}$ for columns is very confusing. What about $\hat{j}$? The same goes for $\ell$.}
+        \If{$\hat{j}_k \in \{j_1, \dots, j_{k - 1}\}$}
+          \State $j_k \gets$ Random column not in $\{j_1, \dots, j_{k - 1}\}$
         \Else
-          \State $\ell_k \gets \hat{\ell}_k$
+          \State $j_k \gets \hat{j}_k$
         \EndIf
       \EndFor
-      \State $I_t \gets (b_1, \dots, b_d)$
-      \State $J_t \gets (\ell_1, \dots, \ell_d)$
+      \State $I_t \gets (i_1, \dots, i_d)$
+      \State $J_t \gets (j_1, \dots, j_d)$
       \State Observe $M_t(I_t(k), J_t(k))$ for all $k \in [d]$
       \For{$k_1 = 1, \dots, d$}
       \For{$k_2 = 1, \dots, d$}
       \Comment{Update statistics}
-      \todob{Simplify the presentation of the update below. To start with, break it into row and column components.}
-        \If{$b_{k} = \hat{b}_{k}$ or $\ell_{k} = \hat{\ell}_{k}$}
-    \State Update arm $b_{k}$ of $\rowalg(k)$ with reward
-    \begin{align*}
+        \If{$i_{k} = \hat{i}_{k}$}
+        \State Update arm $i_{k}$ of $\rowalg(k)$ with reward
+       \begin{align*}
     &\qquad \qquad \max_{k \leq k_1} M_t(i_k, j_{k_2}) - \max_{k < k_1} M_t(i_k, j_{k_2})
-    \end{align*}
-    \State Update arm $\ell_{k}$ of $\colalg(k)$ with reward
-    \begin{align*}
-    &\qquad \qquad \max_{k \leq k_2} M_t(i_{k_1}, j_k)  - \max_{k < k_2} M_t(i_{k_1}, j_k)
-    \end{align*}
+        \end{align*}
         \Else
-          \State Update arm $\hat{b}_k$ of $\rowalg(k)$ with reward $0$ or arm $\hat{\ell}_k$ of $\colalg(k)$ with reward $0$
+          \State Update $\hat{I}_k$ of $\rowalg(k)$ with reward $0$ 
+        \EndIf
+        \If{$j_{k} = \hat{j}_{k}$}
+    		\State Update arm $j_{k}$ of $\colalg(k)$ with reward
+         \begin{align*}
+         &\qquad \qquad \max_{k \leq k_2} M_t(i_{k_1}, j_k)  - \max_{k < k_2} M_t(i_{k_1}, j_k)
+        \end{align*}
+        \Else
+          \State Update $\hat{J}_k$ of $\colalg(k)$ with reward $0$
         \EndIf
       \EndFor
       \EndFor
@@ -81,6 +84,7 @@ Finally, $\latentranker$ observes the individual rewards of $M(i,j)$ for all $(i
   \end{algorithmic}
 \end{algorithm}
 
+%\todob{Simplify the presentation of the update below. To start with, break it into row and column components.}
 
 \subsection{Practical Considerations}
 \label{sec:practical considerations}

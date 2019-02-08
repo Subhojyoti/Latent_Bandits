@@ -3,7 +3,7 @@
 \begin{theorem} \textbf{(Rank-1 Case)}
 \label{thm:upper bound} Let $\colalg$ and $\rowalg$ in $\latentranker$ be $\expthree$ algorithm, respectively. Then the expected $n$-step regret of $\latentranker$ is bounded as
 \begin{align*}
-  R(n) = O\left(\frac{\left(\sqrt{L } + \sqrt{K }\right)n}{\Delta}\right)
+  R(n) = O\left(\frac{\left(\sqrt{L } + \sqrt{K }\right)\sqrt{n}}{\Delta}\right)
 \end{align*}
 where $\Delta = \min_{t \in [n]} \min_{i_t,j_t:\ , i_t \neq i^*_t \, j_t \neq j^*_t} \E\left[u_t(i^*_t)v_t(j^*_t)\right] - \E\left[u_t(i_t)v_t(j_t)\right]$ \todob{I do not think that this definition of $\Delta$ is correct. If you look into the proof, you will note that $\Delta$ there has nothing to do with the gap. We should not call this quantity $\Delta$ because this will confuse reviewers.} is an instance-specific lower bound on the gap in the expected rewards of the optimal and best suboptimal columns and rows at any time $t \in [n]$, averaged over all users at that time.  
 
@@ -11,20 +11,19 @@ where $\Delta = \min_{t \in [n]} \min_{i_t,j_t:\ , i_t \neq i^*_t \, j_t \neq j^
 
 \end{theorem}
 \begin{proof}
-Let, $(u_t v_t\transpose)_{t = 1}^n$ be a sequence of n non-negative rank-1 \todob{Properly write numbers and symbols. This should be ``$n$ non-negative rank-$1$''.} matrices such that $u_t \in [0, 1]^{K \times 1}, v_t \in [0, 1]^{L \times 1}$, and the highest entry is $(1, 1)$. Let,
-
+Let, $(u_t v_t\transpose)_{t = 1}^n$ be a sequence of $n$ non-negative rank-$1$  matrices such that $u_t \in [0, 1]^{K \times 1}, v_t \in [0, 1]^{L \times 1}$, and the highest entry is $(1, 1)$. Let,
 \begin{align*}
 ((i_t, j_t))_{t = 1}^n
 \end{align*}
-
 be a sequence of $n$ row-column pairs chosen by a learning agent. Then the expected n-step regret of the agent is,
 
-\begin{align*}
-R(n) = \sum_{t = 1}^n \E{u_t(1) v_t(1) - u_t(i_t) v_t(j_t)}
-\end{align*}
-\todob{Properly bracket expectations. Lack of brackets repeats throughout the proof.}
-where the expectation is over the randomness of the agent. Now note that for any $u$, $v$, $i$, and $j$ in our problem we can show that,
+%\todob{Properly write numbers and symbols. This should be ``$n$ non-negative rank-$1$''.}
+%\todob{Properly bracket expectations. Lack of brackets repeats throughout the proof.}
 
+\begin{align*}
+R(n) = \sum_{t = 1}^n \E \left[{u_t(1) v_t(1) - u_t(i_t) v_t(j_t)}\right]
+\end{align*}
+where the expectation is over the randomness of the agent. Now note that for any $u$, $v$, $i$, and $j$ in our problem we can show that,
 \begin{align*}
 & 2 (u(1) v(1) - u(i) v(j))\\
 & = \!\! 2 u(1) v(1) \! - \! u(i) v(1) \! - \! u(1) v(j) \! + \! u(i) v(1) \! + \! u(1) v(j) \! - \! 2 u(i) v(j) \\
@@ -38,40 +37,46 @@ where the expectation is over the randomness of the agent. Now note that for any
 Therefore, the expected n-step regret can be decomposed as
 
 \begin{align*}
-R(n) &= \sum_{t = 1}^n \E{(v_t(1) + v_t(j_t)) (u_t(1) - u_t(i_t))} \\
-&+ \sum_{t = 1}^n \E{(u_t(1) + u_t(i_t)) (v_t(1) - v_t(j_t))}
+R(n) &= \sum_{t = 1}^n \E[{(v_t(1) + v_t(j_t)) (u_t(1) - u_t(i_t))}] \\
+&+ \sum_{t = 1}^n \E[{(u_t(1) + u_t(i_t)) (v_t(1) - v_t(j_t))}]
 \end{align*}
 
 Now suppose that all entries of $u_t$ and $v_t$ for all $t=1,2,\ldots, n$ are bounded from below by some $\Delta > 0$. Then we get that,
 
 \begin{align*}
 R(n)
-& = \sum_{t = 1}^n \E{(1 + v_t(1) / v_t(j_t)) v_t(j_t) (u_t(1) - u_t(i_t))} +\\
-&\sum_{t = 1}^n \E{(1 + u_t(1) / u_t(i_t)) u_t(i_t) (v_t(1) - v_t(j_t))} \\
-& \leq (1 + \frac{1}{\Delta}) \bigg[\sum_{t = 1}^n \E{u_t(1) v_t(j_t) - u_t(i_t) v_t(j_t)} + \\
-& \sum_{t = 1}^n \E{u_t(i_t) v_t(1) - u_t(i_t) v_t(j_t)}\bigg]
+& = \sum_{t = 1}^n \E[{(1 + v_t(1) / v_t(j_t)) v_t(j_t) (u_t(1) - u_t(i_t))}] +\\
+&\sum_{t = 1}^n \E[{(1 + u_t(1) / u_t(i_t)) u_t(i_t) (v_t(1) - v_t(j_t))}] \\
+& \leq (1 + \frac{1}{\Delta}) \bigg[\sum_{t = 1}^n \E[{u_t(1) v_t(j_t) - u_t(i_t) v_t(j_t)}] + \\
+& \sum_{t = 1}^n \E[{u_t(i_t) v_t(1) - u_t(i_t) v_t(j_t)}]\bigg]
 \end{align*}
 
 \todob{The argument below is just bla bla bla and needs to be written properly. In particular, it needs to be clear what we condition on and what we take the expectation over.}
 
 Finally, we can show from the result of \citet{auer2002nonstochastic} that the $\colalg$ using $\expthree$ chooses the column $j_t$ at time $t$ and observe reward is $u_t(i_t) v_t(j_t)$. Therefore, the first sum above is bounded by $\sqrt{L n}$ for any sequence of $j_t$, and thus also in expectation over the randomness in $j_t$. Similarly $\rowalg$ using $\expthree$ chooses the row $i_t$ at time $t$, and observe reward is $u_t(i_t) v_t(j_t)$. Therefore, the second sum above is bounded by $\sqrt{K n}$ for any sequence of $i_t$, and thus also in expectation over the randomness in $i_t$. Therefore we get the final regret as,
 \begin{align*}
-  R(n) = O\left(\frac{\left(\sqrt{L } + \sqrt{K }\right)n}{\Delta}\right)
+  R(n) = O\left(\frac{\left(\sqrt{L } + \sqrt{K }\right)\sqrt{n}}{\Delta}\right)
 \end{align*}
-\todob{$n$ above should be $\sqrt{n}$, right?}
+%\todob{$n$ above should be $\sqrt{n}$, right?}
 \end{proof}
 
-\todob{Write discussion as text. It looks weird when large parts of the paper are in italic.}
+%\todob{Write discussion as text. It looks weird when large parts of the paper are in italic.}
 
-\begin{discussion}
-The main idea is to decompose the regret of $\latentranker$ into two parts, where $\colalg$ does not suggest $j^*_t$ and the rest. The first part is analyzed as follows. $\colalg$ has a sub-linear regret, based on a similar analysis to \citet{auer2002nonstochastic}. Therefore, our upper bound on the probability \todob{What probability? There is none. We bound the expected regret.} that $\colalg$ suggests suboptimal columns, which is $O(d \sqrt{L n} / \Delta)$, decreases with time horizon $n$. Similarly, we analyze the regret for the $\rowalg$ as it also uses the exponentially weighted algorithm $\expthree$.
+%\todob{What probability? There is none. We bound the expected regret.}
 
-%The second part is analyzed as follows. Conditioned on $J_t = J_\ast$, the only remaining regret at time $t$ is due to the fact that columns $J_t$ are not ordered optimally for user $i_t$. Since this is a full-information problem where $\rowalg$ is the weighted majority algorithm \citep{littlestone1994weighted}, the regret due to learning to order $d$ columns for $K$ users is $K$ times that of the weighted majority algorithm with $d!$ arms.
+%\todob{What probability? We bound the expected regret due to learning the optimal column, for any sequence of rows. This goes back to the proof, which is written bla bla bla.}
 
-The regret in \cref{thm:upper bound} consists of two main parts. The first part, which is $O(\sqrt{L n} / \Delta)$, is the regret due to learning the optimal column with a high probability. \todob{What probability? We bound the expected regret due to learning the optimal column, for any sequence of rows. This goes back to the proof, which is written bla bla bla.} The second part, which is $O(\sqrt{K n} / \Delta)$, is the regret due to learning the optimal row with a high probability. \todob{What probability? We bound the expected regret due to learning the optimal row, for any sequence of columns.}
+%\todob{What probability? We bound the expected regret due to learning the optimal row, for any sequence of columns.}
 
-Our regret bound also improves upon a trivial approach where the optimal columns are learned separately for each user. If this problem was solved by RBA \citep{radlinski2008learning}, the regret would be $O(\sqrt{K L n})$. \todob{How does this go back to RBA? This is a gap-free upper bound on the regret of any algorithm that would treat each entry as a separate arm. In fact, there is a matching lower bound in this setting, right?}
+%\begin{discussion}
+\textbf{Discussion:} The main idea is to decompose the regret of $\latentranker$ into two parts, where $\colalg$ does not suggest $j^*_t$ and the rest. The first part is analyzed as follows. $\colalg$ has a sub-linear regret, based on a similar analysis to \citet{auer2002nonstochastic}. Therefore, our upper bound on the expected regret that $\colalg$ suggests suboptimal columns, which is $O(d \sqrt{L n} / \Delta)$, decreases with time horizon $n$. Similarly, we analyze the regret for the $\rowalg$ as it also uses the exponentially weighted algorithm $\expthree$.
+The regret in \cref{thm:upper bound} consists of two main parts. The first part, which is $O(\sqrt{L n} / \Delta)$, is the regret due to learning the optimal column for any sequence of rows. The second part, which is $O(\sqrt{K n} / \Delta)$, is the regret due to learning the optimal row, for any sequence of columns.
+Our regret bound also improves upon a trivial approach where the optimal columns are learned separately for each user. In that case, the regret would be $O(\sqrt{K L n})$. 
+
+%\todob{How does this go back to RBA? This is a gap-free upper bound on the regret of any algorithm that would treat each entry as a separate arm. In fact, there is a matching lower bound in this setting, right?}
+
+%If this problem was solved by RBA \citep{radlinski2008learning}
 
 Finally, we use non-stochastic algorithms for $\colalg$ and $\rowalg$ because our environment is non-stationary. In particular, we assume that user preferences $U_t$, and thus rewards, can change over time $t$. 
 %In addition, the rewards in $\colalg(k)$ are non-stationary due to chosen columns at higher positions $1, \dots, k - 1$.
-\end{discussion}
+%\end{discussion}
