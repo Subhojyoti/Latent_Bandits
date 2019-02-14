@@ -66,7 +66,7 @@ This experiment is conducted to test the performance of $\latentranker$ over a l
 \subsection{Real World Experiment $3$}
 We conduct the third experiment to test the performance of \latentranker when our modeling assumptions are violated. We use the Jester dataset \citep{goldberg2001eigentaste} which consist of over 4.1 million continuous ratings of 100 jokes from 73,421 users collected over 5 years. In this dataset there are many users who rated all jokes and we work with these users. Hence the user-item preference matrix is fully observed and we will not have to complete it using matrix completion techniques. Hence, this approach is very real world. We sample randomly $10$ users (who have rated all jokes) from this dataset and use singular value decomposition (SVD) to obtain a rank $2$ approximation of this user-joke rating matrix $M$. In the resultant matrix $M$, most of the users belong to the two classes preferring jokes $98$, and $28$, while a very small percentage of users prefer some other jokes. Note, that this condition results from the fact that this real-life dataset does not have the hott-topics structure. Furthermore, in this experiment we assume that the noise is independent Bernoulli over the entries of $M$ and hence this experiment deviates from our modeling assumptions. From \ref{fig:6} again we see that $\latentranker$ outperform other algorithms. 
 \begin{wrapfigure}{l}{0.2\textwidth}
- \subfigure[0.2\textwidth][Expt-$1$: $10$ Users, $100$ items, Rank $2$]
+ \subfigure[0.2\textwidth][Expt-$3$: $10$ Users, $100$ items, Rank $2$, Jester Dataset]
     %with $r_{i_{{i}\neq {*}}}=0.07$ and $r^{*}=0.1$
     {
     		\includegraphics[scale=0.13]{img/Figure_J_1.png}
