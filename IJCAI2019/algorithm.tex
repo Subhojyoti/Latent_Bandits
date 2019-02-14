@@ -97,7 +97,7 @@ Finally, $\latentranker$ observes the individual rewards of $M(i,j)$ for all $(i
 %We do not have one row Exp3 for each user and any combination of columns, right? %This is how LRA is proposed. This needs to be said.}
 
 
-Note, that we leave the implementation of the $\colalg$ and $\rowalg$ to the users. For theoretical guarantees we use non-stochastic algorithm $\expthree$ as $\colalg$ and $\rowalg$ which will be explained in detail in section \cref{sec:analysis}. For experimental purposes, stochastic algorithms like $\ucb$ or thompson sampling can also be used to improve the performance of $\latentranker$. This has also been explored in \citet{radlinski2008learning} where $\RBA$ uses $\ucb$ for ranking items.
+Note, that we leave the implementation of the $\colalg$ and $\rowalg$ to the users. For theoretical guarantees we use non-stochastic algorithm $\expthree$ as $\colalg$ and $\rowalg$ which will be explained in detail in section \cref{sec:analysis}. For experimental purposes, stochastic algorithms like $\ucb$ or thompson sampling can also be used to improve the performance of $\latentranker$. This has also been explored in \citet{radlinski2008learning} where $\RBA$ uses $\ucb$ for ranking items. The proposed $\latentranker$ algorithm only has to update/look through $(K + L)d$ items for each of the $d$ $\colalg$ and the $\rowalg$ at every timestep $t$. This is in stark contrast to some of the existing matrix completion algorithms which has to reconstruct a $K\times L$ matrix \citep{sen2016contextual} or calculate second or third order tensors \citep{gopalan2016low}. 
 
 %This is ok. I will write about col Exp3 and row WMA and why they are needed. Great. Also mention that previous works considered UCB1 and we do that as well.
 
