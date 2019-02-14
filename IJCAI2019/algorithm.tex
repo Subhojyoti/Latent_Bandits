@@ -68,7 +68,7 @@ Finally, $\latentranker$ observes the individual rewards of $M(i,j)$ for all $(i
     &\qquad \qquad \max_{k \leq k_1} M_t(i_k, j_{k_2}) - \max_{k < k_1} M_t(i_k, j_{k_2})
         \end{align*}
         \Else
-          \State Update $\hat{I}_k$ of $\rowalg(k)$ with reward $0$ 
+          \State Update $\hat{i}_k$ of $\rowalg(k)$ with reward $0$ 
         \EndIf
         \If{$j_{k} = \hat{j}_{k}$}
     		\State Update arm $j_{k}$ of $\colalg(k)$ with reward
@@ -76,7 +76,7 @@ Finally, $\latentranker$ observes the individual rewards of $M(i,j)$ for all $(i
          &\qquad \qquad \max_{k \leq k_2} M_t(i_{k_1}, j_k)  - \max_{k < k_2} M_t(i_{k_1}, j_k)
         \end{align*}
         \Else
-          \State Update $\hat{J}_k$ of $\colalg(k)$ with reward $0$
+          \State Update $\hat{j}_k$ of $\colalg(k)$ with reward $0$
         \EndIf
       \EndFor
       \EndFor
