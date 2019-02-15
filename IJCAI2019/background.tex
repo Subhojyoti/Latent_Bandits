@@ -1,10 +1,11 @@
 %!TEX root = bandit_paper.tex
 
 \newcommand{\transpose}{^\mathsf{\scriptscriptstyle T}}
+We denote $[n] = \{1, \dots, n\}$ as the set of the first $n$ positive integers. Let $M$ denote any arbitrary set of size $m \times n$ matrix. Let the rank of the matrix be denoted by $d$. We denote by $A^B$ the set of all vectors whose entries take values from set $A$ and are indexed by set $B$, where $A$ and $B$ can be any arbitrary sets. We index the rows and columns of the matrices by vectors. For any $d$ and $I \in [m]^d$, $M(I, :)$ denotes a $d \times n$ submatrix of $M$ whose $i$-th row is $M(I(i), :)$. Similarly, for any $d$ and $J \in [n]^d$, $M(:, J)$ denotes a $m \times d$ submatrix of $M$ whose $j$-th column is $M(:, J(j))$. Finally, we denote $\Pi_d$ as the set of all $d$-permutations. For an element $\pi \in \Pi_d$ and $d$-dimensional vector $v$, we denote by $\pi(v)$ the permutation of the entries of $v$ according to $\pi$.
 
-Let $[n] = \{1, \dots, n\}$ be the set of the first $n$ positive integers. For any two sets $A$ and $B$, we denote by $A^B$ the set of all vectors whose entries take values from $A$ and are indexed by $B$. Let $M$ be any $m \times n$ matrix. We index the rows and columns of matrices by vectors. For any $d$ and $I \in [m]^d$, $M(I, :)$ denotes a $d \times n$ submatrix of $M$ whose $i$-th row is $M(I(i), :)$. Similarly, for any $d$ and $J \in [n]^d$, $M(:, J)$ denotes a $m \times d$ submatrix of $M$ whose $j$-th column is $M(:, J(j))$. Let $\Pi_d$ be the set of all $d$-permutations. For any $\pi \in \Pi_d$ and $d$-dimensional vector $v$, we denote by $\pi(v)$ the permutation of the entries of $v$ according to $\pi$.
+%Let $\Pi_d$ be the set of all $d$-permutations. For any $\pi \in \Pi_d$ and $d$-dimensional vector $v$, we denote by $\pi(v)$ the permutation of the entries of $v$ according to $\pi$.
 
-\todob{This section seems like an exact copy of the arxiv paper. Please change language. Otherwise we may be accused of plagiarism.}
+%\todob{This section seems like an exact copy of the arxiv paper. Please change language. Otherwise we may be accused of plagiarism.}
 
 \textbf{Hott-topics Assumption:} We focus on a family of low-rank matrices, which are known as hott topics. We define a \emph{hott-topics matrix} of rank $d$ as $M = U V\transpose$, where $U$ is a $K \times d$ non-negative matrix and $V$ is a $L \times d$ non-negative matrix that gives rise to the hott-topics structure. In particular, we assume that there exists $d$ rows $I^\ast$ in $U$ such that each row in $U$ can be represented as a convex combination of rows of $I^\ast$ and the zero vector. Hence, for an $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$ each row of $U$ can be expressed as,
 \begin{align}
