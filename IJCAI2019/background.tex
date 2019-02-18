@@ -1,22 +1,35 @@
 %!TEX root = bandit_paper.tex
 
 \newcommand{\transpose}{^\mathsf{\scriptscriptstyle T}}
-We denote $[n] = \{1, \dots, n\}$ as the set of the first $n$ positive integers. Let $M$ denote any arbitrary set of size $m \times n$ matrix. Let the rank of the matrix be denoted by $d$. We denote by $A^B$ the set of all vectors whose entries take values from set $A$ and are indexed by set $B$, where $A$ and $B$ can be any arbitrary sets. We index the rows and columns of the matrices by vectors. For any $d$ and $I \in [m]^d$, $M(I, :)$ denotes a $d \times n$ submatrix of $M$ whose $i$-th row is $M(I(i), :)$. Similarly, for any $d$ and $J \in [n]^d$, $M(:, J)$ denotes a $m \times d$ submatrix of $M$ whose $j$-th column is $M(:, J(j))$. Finally, we denote $\Pi_d$ as the set of all $d$-permutations. For an element $\pi \in \Pi_d$ and $d$-dimensional vector $v$, we denote by $\pi(v)$ the permutation of the entries of $v$ according to $\pi$.
+\textbf{Notations:} We denote $[n] = \{1, \dots, n\}$ as the set of the first $n$ positive integers. Let $M$ denote any arbitrary set of size $m \times n$ matrix. Let the rank of the matrix be denoted by $d$. We denote by $A^B$ the set of all vectors whose entries take values from set $A$ and are indexed by set $B$, where $A$ and $B$ can be any arbitrary sets. We index the rows and columns of the matrices by vectors. For any $d$ and $I \in [m]^d$, $M(I, :)$ denotes a $d \times n$ submatrix of $M$ whose $i$-th row is $M(I(i), :)$. Similarly, for any $d$ and $J \in [n]^d$, $M(:, J)$ denotes a $m \times d$ submatrix of $M$ whose $j$-th column is $M(:, J(j))$. Finally, we denote $\Pi_d$ as the set of all $d$-permutations. For an element $\pi \in \Pi_d$ and $d$-dimensional vector $v$, we denote by $\pi(v)$ the permutation of the entries of $v$ according to $\pi$.
+
+
+
+\textbf{Rank-$1$ Setting:} We study the online learning problem of finding the maximum entry of a non-stochastic, low-rank and non-negative matrix which we call as a \emph{non-stochastic low-rank bandit problem}. We first analyze the simple rank-$1$ scenario and propose our solution for this setting. Many of the key aspects of our design principle are captured in this rank-$1$ setting. Let $U_t\in [0,1]^{K\times 1}$ be the user preference over a single topic and $V_t \in [0,1]^{L\times 1}$ is the item preference over a single topic. Note that we refer to the rows as users and to the columns as items because this is a standard terminology in recommender systems, where we envision applications of our work. The user-item \emph{preference matrix} $M_t = U_tV_t^{\intercal}$ is non-negative, non-stochastic, and rank $1$. We assume that user and item preferences ($U_t$ and $V_t$ respectively) can change with time $t$. At every timestep $t$ the learner chooses one pair of row and column indexed by $i_t$ and $j_t$ respectively and observes their product $U_t(i_t)V_t(i_t)$ as its feedback.
+
+
+%At time $t$, the preferences of users over items are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V_t\transpose$, where $M$, where  the rank of $M$ is $d=1$.
+%$U_t$, and $V_t$ are defined as in \cref{sec:background}
+%Note that for $d=1$, 
+
+%We study the online learning problem of finding the maximum entry of a non-stochastic, low-rank and non-negative matrix $M$ which we call as a \emph{non-stochastic low-rank bandit problem}. At time $t$, the preferences of users over items are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V_t\transpose$, where $M$, $U_t$, and $V_t$ are defined as in \cref{sec:background}. We assume that user and item preferences ($U_t$ and $V_t$ respectively) can change with time $t$. At every timestep $t$ the learner chooses one pair of row and column indexed by $i_t$ and $j_t$ and observes their product $U_t(i_t)V_t(i_t)$ as its feedback.
+
+
 
 %Let $\Pi_d$ be the set of all $d$-permutations. For any $\pi \in \Pi_d$ and $d$-dimensional vector $v$, we denote by $\pi(v)$ the permutation of the entries of $v$ according to $\pi$.
 
 %\todob{This section seems like an exact copy of the arxiv paper. Please change language. Otherwise we may be accused of plagiarism.}
 
-\textbf{Hott-topics Assumption:} We focus on a family of low-rank matrices, which are known as hott topics. We define a \emph{hott-topics matrix} of rank $d$ as $M = U V\transpose$, where $U$ is a $K \times d$ non-negative matrix and $V$ is a $L \times d$ non-negative matrix that gives rise to the hott-topics structure. In particular, we assume that there exists $d$ rows $I^\ast$ in $U$ such that each row in $U$ can be represented as a convex combination of rows of $I^\ast$ and the zero vector. Hence, for an $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$ each row of $U$ can be expressed as,
-\begin{align}
-  \forall i \in [K] \ \exists \alpha \in A: U(I^\ast, :) \alpha = U(i, :)\,,
-  \label{eq:hott topics1}
-\end{align}
-Similarly, we assume that there exist $d$ rows $J^\ast$ in $V$ such that each row of $V$ can be expressed as a convex combination of rows $J^\ast$ and the zero vector,
-\begin{align}
-  \forall j \in [L] \ \exists \alpha \in A: V(J^\ast, :) \alpha = V(j, :)\,,
-  \label{eq:hott topics}
-\end{align}
-where $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$. Note that we refer to the rows as users and to the columns as items because this is a standard terminology in recommender systems, where we envision applications of our work. Hence, the matrix $M$ represents preferences of users for items, $M(i, j)$ is the preference of user $i$ for item $j$. The rank $d$ of $M$ is the number of latent topics. The matrix $U$ are latent preferences of $K$ users over $d$ topics, where $U(i, :)$ are the preferences of user $i \in [K]$. The matrix $V$ are latent preferences of $L$ items in the space of $d$ topics, where $V(j, :)$ are the coordinates of item $j \in [L]$. Without loss of generality, we assume that $U \in [0, 1]^{K \times d}$ and $V \in [0, 1]^{L \times d}$. We assume that the coordinates are points in a simplex, that is $\|U(i, :)\|_1 \leq 1$ for all $i \in [K]$ and $\|V(j, :)\|_1 \leq 1$ for all $j \in [L]$. Note that our assumptions imply that $M(i, j) \geq 0$ for any $i \in [K]$ and $j \in [L]$.
+%\textbf{Hott-topics Assumption:} We focus on a family of low-rank matrices, which are known as hott topics. We define a \emph{hott-topics matrix} of rank $d$ as $M = U V\transpose$, where $U$ is a $K \times d$ non-negative matrix and $V$ is a $L \times d$ non-negative matrix that gives rise to the hott-topics structure. In particular, we assume that there exists $d$ rows $I^\ast$ in $U$ such that each row in $U$ can be represented as a convex combination of rows of $I^\ast$ and the zero vector. Hence, for an $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$ each row of $U$ can be expressed as,
+%\begin{align}
+%  \forall i \in [K] \ \exists \alpha \in A: U(I^\ast, :) \alpha = U(i, :)\,,
+%  \label{eq:hott topics1}
+%\end{align}
+%Similarly, we assume that there exist $d$ rows $J^\ast$ in $V$ such that each row of $V$ can be expressed as a convex combination of rows $J^\ast$ and the zero vector,
+%\begin{align}
+%  \forall j \in [L] \ \exists \alpha \in A: V(J^\ast, :) \alpha = V(j, :)\,,
+%  \label{eq:hott topics}
+%\end{align}
+%where $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$. Note that we refer to the rows as users and to the columns as items because this is a standard terminology in recommender systems, where we envision applications of our work. Hence, the matrix $M$ represents preferences of users for items, $M(i, j)$ is the preference of user $i$ for item $j$. The rank $d$ of $M$ is the number of latent topics. The matrix $U$ are latent preferences of $K$ users over $d$ topics, where $U(i, :)$ are the preferences of user $i \in [K]$. The matrix $V$ are latent preferences of $L$ items in the space of $d$ topics, where $V(j, :)$ are the coordinates of item $j \in [L]$. Without loss of generality, we assume that $U \in [0, 1]^{K \times d}$ and $V \in [0, 1]^{L \times d}$. We assume that the coordinates are points in a simplex, that is $\|U(i, :)\|_1 \leq 1$ for all $i \in [K]$ and $\|V(j, :)\|_1 \leq 1$ for all $j \in [L]$. Note that our assumptions imply that $M(i, j) \geq 0$ for any $i \in [K]$ and $j \in [L]$.
 
 %\todob{We say that the rows are users and that the columns are items. But they do not have to be, right? Say that we refer to the rows as users and to the columns as items because this is a standard terminology in recommender systems, where we envision applications of our work.}
