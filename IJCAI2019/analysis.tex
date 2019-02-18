@@ -26,8 +26,8 @@ R(n) = \sum_{t = 1}^n \E \left[{u_t(1) v_t(1) - u_t(i_t) v_t(j_t)}\right]
 \end{align*}
 where the expectation is over the randomness of the agent. Now note that for any $u$, $v$, $i$, and $j$ in our problem we can show that,
 \begin{align*}
-& 2 (u(1) v(1) - u(i) v(j))\\
-& = \!\! 2 u(1) v(1) \! - \! u(i) v(1) \! - \! u(1) v(j) \! + \! u(i) v(1) \! + \! u(1) v(j) \! - \! 2 u(i) v(j) \\
+& 2 (u(1) v(1) - u(i) v(j)) =  2 u(1) v(1) \! - \! u(i) v(1) \! - \! u(1) v(j)\\
+&  \hspace*{2em} + \! u(i) v(1) \! + \! u(1) v(j) \! - \! 2 u(i) v(j) \\
 & = u(1) (v(1) - v(j))  + v(1) (u(1) -  u(i))  +\\
 & \hspace*{3em}  u(i) (v(1)  - v(j))  + v(j) (u(1)  - u(i)) \\
 %& = \!\! u(1) (v(1)\! - \! v(j)) \! + \! v(1) (u(1) \!- \! u(i)) \! +\\
@@ -35,7 +35,7 @@ where the expectation is over the randomness of the agent. Now note that for any
 & = (u(1) + u(i)) (v(1) - v(j)) + (v(1) + v(j)) (u(1) - u(i))
 \end{align*}
 
-Therefore, the expected n-step regret can be decomposed as
+Therefore, the expected $n$-step regret can be decomposed as
 
 \begin{align*}
 R(n) &= \sum_{t = 1}^n \E[{(v_t(1) + v_t(j_t)) (u_t(1) - u_t(i_t))}] \\
@@ -70,14 +70,14 @@ Finally, we can show from the result of \citet{auer2002nonstochastic} that the $
 %\todob{What probability? We bound the expected regret due to learning the optimal row, for any sequence of columns.}
 
 %\begin{discussion}
-\textbf{Discussion:} The main idea is to decompose the regret of $\latentranker$ into two parts, where $\colalg$ does not suggest $j^*_t$ and the $\rowalg$ does not suggest $i^*_t$. The first part is analyzed as follows. $\colalg$ has a sub-linear regret, based on a similar analysis to \citet{auer2002nonstochastic}. Therefore, our upper bound on the expected regret that $\colalg$ suggests suboptimal columns, which is $O(d \sqrt{L n} / \Delta)$, decreases with time horizon $n$. Similarly, we analyze the regret for the $\rowalg$ as it also uses the exponentially weighted algorithm $\expthree$.
-The regret in \cref{thm:upper bound} consists of two main parts. The first part, which is $O(\sqrt{L n} / \Delta)$, is the regret due to learning the optimal column for any sequence of rows. The second part, which is $O(\sqrt{K n} / \Delta)$, is the regret due to learning the optimal row, for any sequence of columns.
-Our regret bound also improves upon a trivial approach where the optimal columns are learned separately for each user. In that case, the regret would be $O(\sqrt{K L n})$. 
+\textbf{Discussion:} The main idea is to decompose the regret of $\latentranker$ into two parts, where $\colalg$ does not suggest $j^*_t$ and the $\rowalg$ does not suggest $i^*_t$. The first part is analyzed as follows. $\colalg$ has a sub-linear regret, based on a similar analysis to \citet{auer2002nonstochastic}. We use non-stochastic algorithm $\expthree$ for $\colalg$ and $\rowalg$ because our environment is non-stationary. Thus, the upper bound on the expected regret that $\colalg$ suggests sub-optimal columns for \emph{any sequence} of rows is bounded. This regret scales as $O(\sqrt{L n})$ and decreases with time horizon $n$. Similarly, we analyze the regret for the $\rowalg$ as it also uses the exponentially weighted algorithm $\expthree$. The $\rowalg$ suffers a regret of $O(\sqrt{K n})$ for suggesting sub-optimal rows for \emph{any sequence} of columns . Hence, the regret in \cref{thm:upper bound} consists of two main parts. The first part, which is $O(\sqrt{L n})$, is the regret due to learning the optimal column and the second part, which is $O(\sqrt{K n})$, is the regret due to learning the optimal row. Finally, we can consider any matrix $M$ of dimension $K\times L$ as a $K$-bandit problem with each bandit having $L$ arms and the optimal columns are learned separately for each bandit. Such a trivial setting gives rise to the regret bound of order $O(\sqrt{K L n})$. Our regret bound also improves upon this trivial approach.
+
+% where the optimal columns are learned separately for each user. In that case, the regret would be $O(\sqrt{K L n})$. 
 
 %\todob{How does this go back to RBA? This is a gap-free upper bound on the regret of any algorithm that would treat each entry as a separate arm. In fact, there is a matching lower bound in this setting, right?}
 
 %If this problem was solved by RBA \citep{radlinski2008learning}
 
-Finally, we use non-stochastic algorithms for $\colalg$ and $\rowalg$ because our environment is non-stationary. In particular, we assume that user preferences $U_t$, and thus rewards, can change over time $t$. 
+%Finally, we use non-stochastic algorithms for $\colalg$ and $\rowalg$ because our environment is non-stationary. In particular, we assume that user preferences $U_t$, and thus rewards, can change over time $t$. 
 %In addition, the rewards in $\colalg(k)$ are non-stationary due to chosen columns at higher positions $1, \dots, k - 1$.
 %\end{discussion}
