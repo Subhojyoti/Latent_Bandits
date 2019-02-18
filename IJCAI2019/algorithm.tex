@@ -1,6 +1,6 @@
 %!TEX root = bandit_paper.tex
 
-Now, we propose the general \emph{Low Rank Bandit ($\latentranker$)} algorithm for solving the family of non-stochastic, non-negative and low-rank matrices of rank $d$. Again, the goal is to identify the maximum entry of the matrix by quickly identifying the $d$-best rows or columns. The pseudocode of $\latentranker$ is in \cref{alg:LRB}. $\latentranker$ has two main components, column learning and row learning algorithm. 
+Now, we propose the general \emph{Low Rank Bandit ($\latentranker$)} algorithm for solving the family of non-stochastic, non-negative and low-rank matrices of rank $d$. Again, the goal is to identify the maximum entry of the matrix by quickly identifying the $d$-best rows or columns. The pseudocode of $\latentranker$ is in \cref{alg:LRB1}. $\latentranker$ has two main components, column learning and row learning algorithm. 
 
 At every timestep $t$, the row learning algorithm recommends a list of $d$ rows and is the same as the Ranked Bandit Algorithm (RBA) in \citet{radlinski2008learning}. But we exploit an additional structure in our problem to show that we learn the optimal rows $I^\ast$. The row learning algorithm are $d$ instances of multi-armed bandit algorithms, which we denote by $\rowalg(k)$ for algorithm $k \in [d]$. $\rowalg(1)$ learns the most rewarding row on average, $\rowalg(2)$ learns the second most rewarding row on average conditioned on the first learned column, and so on.
 
