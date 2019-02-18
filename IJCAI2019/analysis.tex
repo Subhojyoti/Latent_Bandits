@@ -3,9 +3,10 @@
 \begin{theorem} \textbf{(Rank-1 Case)}
 \label{thm:upper bound} Let $\colalg$ and $\rowalg$ in $\latentranker$ be $\expthree$ algorithm, respectively. Then the expected $n$-step regret of $\latentranker$ is bounded as
 \begin{align*}
-  R(n) = O\left(\frac{\left(\sqrt{L } + \sqrt{K }\right)\sqrt{n}}{\Delta}\right)
+  R(n) = O\left(\frac{\left(\sqrt{L } + \sqrt{K }\right)\sqrt{n}}{\alpha}\right)
 \end{align*}
-where $\Delta = \min_{t \in [n]} \min_{i_t,j_t:\ , i_t \neq i^*_t \, j_t \neq j^*_t} \E\left[u_t(i^*_t)v_t(j^*_t)\right] - \E\left[u_t(i_t)v_t(j_t)\right]$ \todob{I do not think that this definition of $\Delta$ is correct. If you look into the proof, you will note that $\Delta$ there has nothing to do with the gap. We should not call this quantity $\Delta$ because this will confuse reviewers.} is an instance-specific lower bound on the gap in the expected rewards of the optimal and best suboptimal columns and rows at any time $t \in [n]$, averaged over all users at that time.  
+where $\alpha > 0$ is such a lower bound that for all $i\in[K], j\in [L]$ and $t \in [n]$, $U_{t}(i,1) > \alpha$ and $V_{t}(j,1) > \alpha$.
+%where $\alpha = \min_{t \in [n]} \min_{i_t,j_t:\ , i_t \neq i^*_t \, j_t \neq j^*_t} \E\left[u_t(i^*_t)v_t(j^*_t)\right] - \E\left[u_t(i_t)v_t(j_t)\right]$ \todob{I do not think that this definition of $\Delta$ is correct. If you look into the proof, you will note that $\Delta$ there has nothing to do with the gap. We should not call this quantity $\Delta$ because this will confuse reviewers.} is an instance-specific lower bound on the gap in the expected rewards of the optimal and best suboptimal columns and rows at any time $t \in [n]$, averaged over all users at that time.  
 
 %\todob{We need to define the unweighted reward.}
 
@@ -41,13 +42,13 @@ R(n) &= \sum_{t = 1}^n \E[{(v_t(1) + v_t(j_t)) (u_t(1) - u_t(i_t))}] \\
 &+ \sum_{t = 1}^n \E[{(u_t(1) + u_t(i_t)) (v_t(1) - v_t(j_t))}]
 \end{align*}
 
-Now suppose that all entries of $u_t$ and $v_t$ for all $t=1,2,\ldots, n$ are bounded from below by some $\Delta > 0$. Then we get that,
+Now suppose that all entries of $u_t$ and $v_t$ for all $t=1,2,\ldots, n$ are bounded from below by some $\alpha > 0$. Then we get that,
 
 \begin{align*}
 R(n)
 & = \sum_{t = 1}^n \E[{(1 + v_t(1) / v_t(j_t)) v_t(j_t) (u_t(1) - u_t(i_t))}] +\\
 &\sum_{t = 1}^n \E[{(1 + u_t(1) / u_t(i_t)) u_t(i_t) (v_t(1) - v_t(j_t))}] \\
-& \leq (1 + \frac{1}{\Delta}) \bigg[\sum_{t = 1}^n \E[{u_t(1) v_t(j_t) - u_t(i_t) v_t(j_t)}] + \\
+& \leq (1 + \frac{1}{\alpha}) \bigg[\sum_{t = 1}^n \E[{u_t(1) v_t(j_t) - u_t(i_t) v_t(j_t)}] + \\
 & \sum_{t = 1}^n \E[{u_t(i_t) v_t(1) - u_t(i_t) v_t(j_t)}]\bigg]
 \end{align*}
 
@@ -55,7 +56,7 @@ R(n)
 
 Finally, we can show from the result of \citet{auer2002nonstochastic} that the $\colalg$ using $\expthree$ chooses the column $j_t$ at time $t$ and observe reward is $u_t(i_t) v_t(j_t)$. Therefore, the first sum above is bounded by $\sqrt{L n}$ for any sequence of $j_t$, and thus also in expectation over the randomness in $j_t$. Similarly $\rowalg$ using $\expthree$ chooses the row $i_t$ at time $t$, and observe reward is $u_t(i_t) v_t(j_t)$. Therefore, the second sum above is bounded by $\sqrt{K n}$ for any sequence of $i_t$, and thus also in expectation over the randomness in $i_t$. Therefore we get the final regret as,
 \begin{align*}
-  R(n) = O\left(\frac{\left(\sqrt{L } + \sqrt{K }\right)\sqrt{n}}{\Delta}\right)
+  R(n) = O\left(\frac{\left(\sqrt{L } + \sqrt{K }\right)\sqrt{n}}{\alpha}\right)
 \end{align*}
 %\todob{$n$ above should be $\sqrt{n}$, right?}
 \end{proof}

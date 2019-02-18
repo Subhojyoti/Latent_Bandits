@@ -7,6 +7,13 @@
 
 \textbf{Rank-$1$ Setting:} We study the online learning problem of finding the maximum entry of a non-stochastic, low-rank and non-negative matrix which we call as a \emph{non-stochastic low-rank bandit problem}. We first analyze the simple rank-$1$ scenario and propose our solution for this setting. Many of the key aspects of our design principle are captured in this rank-$1$ setting. Let $U_t\in [0,1]^{K\times 1}$ be the user preference over a single topic and $V_t \in [0,1]^{L\times 1}$ is the item preference over a single topic. Note that we refer to the rows as users and to the columns as items because this is a standard terminology in recommender systems, where we envision applications of our work. The user-item \emph{preference matrix} $M_t = U_tV_t^{\intercal}$ is non-negative, non-stochastic, and rank $1$. We assume that user and item preferences ($U_t$ and $V_t$ respectively) can change with time $t$. At every timestep $t$ the learner chooses one pair of row and column indexed by $i_t$ and $j_t$ respectively and observes their product $U_t(i_t)V_t(i_t)$ as its feedback.
 
+\textbf{Regret Definition:} We can now define our notion of optimality and regret.  Our goal is to minimize the expected $n$-step regret with respect to the optimal solution on the hindsight as,
+\begin{align}
+  R(n) =
+  \sum_{t = 1}^n \E\left[r_t(i^\ast_t, j^\ast_t) - r_t(i_t,j_t)\right]\,,
+  \label{eq:regret}
+\end{align}
+where, $i^\ast_t = \argmax_{\{i\in[K], t\in[n]\}}U_t(i,1)$ and  $j^\ast_t = \argmax_{\{j\in[L], t\in[n]\}}V_t(j,1)$.
 
 %At time $t$, the preferences of users over items are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V_t\transpose$, where $M$, where  the rank of $M$ is $d=1$.
 %$U_t$, and $V_t$ are defined as in \cref{sec:background}
