@@ -42,9 +42,9 @@ Since $U_t$ can change arbitrarily over time \todob{This obviously cannot be arb
 \end{align*}
 where $I^\ast$ and $J^\ast$ is defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. Therefore, it is possible to learn all potentially most rewarding pairs of rows and columns statistically efficiently.
 
-\todob{The definition of the regret below is incorrect for $d > 1$. We need to think about this. Actually, do we need the definition of the regret for $d > 1$ if we never bound it? We should use determinants and then intuitively explain what they mean. The rank $1$ case is intuitive and easy to explain.}
+%\todob{The definition of the regret below is incorrect for $d > 1$. We need to think about this. Actually, do we need the definition of the regret for $d > 1$ if we never bound it? We should use determinants and then intuitively explain what they mean. The rank $1$ case is intuitive and easy to explain.}
 
-Now we are ready to define our notion of optimality and regret.  Our goal is to minimize the expected $n$-step regret,
+Now we are ready to define our notion of optimality and regret. for the general rank-$d$ scenario. Our goal is to minimize the expected $n$-step regret,
 \begin{align}
   R(n) =
   \sum_{t = 1}^n \E\left[r_t(i^\ast_t, j^\ast_t) - r_t(i^\ast(I,J),j^\ast(I,J))\right]\,,
