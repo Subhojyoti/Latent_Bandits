@@ -23,7 +23,7 @@ A remarkable property of our user-item preference matrices $M_t$ is that for any
 \begin{align*}
   \argmax_{(i, j) \in ([K] \times [L])} M_t(i, j) \in (I^\ast, J^\ast),
 \end{align*}
-where $I^\ast$ and $J^\ast$ is defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. Hence, the hott-topics assumption makes it possible to learn the maximum entry of $M_t$ statistically efficiently as at any time $t\in[n]$ the maximum entry $M_t(i^*_t,j^*_t)$ will be in $M_t(I^*,J^*)$. Note, that even though different entries of $U_t$ and $V_t$ can attain high rewards at different times but the hott-topics assumption makes sure that $I^*$ and $J^*$ remain fixed for all time $t\in[n]$.
+where $I^\ast$ and $J^\ast$ is defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. Hence, the hott-topics assumption makes it possible to learn the maximum entry of $M_t$ statistically efficiently as at any time $t\in[n]$ the maximum entry $M_t(i^*_t,j^*_t)$ will be in $M_t(I^*,J^*)$. Note, that even though different entries of $U_t$ and $V_t$ can attain high rewards at different times but the hott-topics assumption makes sure that $I^*$ and $J^*$ remain fixed for all time $t\in[n]$. \todoan{It is not hott topics structure that ensures this. This is an extra assumption we make.}
 
 %the reward in \eqref{eq:reward} is maximized by lists $J$ with highly rewarding items that are diverse, in the sense that they attain high rewards at different times $t \in [n]$. 
 
