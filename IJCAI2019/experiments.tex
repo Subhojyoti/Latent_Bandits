@@ -43,7 +43,7 @@ In this section, we compare $\latentranker$ to several bandit algorithms in thre
 \begin{tabular}{cc}
 \setlength{\tabcolsep}{0.05pt}
 %\setlength{\textfloatsep}{minus 2.0pt}
-\subfigure[0.22\textwidth][Expt-$1$: $8$ Users, $8$ columns, Rank $1$ Setting]
+\subfigure[0.22\textwidth][Expt-$1$: $8$ rows, $8$ columns, Rank $1$ Setting]
     %with $r_{i_{{i}\neq {*}}}=0.07$ and $r^{*}=0.1$
     {
     		\includegraphics[scale=0.13]{img/Figure_L1.png}
@@ -51,14 +51,14 @@ In this section, we compare $\latentranker$ to several bandit algorithms in thre
     }
     &
     \hspace*{-2.3em}
-    \subfigure[0.22\textwidth][Expt-$1$: $16$ Users, $16$ columns, Rank $1$ Setting]
+    \subfigure[0.22\textwidth][Expt-$1$: $16$ rows, $16$ columns, Rank $1$ Setting]
     %with $r_{i_{{i}\neq {*}}}=0.07$ and $r^{*}=0.1$
     {
     		\includegraphics[scale=0.15]{img/Figure_L2.png}
   		\label{fig:2}
     }
     \\
-    \subfigure[0.22\textwidth][Expt-$2$: $64$ Users, $64$ columns, Rank $2$, User and Item vectors]
+    \subfigure[0.22\textwidth][Expt-$2$: $64$ rows, $64$ columns, row and column vectors]
     %with $r_{i_{{i}\neq {*}}}=0.07$ and $r^{*}=0.1$
     {
     		\includegraphics[scale=0.08]{img/rank_21_vector.png}
@@ -66,30 +66,32 @@ In this section, we compare $\latentranker$ to several bandit algorithms in thre
     }
     &
      \hspace*{-2.5em}
-    \subfigure[0.22\textwidth][Expt-$2$: $64$ Users, $64$ columns, Rank $2$ Setting]
+    \subfigure[0.22\textwidth][Expt-$2$: $64$ rows, $64$ columns, Rank $2$ Setting]
     %with $r_{i_{{i}\neq {*}}}=0.07$ and $r^{*}=0.1$
     {
     		\includegraphics[scale=0.16]{img/Figure_L3.png}
   		\label{fig:4}
     }
     \end{tabular}
-    \caption{A comparison of the cumulative regret incurred by the various bandit algorithms. }
+    \caption{A comparison of $\latentranker$ vs state-of-the-art algorithms. }
     \label{fig:karmed1}
-    \vspace*{-1em}
+    \vspace*{-1.1em}
 \end{figure}
 %\subsection{Real World Experiment $3$}
-\textbf{Real-world Experiment $3$:} We conduct the third experiment to test the performance of $\latentranker$ when our modeling assumptions are violated. We use the Jester dataset \citep{goldberg2001eigentaste} which consist of over 4.1 million continuous ratings of 100 jokes from 73,421 users collected over 5 years. In this dataset there are many users who rated all jokes and we work with these users. We sample randomly $20$ users (who have rated all jokes) from this dataset and use singular value decomposition (SVD) to obtain a rank $2$ approximation of this user-joke rating matrix $M$. In the resultant matrix $M$, most of the rows belong to the two classes preferring jokes $98$, and $28$, while a very small percentage of users prefer some other jokes. Note that this condition results from the fact that this real-life dataset does not have the hott-topics structure. Furthermore, in this experiment we assume that the noise is independent Bernoulli over the entries of $M$ and hence this experiment deviates from our modeling assumptions. In Figure \ref{fig:6} we see that $\latentranker$-rank$2$ outperform other algorithms. Finally, $\latentranker$-rank$1$ again fails to perform well in this setting.
-%Hence the row-item preference matrix is fully observed and we will not have to complete it using \todoan{You don't have to mention matrix completion here} matrix completion techniques. Hence, this approach is very real world.
+\textbf{Real-world Experiment $3$:} We conduct the third experiment to test the performance of $\latentranker$ when our modeling assumptions are violated. We use the Jester dataset \citep{goldberg2001eigentaste} which consist of over 4.1 million continuous ratings of 100 jokes from 73,421 users collected over 5 years. In this dataset there are many users who rated all jokes and we work with these users. 
 \begin{wrapfigure}{l}{0.2\textwidth}
  %\subfigure[0.2\textwidth][Expt-$3$: $10$ Users, $100$ columns, Rank $2$, Jester Dataset]
     %with $r_{i_{{i}\neq {*}}}=0.07$ and $r^{*}=0.1$
     {
-    		\includegraphics[scale=0.13]{img/Figure_L4.png}
+    		\includegraphics[scale=0.14]{img/Figure_L4.png}
    }
- \caption{Expt-$3$: $20$ Users, $100$ columns, Rank $2$, Jester Dataset}
+ \caption{Expt-$3$: $20$ rows, $100$ columns, Jester Dataset}
  \label{fig:6}
- \vspace{-2em}
+ \vspace{-1.0em}
 \end{wrapfigure}
+We sample randomly $20$ users (who have rated all jokes) from this dataset and use singular value decomposition (SVD) to obtain a rank $2$ approximation of this user-joke rating matrix $M$. In the resultant matrix $M$, most of the rows belong to the two classes preferring jokes $98$, and $28$, while a very small percentage of users prefer some other jokes. Note that this condition results from the fact that this real-life dataset does not have the hott-topics structure. Furthermore, in this experiment we assume that the noise is independent Bernoulli over the entries of $M$ and hence this experiment deviates from our modeling assumptions. In Figure \ref{fig:6} we see that $\latentranker$-rank$2$ outperform other algorithms. Finally, $\latentranker$-rank$1$ again fails to perform well in this setting.
+%Hence the row-item preference matrix is fully observed and we will not have to complete it using \todoan{You don't have to mention matrix completion here} matrix completion techniques. Hence, this approach is very real world.
+
 
 %The rank $2$ approximation of $M$ of  is shown in Figure \ref{fig:5}, where we can clearly see the red stripes spanning the matrix indicating the low-rank structure of $M$. 
 %\begin{figure}[!th]
