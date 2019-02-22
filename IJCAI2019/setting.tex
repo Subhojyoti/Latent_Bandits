@@ -3,7 +3,8 @@
 In this section, we study the online learning problem of finding the maximum entry of a family of non-stochastic, low-rank and non-negative matrices for the general rank-$d$ setting.  
 %\todob{You make it sound like there is only one matrix. This is false.}
 
-\textbf{Hott-topics Assumption:} We focus on a family of low-rank matrices, which are known as hott topics. \todob{Cite. Why do these matrices matter?} We define a \emph{hott-topics matrix} of rank $d$ as $M = U V\transpose$, where $U$ is a $K \times d$ non-negative matrix and $V$ is a $L \times d$ non-negative matrix that gives rise to the hott-topics structure. In particular, we assume that there exists $d$ rows $I^\ast$ in $U$ such that each row in $U$ can be represented as a convex combination of rows of $I^\ast$ and the zero vector. Hence, for $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$ each row of $U$ can be expressed as,
+\textbf{Hott-topics Assumption:} We focus on a family of low-rank matrices, which are known as hott topics \citep{recht2012factoring}. We define a \emph{hott-topics matrix} of rank $d$ as $M = U V\transpose$, where $U$ is a $K \times d$ non-negative matrix and $V$ is a $L \times d$ non-negative matrix that gives rise to the hott-topics structure. In particular, we assume that there exists $d$ rows $I^\ast$ in $U$ such that each row in $U$ can be represented as a convex combination of rows of $I^\ast$ and the zero vector. Hence, for $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$ each row of $U$ can be expressed as,
+%\todob{Cite. Why do these matrices matter?}
 \begin{align}
   \forall i \in [K] \ \exists \alpha \in A: U(I^\ast, :) \alpha = U(i, :)\,,
   \label{eq:hott topics1}
@@ -13,61 +14,63 @@ Similarly, we assume that there exist $d$ rows $J^\ast$ in $V$ such that each ro
   \forall j \in [L] \ \exists \alpha \in A: V(J^\ast, :) \alpha = V(j, :)\,,
   \label{eq:hott topics}
 \end{align}
-where $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$. \todob{This is a strange transition. You start talking about users, items, and topics like this is synonymous to hott topics. This is false. This is just an illustration of what hott topics can mean in practice, right?} Hence, the matrix $M$ represents preferences of users for items, $M(i, j)$ is the preference of user $i$ for item $j$. The rank $d$ of $M$ is the number of latent topics. The matrix $U$ are latent preferences of $K$ users over $d$ topics, where $U(i, :)$ are the preferences of user $i \in [K]$. The matrix $V$ are latent preferences of $L$ items in the space of $d$ topics, where $V(j, :)$ are the coordinates of item $j \in [L]$. Without loss of generality, we assume that $U \in [0, 1]^{K \times d}$ and $V \in [0, 1]^{L \times d}$. We assume that the coordinates are points in a simplex, that is $\|U(i, :)\|_1 \leq 1$ for all $i \in [K]$ and $\|V(j, :)\|_1 \leq 1$ for all $j \in [L]$. Note that our assumptions imply that $M(i, j) \geq 0$ for any $i \in [K]$ and $j \in [L]$.
+where $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$. One way to conceptualize this very general hott-topics assumption in our setting  is to assume that the matrix $M$ represents preferences of rows for columns. $M(i, j)$ is the preference of row $i$ for column $j$. The rank $d$ of $M$ is the number of latent topics. The matrix $U$ are latent preferences of $K$ rows over $d$ topics, where $U(i, :)$ are the preferences of row $i \in [K]$. The matrix $V$ are latent preferences of $L$ columns in the space of $d$ topics, where $V(j, :)$ are the coordinates of column $j \in [L]$. Without loss of generality, we assume that $U \in [0, 1]^{K \times d}$ and $V \in [0, 1]^{L \times d}$. We assume that the coordinates are points in a simplex, that is $\|U(i, :)\|_1 \leq 1$ for all $i \in [K]$ and $\|V(j, :)\|_1 \leq 1$ for all $j \in [L]$. Note that our assumptions imply that $M(i, j) \geq 0$ for any $i \in [K]$ and $j \in [L]$.
+%\todob{This is a strange transition. You start talking about rows, columns, and topics like this is synonymous to hott topics. This is false. This is just an illustration of what hott topics can mean in practice, right?}
 
-\textbf{Rank-$d$ Setting:} Again, note that at time $t$, the preferences of users over items are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V_t\transpose$, where $U$ and $V$ are defined as in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. We assume that user and item preferences ($U_t$ and $V_t$ respectively) can change with time $t$. At every round $t$ the learner chooses $d$-pairs of rows and columns from $M_t$ denoted by $(I_t,J_t)\in \Pi_d([K])\times \Pi_d([L])$. It then observes all the values from the matrix $M_{t}(I_t,J_t)$ for all $i_t\in I_t$ and $j_t \in J_t$. The \emph{reward} for the agent for choosing arms $(I_t,J_t)$ at time $t$ is denoted by $r_t(i^\ast(I_t,J_t),j^\ast(I_t,J_t))$ such that,
+
+\textbf{Rank-$d$ Setting:} Again, note that at time $t$, the preferences of rows over columns are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V_t\transpose$, where $U$ and $V$ are defined as in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. We assume that row and column preferences ($U_t$ and $V_t$ respectively) can change with time $t$. At every round $t$ the learner chooses $d$-pairs of rows and columns from $M_t$ denoted by $(I_t,J_t)\in \Pi_d([K])\times \Pi_d([L])$. It then observes all the values from the matrix $M_{t}(I_t,J_t)$ for all $i_t\in I_t$ and $j_t \in J_t$. The \emph{reward} for the agent for choosing arms $(I_t,J_t)$ at time $t$ is denoted by $r_t(i^\ast(I_t,J_t),j^\ast(I_t,J_t))$ such that,
 \begin{align}
   (i^\ast(I,J),j^\ast(I,J)) = \argmax_{(i,j) \in (I\times J)} M_{t}(i,j)
   \label{eq:reward}
 \end{align}
-A remarkable property of our user-item preference matrices $M_t$ is that for any user $i \in [K]$ and any item $j \in [L]$ at any time $t$,
-\begin{align*}
-  \argmax_{(i, j) \in ([K] \times [L])} M_t(i, j) \in (I^\ast, J^\ast),
-\end{align*}
-where $I^\ast$ and $J^\ast$ is defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. Hence, the hott-topics assumption makes it possible to learn the maximum entry of $M_t$ statistically efficiently as at any time $t\in[n]$ the maximum entry $M_t(i^*_t,j^*_t)$ will be in $M_t(I^*,J^*)$. Note, that even though different entries of $U_t$ and $V_t$ can attain high rewards at different times but the $I^*$ and $J^*$ remain fixed for all time $t\in[n]$. 
+A remarkable property of our row-column preference matrices $M_t$ is that for any row $i \in [K]$ and any column $j \in [L]$ at any time $t$,
+\begin{align}
+  \argmax_{(i, j) \in ([K] \times [L])} M_t(i, j) \in (I^\ast, J^\ast) \label{eq:rewardProp},
+\end{align}
+where $I^\ast$ and $J^\ast$ is defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. Hence, the hott-topics assumption makes it possible to learn the maximum entry of $M_t$ statistically efficiently as at any time $t\in[n]$ the maximum entry $M_t(i^*,j^*)$ will be in $M_t(I^*,J^*)$. Note that even though different entries of $U_t$ and $V_t$ can attain high rewards at different times but the $I^*$ and $J^*$ remain fixed for all time $t\in[n]$. 
 
 %hott-topics assumption makes sure that
 %\todoan{It is not hott topics structure that ensures this. This is an extra assumption we make.}
 
 %\todob{You need to watch what you write. $U$ and $V$ are defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. Not $U_t$ and $V_t$. Now you need to say what the properties of $U_t$ and $V_t$ are. You need to state that the best rows and columns in $M_t$ remain the same.}
-%the reward in \eqref{eq:reward} is maximized by lists $J$ with highly rewarding items that are diverse, in the sense that they attain high rewards at different times $t \in [n]$. 
+%the reward in \eqref{eq:reward} is maximized by lists $J$ with highly rewarding columns that are diverse, in the sense that they attain high rewards at different times $t \in [n]$. 
 
 %todob{This obviously cannot be arbitrary. The assumption is that all $M_t$ have the same hott topics rows and columns. Write it formally.},
 %\todob{Say how the hott topics assumption simplifies the problem of finding the maximum entry of a matrix. Write it formally.}
 
-%We study an online learning to rank problem, which we call a \emph{latent ranked bandit}. At time $t$, the preferences of users are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V\transpose$, where $M$, $U_t$, and $V$ are defined as in \cref{sec:background}. We assume that user preferences $U_t$ can change with time $t$. A random user $i_t \in [K]$ arrives to the recommender system at time $t$ and we recommend $d$ items $J_t$ to this user. The \emph{reward} for recommending these items is $r_t(i_t, J_t)$, where
+%We study an online learning to rank problem, which we call a \emph{latent ranked bandit}. At time $t$, the preferences of rows are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V\transpose$, where $M$, $U_t$, and $V$ are defined as in \cref{sec:background}. We assume that row preferences $U_t$ can change with time $t$. A random row $i_t \in [K]$ arrives to the recommender system at time $t$ and we recommend $d$ columns $J_t$ to this row. The \emph{reward} for recommending these columns is $r_t(i_t, J_t)$, where
 %\begin{align}
 %  r_t(i, J) =
 %  \max \, \{\mu(k) \, M_t(i, J(k)): k \in [d]\}
 %  \label{eq:reward}
 %\end{align}
-%is the reward for recommending items $J$ to user $i$ at time $t$, $J(k)$ is the $k$-th item in $J$, and $\mu(k)$ is the weight of position $k \in [d]$. We assume that higher-ranked positions are more rewarding, $1 \geq \mu(1) \geq \dots \geq \mu(d) \geq 0$. The learning agent \emph{observes} the individual rewards of all recommended items, $M_t(i_t, J_t(k))$ for all $k \in [d]$.
+%is the reward for recommending columns $J$ to row $i$ at time $t$, $J(k)$ is the $k$-th column in $J$, and $\mu(k)$ is the weight of position $k \in [d]$. We assume that higher-ranked positions are more rewarding, $1 \geq \mu(1) \geq \dots \geq \mu(d) \geq 0$. The learning agent \emph{observes} the individual rewards of all recommended columns, $M_t(i_t, J_t(k))$ for all $k \in [d]$.
 
-%\todob{We need to motivate \eqref{eq:reward} from the user-modeling point of view. This should be the same motivation as in ranked bandits, except that $\mu$ enforces personalization, in the sense that the order matters.} \todoan{See the above comment. To motivate the fractional reward, how about saying that it can correspond to the length of the video the user watches. Like, we recommend a movie/video and if the user watches only half of the video, then the reward is 0.5.}
+%\todob{We need to motivate \eqref{eq:reward} from the row-modeling point of view. This should be the same motivation as in ranked bandits, except that $\mu$ enforces personalization, in the sense that the order matters.} \todoan{See the above comment. To motivate the fractional reward, how about saying that it can correspond to the length of the video the row watches. Like, we recommend a movie/video and if the row watches only half of the video, then the reward is 0.5.}
 
-%Since $U_t$ can change arbitrarily over time \todob{This obviously cannot be arbitrary. The assumption is that all $M_t$ have the same hott topics rows and columns. Write it formally.}, the reward in \eqref{eq:reward} is maximized by lists $J$ with highly rewarding items that are diverse, in the sense that they attain high rewards at different times $t \in [n]$. 
+%Since $U_t$ can change arbitrarily over time \todob{This obviously cannot be arbitrary. The assumption is that all $M_t$ have the same hott topics rows and columns. Write it formally.}, the reward in \eqref{eq:reward} is maximized by lists $J$ with highly rewarding columns that are diverse, in the sense that they attain high rewards at different times $t \in [n]$. 
 
 %\todob{The definition of the regret below is incorrect for $d > 1$. We need to think about this. Actually, do we need the definition of the regret for $d > 1$ if we never bound it? We should use determinants and then intuitively explain what they mean. The rank $1$ case is intuitive and easy to explain.}
 
 \textbf{Regret Definition (Rank-$d$):} Now we are ready to define our notion of optimality and regret for the general rank-$d$ scenario. Our goal is to minimize the expected $n$-step regret,
 \begin{align}
   R(n) =
-  \sum_{t = 1}^n \E\left[r_t(i^\ast_t, j^\ast_t) - r_t(i^\ast(I,J),j^\ast(I,J))\right]\,,
+  \sum_{t = 1}^n \E\left[M_t(i^\ast_t, j^\ast_t) - M_t(i^\ast(I,J),j^\ast(I,J))\right]\,,
   \label{eq:regret1}
 \end{align}
 where the expectation is with respect to both randomly choosing rows $(I_t)$ and columns $(J_t)$ by the learning algorithm and potential randomness in the environment.
 
-%Now we are ready to define our notion of optimality and regret. Let $J_\ast$ be the hott-topics items in \eqref{eq:hott topics} and $\pi_{\ast, i}$ be their permutation that maximizes the reward of user $i$ in hindsight,
+%Now we are ready to define our notion of optimality and regret. Let $J_\ast$ be the hott-topics columns in \eqref{eq:hott topics} and $\pi_{\ast, i}$ be their permutation that maximizes the reward of row $i$ in hindsight,
 %\begin{align*}
 %  \pi_{\ast, i} =
 %  \argmax_{\pi \in \Pi_d} \sum_{t = 1}^n r_t(i, \pi(J_\ast))\,.
 %\end{align*}
-%Let $J_t$ be our recommended items at time $t$ and $\pi_{t, i}$ be their permutation for user $i$, both of which are learned. Then our goal is to minimize the expected $n$-step regret,
+%Let $J_t$ be our recommended columns at time $t$ and $\pi_{t, i}$ be their permutation for row $i$, both of which are learned. Then our goal is to minimize the expected $n$-step regret,
 %\begin{align}
 %  R(n) =
 %  \sum_{t = 1}^n \E\left[r_t(i_t, \pi_{\ast, i_t}(J_\ast)) - r_t(i_t, \pi_{t, i_t}(J_t))\right]\,,
 %  \label{eq:regret}
 %\end{align}
-%where the expectation is with respect to both randomly arriving users and potential randomness in the learning algorithm.
+%where the expectation is with respect to both randomly arriving rows and potential randomness in the learning algorithm.
 
 %\todob{We do not really need the greedy definition of $J_\ast$ until the proof.}

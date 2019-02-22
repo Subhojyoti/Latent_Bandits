@@ -6,24 +6,30 @@
 %\todob{The previous sentence does not make any sense. What is the set of size $m \times n$?}
 %\todoan{We don't index the rows and columns by vectors, but define what it means to use vector indexing. You can just remove this sentence.}
 
-\textbf{Rank-$1$ Setting:} We study the online learning problem of finding the maximum entry of a family of non-stochastic, low-rank and non-negative matrices  which we call as the \emph{non-stochastic low-rank bandit problem}. We first analyze the simple rank-$1$ scenario and propose our solution for this setting. Many of the key aspects of our design principle are captured in this rank-$1$ setting. Let $U_t\in [0,1]^{K\times 1}$ be the user preference over a single topic and $V_t \in [0,1]^{L\times 1}$ be the item preference over a single topic. Note, that we refer to the rows as users and to the columns as items because this is a standard terminology in recommender systems, where we envision applications of our work. The user-item \emph{preference matrix} $M_t = U_tV_t^{\intercal}$ is non-negative, non-stochastic, and rank $1$. We assume that $i^\ast_t = \argmax_{i\in[K], t\in[n]}U_t(i,1)$ and  $j^\ast_t = \argmax_{j\in[L], t\in[n]}V_t(j,1)$. Thus, this assumption makes sure that the user and item preferences ($U_t$ and $V_t$ respectively) can change with time $t$, but the best row and column does not change over all time $t\in[n]$. At every round $t$, the learner chooses one pair of row and column indexed by $i_t$ and $j_t$ respectively and observes their product $U_t(i_t)V_t(i_t)$ as its feedback.
+\textbf{Rank-$1$ Setting:} We study the online learning problem of finding the maximum entry of a family of non-stochastic, low-rank and non-negative matrices  which we call as the \emph{non-stochastic low-rank bandit problem}. We first analyze the simple rank-$1$ setup and propose our solution for this setting. Many of the key aspects of our design principle are captured in this rank-$1$ setting. Let $U_t\in [0,1]^{K\times 1}$ be the row preference over a single topic and $V_t \in [0,1]^{L\times 1}$ be the column preference over a single topic. The row-column \emph{preference matrix} $M_t = U_tV_t^{\intercal}$ is non-negative, non-stochastic, and rank $1$. We assume that,
+\begin{align}
+i^\ast = \argmax_{i\in[K], t\in[n]}U_t(i,1), \hspace{1.5em}
+j^\ast = \argmax_{j\in[L], t\in[n]}V_t(j,1) \label{eq:rank1ij}.
+\end{align}
+Thus, this assumption makes sure that the row and column preferences ($U_t$ and $V_t$ respectively) can change with time $t$, but the best row and column does not change over all time $t\in[n]$. At every round $t$, the learner chooses one pair of row and column indexed by $i_t$ and $j_t$ respectively and observes their product $U_t(i_t)V_t(i_t)$ as its feedback.
 %\todob{You make it sound like there is only one matrix. This is false.}
+%Note, that we refer to the rows as rows and to the columns as columns because this is a standard terminology in recommender systems, where we envision applications of our work.
 
 \textbf{Regret Definition (Rank-$1$):} The goal of the learner is to minimize the expected $n$-step regret with respect to the optimal solution in the hindsight as follows,
 \begin{align}
   R(n) =
-  \sum_{t = 1}^n \E\left[r_t(i^\ast_t, j^\ast_t) - r_t(i_t,j_t)\right]\,
+  \sum_{t = 1}^n \E\left[M_t(i^\ast, j^\ast) - M_t(i_t,j_t)\right]\,
   \label{eq:regret}
 \end{align}
 where, the expectation is over any random choice of rows and columns. 
 
 %\todob{Please do not use non-standard notation. $\{\}$ is a set!!! You want to write either $\argmax_{i \in [K], \, t \in [n]} U_t(i, 1)$ or $\argmax_{(i, t) \in [K] \times [n]} U_t(i, 1)$. You also need to move this earlier. You want to say that the best row and column does not change over time.}
 
-%At time $t$, the preferences of users over items are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V_t\transpose$, where $M$, where  the rank of $M$ is $d=1$.
+%At time $t$, the preferences of users over columns are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V_t\transpose$, where $M$, where  the rank of $M$ is $d=1$.
 %$U_t$, and $V_t$ are defined as in \cref{sec:background}
 %Note that for $d=1$, 
 
-%We study the online learning problem of finding the maximum entry of a non-stochastic, low-rank and non-negative matrix $M$ which we call as a \emph{non-stochastic low-rank bandit problem}. At time $t$, the preferences of users over items are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V_t\transpose$, where $M$, $U_t$, and $V_t$ are defined as in \cref{sec:background}. We assume that user and item preferences ($U_t$ and $V_t$ respectively) can change with time $t$. At every timestep $t$ the learner chooses one pair of row and column indexed by $i_t$ and $j_t$ and observes their product $U_t(i_t)V_t(i_t)$ as its feedback.
+%We study the online learning problem of finding the maximum entry of a non-stochastic, low-rank and non-negative matrix $M$ which we call as a \emph{non-stochastic low-rank bandit problem}. At time $t$, the preferences of users over columns are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V_t\transpose$, where $M$, $U_t$, and $V_t$ are defined as in \cref{sec:background}. We assume that row and column preferences ($U_t$ and $V_t$ respectively) can change with time $t$. At every timestep $t$ the learner chooses one pair of row and column indexed by $i_t$ and $j_t$ and observes their product $U_t(i_t)V_t(i_t)$ as its feedback.
 
 
 
@@ -41,6 +47,6 @@ where, the expectation is over any random choice of rows and columns.
 %  \forall j \in [L] \ \exists \alpha \in A: V(J^\ast, :) \alpha = V(j, :)\,,
 %  \label{eq:hott topics}
 %\end{align}
-%where $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$. Note that we refer to the rows as users and to the columns as items because this is a standard terminology in recommender systems, where we envision applications of our work. Hence, the matrix $M$ represents preferences of users for items, $M(i, j)$ is the preference of user $i$ for item $j$. The rank $d$ of $M$ is the number of latent topics. The matrix $U$ are latent preferences of $K$ users over $d$ topics, where $U(i, :)$ are the preferences of user $i \in [K]$. The matrix $V$ are latent preferences of $L$ items in the space of $d$ topics, where $V(j, :)$ are the coordinates of item $j \in [L]$. Without loss of generality, we assume that $U \in [0, 1]^{K \times d}$ and $V \in [0, 1]^{L \times d}$. We assume that the coordinates are points in a simplex, that is $\|U(i, :)\|_1 \leq 1$ for all $i \in [K]$ and $\|V(j, :)\|_1 \leq 1$ for all $j \in [L]$. Note that our assumptions imply that $M(i, j) \geq 0$ for any $i \in [K]$ and $j \in [L]$.
+%where $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$. Note that we refer to the rows as users and to the columns as columns because this is a standard terminology in recommender systems, where we envision applications of our work. Hence, the matrix $M$ represents preferences of users for columns, $M(i, j)$ is the preference of user $i$ for column $j$. The rank $d$ of $M$ is the number of latent topics. The matrix $U$ are latent preferences of $K$ users over $d$ topics, where $U(i, :)$ are the preferences of user $i \in [K]$. The matrix $V$ are latent preferences of $L$ columns in the space of $d$ topics, where $V(j, :)$ are the coordinates of column $j \in [L]$. Without loss of generality, we assume that $U \in [0, 1]^{K \times d}$ and $V \in [0, 1]^{L \times d}$. We assume that the coordinates are points in a simplex, that is $\|U(i, :)\|_1 \leq 1$ for all $i \in [K]$ and $\|V(j, :)\|_1 \leq 1$ for all $j \in [L]$. Note that our assumptions imply that $M(i, j) \geq 0$ for any $i \in [K]$ and $j \in [L]$.
 
-%\todob{We say that the rows are users and that the columns are items. But they do not have to be, right? Say that we refer to the rows as users and to the columns as items because this is a standard terminology in recommender systems, where we envision applications of our work.}
+%\todob{We say that the rows are users and that the columns are columns. But they do not have to be, right? Say that we refer to the rows as users and to the columns as columns because this is a standard terminology in recommender systems, where we envision applications of our work.}
