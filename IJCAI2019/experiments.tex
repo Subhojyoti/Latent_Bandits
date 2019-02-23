@@ -21,7 +21,7 @@ In this section, we compare $\latentranker$ to several bandit algorithms in thre
 
 \subsection{Experiments on Rank-$2$ Setting}
 
-\textbf{Evaluated Algorithms for Rank-$2$:} We design the rank-$2$ algorithms by modifying the rank-$1$ algorithms. Again note that all the rank-$2$ algorithms suggest two pairs of rows and columns at every round $t$. For all of the algorithms $\ucb$, $\ucbe$, $\linucb$, $\glmucb$, and $\rankelim$ we modify these algorithms so that they suggest $2$ pairs of rows and columns based on their respective confidence interval set $c_{i, j}(t)$. The row and column pair with the highest and the second highest $\hat{M}_{t}(i,j) + c_{i, j}(t)$ are suggested for each round $t$ and consequently after observing all the entries of $M_t(i,j)$ all of the algorithms update their estimates of $\hat{M}_{t}(i,j)$ for each $i,j \in [d]$. For $\latentranker$ we use the Algorithm \ref{alg:LRB1} from Section \ref{sec:algorithm}. Note that there are two $\rowalg$ and $\colalg$, each running an $\expthree$ algorithm with the  exploration parameters as discussed before. For $\latentranker$-rank$2$ we use the Algorithm \ref{alg:LRB1} from Section \ref{sec:algorithm}. We also modify the rank-$1$ $\latentranker$ (Algorithm \ref{alg:LRB}) so that the algorithm works in rank-$2$ setting. After $\latentranker$-rank$1$ has sampled one pair of rows and columns from $[K]$ and $[L]$, it then samples again another choice that does not clash with the first pair and then updates all the pairs with the feedback observed. We use eq \eqref{eq:regret1} definition to calculate regret in rank-$2$ setting.
+\textbf{Evaluated Algorithms for Rank-$2$:} We design the rank-$2$ algorithms by modifying the rank-$1$ algorithms. Again note that all the rank-$2$ algorithms suggest two pairs of rows and columns at every round $t$. For all of the algorithms $\ucb$, $\ucbe$, $\linucb$, $\glmucb$, and $\rankelim$ we modify these algorithms so that they suggest $2$ pairs of rows and columns based on their respective confidence interval set $c_{i, j}(t)$. The row and column pair with the highest and the second highest $\hat{M}_{t}(i,j) + c_{i, j}(t)$ are suggested for each round $t$ and consequently after observing all the entries of $M_t(i,j)$ all of the algorithms update their estimates of $\hat{M}_{t}(i,j)$ for each $i,j \in [d]$. For $\latentranker$ we use the Algorithm \ref{alg:LRB1} from Section \ref{sec:algorithm}. Note that there are two $\rowalg$ and $\colalg$, each running a $\expthree$ algorithm with the exploration parameters as discussed before. For $\latentranker$-rank$2$ we use the Algorithm \ref{alg:LRB1} from Section \ref{sec:algorithm}. We also modify the rank-$1$ $\latentranker$ (Algorithm \ref{alg:LRB}) so that the algorithm works in rank-$2$ setting. After $\latentranker$-rank$1$ has sampled one pair of rows and columns from $[K]$ and $[L]$, it then samples again another choice that does not clash with the first pair and then updates all the pairs with the feedback observed. We use eq \eqref{eq:regret1} definition to calculate regret in rank-$2$ setting.
 
 
 
@@ -46,50 +46,50 @@ In this section, we compare $\latentranker$ to several bandit algorithms in thre
 \subfigure[0.22\textwidth][Expt-$1$: $8$ rows, $8$ columns, Rank $1$ Setting]
     %with $r_{i_{{i}\neq {*}}}=0.07$ and $r^{*}=0.1$
     {
-    		\includegraphics[scale=0.13]{img/Figure_L1.png}
+    		\includegraphics[trim={1cm 1cm 1cm 1cm},clip,width=3.9cm]{img/Figure_L1.png}
   		\label{fig:1}
     }
     &
-    \hspace*{-2.3em}
+    \hspace*{-1.2em}
     \subfigure[0.22\textwidth][Expt-$1$: $16$ rows, $16$ columns, Rank $1$ Setting]
     %with $r_{i_{{i}\neq {*}}}=0.07$ and $r^{*}=0.1$
     {
-    		\includegraphics[scale=0.15]{img/Figure_L2.png}
+    		\includegraphics[trim={1cm 1cm 1cm 1cm},clip,width=3.9cm]{img/Figure_L2.png}
   		\label{fig:2}
     }
     \\
     \subfigure[0.22\textwidth][Expt-$2$: $64$ rows, $64$ columns, row and column vectors]
     %with $r_{i_{{i}\neq {*}}}=0.07$ and $r^{*}=0.1$
     {
-    		\includegraphics[scale=0.1]{img/rank_21_vector.png}
+    		\includegraphics[trim={1cm 1cm 1cm 1cm},clip,width=2.5cm]{img/rank_21_vector.png}
   		\label{fig:3}
     }
     &
-     \hspace*{-2.5em}
+     \hspace*{-1.2em}
     \subfigure[0.22\textwidth][Expt-$2$: $64$ rows, $64$ columns, Rank $2$ Setting]
     %with $r_{i_{{i}\neq {*}}}=0.07$ and $r^{*}=0.1$
     {
-    		\includegraphics[scale=0.16]{img/Figure_L3.png}
+    		\includegraphics[trim={1cm 1cm 1cm 1cm},clip,width=3.9cm]{img/Figure_L3.png}
   		\label{fig:4}
     }
     \end{tabular}
     \caption{A comparison of $\latentranker$ vs state-of-the-art algorithms. }
     \label{fig:karmed1}
-    \vspace*{-1.1em}
+    \vspace*{-1.2em}
 \end{figure}
 %\subsection{Real World Experiment $3$}
-\textbf{Real-world Experiment $3$:} We conduct the third experiment to test the performance of $\latentranker$ when our modeling assumptions are violated. We use the Jester dataset \citep{goldberg2001eigentaste} which consist of over 4.1 million continuous ratings of 100 jokes from 73,421 users collected over 5 years. In this dataset there are many users who rated all jokes and we work with these users. 
-\begin{wrapfigure}{l}{0.2\textwidth}
+\textbf{Real-world Experiment $3$:} We conduct the third experiment to test the performance of $\latentranker$ when our modeling assumptions are violated. 
+\begin{wrapfigure}{l}{0.18\textwidth}
  %\subfigure[0.2\textwidth][Expt-$3$: $10$ Users, $100$ columns, Rank $2$, Jester Dataset]
     %with $r_{i_{{i}\neq {*}}}=0.07$ and $r^{*}=0.1$
     {
-    		\includegraphics[scale=0.13]{img/Figure_L4.png}
+            \includegraphics[trim={1cm 1cm 1cm 1cm},clip,width=3.9cm]{img/Figure_L4.png}
    }
  \caption{Expt-$3$: $20$ rows, $100$ columns, Jester Dataset}
  \label{fig:6}
- \vspace{-1.0em}
+ \vspace{-1.2em}
 \end{wrapfigure}
-We sample randomly $20$ users (who have rated all jokes) from this dataset and use singular value decomposition (SVD) to obtain a rank $2$ approximation of this user-joke rating matrix $M$. In the resultant matrix $M$, most of the rows belong to the two classes preferring jokes $98$, and $28$, while a very small percentage of users prefer some other jokes. Note that this condition results from the fact that this real-life dataset does not have the hott-topics structure. Furthermore, in this experiment we assume that the noise is independent Bernoulli over the entries of $M$ and hence this experiment deviates from our modeling assumptions. In Figure \ref{fig:6} we see that $\latentranker$-rank$2$ outperform other algorithms. Finally, $\latentranker$-rank$1$ again fails to perform well in this setting.
+We use the Jester dataset \citep{goldberg2001eigentaste} which consist of over 4.1 million continuous ratings of 100 jokes from 73,421 users collected over 5 years. In this dataset there are many users who rated all jokes and we work with these users. We sample randomly $20$ users (who have rated all jokes) from this dataset and use singular value decomposition (SVD) to obtain a rank $2$ approximation of this user-joke rating matrix $M$. In the resultant matrix $M$, most of the rows belong to the two classes preferring jokes $98$, and $28$, while a very small percentage of users prefer some other jokes. Note that this condition results from the fact that this real-life dataset does not have the hott-topics structure. Furthermore, in this experiment, we assume that the noise is independent Bernoulli over the entries of $M$ and hence this experiment deviates from our modeling assumptions. In Figure \ref{fig:6} we see that $\latentranker$-rank$2$ outperform other algorithms. Finally, $\latentranker$-rank$1$ again fails to perform well in this setting.
 %Hence the row-item preference matrix is fully observed and we will not have to complete it using \todoan{You don't have to mention matrix completion here} matrix completion techniques. Hence, this approach is very real world.
 
 

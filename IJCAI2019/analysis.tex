@@ -56,24 +56,17 @@ R(n)
 & \leq (1 + \frac{1}{\alpha}) \bigg[\sum_{t = 1}^n \E[{U_t(1) V_t(j_t) - U_t(i_t) V_t(j_t)}] + \\
 & \sum_{t = 1}^n \E[{U_t(i_t) V_t(1) - U_t(i_t) V_t(j_t)}]\bigg]
 \end{align*}
-
 %\todob{The argument below is just bla bla bla and needs to be written properly. In particular, it needs to be clear what we condition on and what we take the expectation over.}
-
 The $\colalg$ chooses the column $j_t$ at time $t$ and observes reward $U_t(i_t) V_t(j_t)$. Note that from eq \eqref{eq:rank1ij} we know that the best row $i^*$ and best column $j^*$ is fixed for all $t\in [n]$. Hence, we can show that the $\colalg$ using $\expthree$ will converge on $j^*$ for any sequence of rows. Therefore, the first sum above is bounded by $\sqrt{L n}$ for any sequence of $i_t$, and thus also in expectation over the randomness in $i_t$. Similarly $\rowalg$ using $\expthree$ chooses the row $i_t$ at time $t$, and observe reward is $U_t(i_t) V_t(j_t)$. Following eq \eqref{eq:rank1ij} we can again show that $\rowalg$ will converge on $i^*$ for any sequence of columns. Therefore, the second sum above is bounded by $\sqrt{K n}$ for any sequence of $j_t$, and thus also in expectation over the randomness in $j_t$. Therefore we get the final regret as,
 \begin{align*}
-  R(n) = O\left(\frac{\left(\sqrt{L } + \sqrt{K }\right)\sqrt{n}}{\alpha}\right)
+  R(n) = O\bigg(\frac{(\sqrt{L } + \sqrt{K })\sqrt{n}}{\alpha}\bigg)
 \end{align*}
 %\todob{$n$ above should be $\sqrt{n}$, right?}
 \end{proof}
-
 %\todob{Write discussion as text. It looks weird when large parts of the paper are in italic.}
-
 %\todob{What probability? There is none. We bound the expected regret.}
-
 %\todob{What probability? We bound the expected regret due to learning the optimal column, for any sequence of rows. This goes back to the proof, which is written bla bla bla.}
-
 %\todob{What probability? We bound the expected regret due to learning the optimal row, for any sequence of columns.}
-
 %\begin{discussion}
 \textbf{Discussion:} The main idea in Theorem \ref{thm:upper bound} is to decompose the regret of $\latentranker$ into two parts, where $\colalg$ does not suggest $j^*$ and the $\rowalg$ does not suggest $i^*$. The first part is analyzed as follows. $\colalg$ has a sub-linear regret, as we use $\expthree$ as the $\colalg$. Thus, the upper bound on the expected regret that $\colalg$ suggests sub-optimal columns for \emph{any sequence} of rows is bounded. This regret scales as $O(\sqrt{L n})$ based on the analysis of \citet{auer2002nonstochastic}. Similarly, we analyze the regret for the $\rowalg$ as it also uses the exponentially weighted algorithm $\expthree$. The $\rowalg$ suffers a regret of $O(\sqrt{K n})$ for suggesting sub-optimal rows for \emph{any sequence} of columns . Hence, combining both the parts we get the regret of order $O\left(\frac{\left(\sqrt{L } + \sqrt{K }\right)\sqrt{n}}{\alpha}\right)$ in \cref{thm:upper bound}. We use non-stochastic algorithm $\expthree$ for $\colalg$ and $\rowalg$ because our environment is non-stationary. Finally, we can consider any matrix $M$ of dimension $K\times L$ as a $K$-bandit problem with each bandit having $L$ arms and the optimal columns are learned separately for each bandit. Such a trivial setting gives rise to the regret bound of order $O(\sqrt{K L n})$. Our regret bound also improves upon this trivial approach.
 
