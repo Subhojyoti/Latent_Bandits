@@ -3,7 +3,7 @@
 In this section, we study the online learning problem of finding the maximum entry of a family of non-stochastic, low-rank and non-negative matrices for the general rank-$d$ setting.  
 %\todob{You make it sound like there is only one matrix. This is false.}
 
-\textbf{Hott-topics Assumption:} We focus on a family of low-rank matrices, which are known as hott topics \citep{recht2012factoring}. We define a \emph{hott-topics matrix} of rank $d$ as $M = U V\transpose$, where $U$ is a $K \times d$ non-negative matrix and $V$ is a $L \times d$ non-negative matrix that gives rise to the hott-topics structure. In particular, we assume that there exists $d$ rows $I^\ast$ in $U$ such that each row in $U$ can be represented as a convex combination of rows of $I^\ast$ and the zero vector. Hence, for $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$ each row of $U$ can be expressed as,
+\textbf{Hott-topics Assumption:} We focus on a family of low-rank matrices, which are known as hott topics \citep{recht2012factoring}. We define a \emph{hott-topics matrix} of rank $d$ as $M = U V\transpose$, where $U$ is a $K \times d$ non-negative matrix and $V$ is a $L \times d$ non-negative matrix that give rise to the hott-topics structure. In particular, we assume that there exists $d$ rows $I^\ast$ in $U$ such that each row in $U$ can be represented as a convex combination of rows of $I^\ast$ and the zero vector. Hence, for $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$ each row of $U$ can be expressed as,
 %\todob{Cite. Why do these matrices matter?}
 \begin{align}
   \forall i \in [K] \ \exists \alpha \in A: U(I^\ast, :) \alpha = U(i, :)\,,
@@ -25,9 +25,9 @@ where $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$. One way to conceptual
 \end{align}
 A remarkable property of our row-column preference matrices $M_t$ is that for any row $i \in [K]$ and any column $j \in [L]$ at any time $t$,
 \begin{align}
-  \argmax_{(i, j) \in ([K] \times [L])} M_t(i, j) \in (I^\ast, J^\ast) \label{eq:rewardProp},
+  \argmax_{(i, j) \in [K] \times [L]} M_t(i, j) \in (I^\ast, J^\ast) \label{eq:rewardProp},
 \end{align}
-where $I^\ast$ and $J^\ast$ is defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. Hence, the hott-topics assumption makes it possible to learn the maximum entry of $M_t$ statistically efficiently as at any time $t\in[n]$ because the maximum entry $M_t(i^*,j^*)$ will be in $M_t(I^*,J^*)$. Note that even though different entries of $U_t$ and $V_t$ can attain high rewards at different times but the $I^*$ and $J^*$ remain fixed for all time $t\in[n]$ (see eq \ref{eq:rewardProp}). 
+where $I^\ast$ and $J^\ast$ is defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. Hence, the hott-topics assumption makes it possible to learn the maximum entry of $M_t$ statistically efficiently at any time $t\in[n]$ because the maximum entry $M_t(i^*,j^*)$ will be in $M_t(I^*,J^*)$. Note that even though different entries of $U_t$ and $V_t$ can attain high rewards at different times but the $I^*$ and $J^*$ remain fixed for all time $t\in[n]$ (see eq \ref{eq:rewardProp}). 
 
 %hott-topics assumption makes sure that
 %\todoan{It is not hott topics structure that ensures this. This is an extra assumption we make.}
