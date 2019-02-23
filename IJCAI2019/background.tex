@@ -11,7 +11,7 @@
 i^\ast = \argmax_{i\in[K], t\in[n]}U_t(i,1), \hspace{1.5em}
 j^\ast = \argmax_{j\in[L], t\in[n]}V_t(j,1) \label{eq:rank1ij}.
 \end{align}
-Thus, this assumption makes sure that the row and column preferences ($U_t$ and $V_t$ respectively) can change with time $t$, but the best row and column does not change over all time $t\in[n]$. At every round $t$, the learner chooses one pair of row and column indexed by $i_t$ and $j_t$ respectively and observes their product $U_t(i_t)V_t(i_t)$ as its feedback.
+Thus, this assumption makes sure that the row and column preferences ($U_t$ and $V_t$ respectively) can change with time $t$, but the best row $i^*$ and column $j^*$ does not change over all time $t\in[n]$. At every round $t$, the learner chooses one pair of row and column indexed by $i_t$ and $j_t$ respectively and observes their product $U_t(i_t)V_t(i_t)$ as its feedback.
 %\todob{You make it sound like there is only one matrix. This is false.}
 %Note, that we refer to the rows as rows and to the columns as columns because this is a standard terminology in recommender systems, where we envision applications of our work.
 

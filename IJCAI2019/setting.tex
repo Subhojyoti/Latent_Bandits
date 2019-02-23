@@ -18,7 +18,7 @@ where $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$. One way to conceptual
 %\todob{This is a strange transition. You start talking about rows, columns, and topics like this is synonymous to hott topics. This is false. This is just an illustration of what hott topics can mean in practice, right?}
 
 
-\textbf{Rank-$d$ Setting:} Again, note that at time $t$, the preferences of rows over columns are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V_t\transpose$, where $U$ and $V$ are defined as in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. We assume that row and column preferences ($U_t$ and $V_t$ respectively) can change with time $t$. At every round $t$ the learner chooses $d$-pairs of rows and columns from $M_t$ denoted by $(I_t,J_t)\in \Pi_d([K])\times \Pi_d([L])$. It then observes all the values from the matrix $M_{t}(I_t,J_t)$ for all $i_t\in I_t$ and $j_t \in J_t$. The \emph{reward} for the agent for choosing arms $(I_t,J_t)$ at time $t$ is denoted by $r_t(i^\ast(I_t,J_t),j^\ast(I_t,J_t))$ such that,
+\textbf{Rank-$d$ Setting:} Again, note that at time $t$, the preferences of rows over columns are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V_t\transpose$, where $U$ and $V$ are defined as in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. At every round $t$ the learner chooses $d$-pairs of rows and columns from $M_t$ denoted by $(I_t,J_t)\in \Pi_d([K])\times \Pi_d([L])$. It then observes all the values from the matrix $M_{t}(I_t,J_t)$ for all $i_t\in I_t$ and $j_t \in J_t$. The \emph{reward} for the agent for choosing arms $(I_t,J_t)$ at time $t$ is denoted by $r_t(i^\ast(I_t,J_t),j^\ast(I_t,J_t))$ such that,
 \begin{align}
   (i^\ast(I,J),j^\ast(I,J)) = \argmax_{(i,j) \in (I\times J)} M_{t}(i,j)
   \label{eq:reward}
@@ -27,7 +27,7 @@ A remarkable property of our row-column preference matrices $M_t$ is that for an
 \begin{align}
   \argmax_{(i, j) \in ([K] \times [L])} M_t(i, j) \in (I^\ast, J^\ast) \label{eq:rewardProp},
 \end{align}
-where $I^\ast$ and $J^\ast$ is defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. Hence, the hott-topics assumption makes it possible to learn the maximum entry of $M_t$ statistically efficiently as at any time $t\in[n]$ the maximum entry $M_t(i^*,j^*)$ will be in $M_t(I^*,J^*)$. Note that even though different entries of $U_t$ and $V_t$ can attain high rewards at different times but the $I^*$ and $J^*$ remain fixed for all time $t\in[n]$. 
+where $I^\ast$ and $J^\ast$ is defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. Hence, the hott-topics assumption makes it possible to learn the maximum entry of $M_t$ statistically efficiently as at any time $t\in[n]$ because the maximum entry $M_t(i^*,j^*)$ will be in $M_t(I^*,J^*)$. Note that even though different entries of $U_t$ and $V_t$ can attain high rewards at different times but the $I^*$ and $J^*$ remain fixed for all time $t\in[n]$ (see eq \ref{eq:rewardProp}). 
 
 %hott-topics assumption makes sure that
 %\todoan{It is not hott topics structure that ensures this. This is an extra assumption we make.}
