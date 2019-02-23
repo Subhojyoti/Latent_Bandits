@@ -18,7 +18,7 @@ where $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$. One way to conceptual
 %\todob{This is a strange transition. You start talking about rows, columns, and topics like this is synonymous to hott topics. This is false. This is just an illustration of what hott topics can mean in practice, right?}
 
 
-\textbf{Rank-$d$ Setting:} Again, note that at time $t$, the preferences of rows over columns are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V_t\transpose$, where $U$ and $V$ are defined as in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. At every round $t$ the learner chooses $d$-pairs of rows and columns from $M_t$ denoted by $(I_t,J_t)\in \Pi_d([K])\times \Pi_d([L])$. It then observes all the values from the matrix $M_{t}(I_t,J_t)$ for all $i_t\in I_t$ and $j_t \in J_t$. The \emph{reward} for the agent for choosing arms $(I_t,J_t)$ at time $t$ is denoted by $r_t(i^\ast(I_t,J_t),j^\ast(I_t,J_t))$ such that,
+\textbf{Rank-$d$ Setting:} Again, note that at time $t$, the preferences of rows over columns are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V_t\transpose$, where $U$ and $V$ are defined as in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. At every round $t$, the learner chooses $d$-pairs of rows and columns from $M_t$ denoted by $(I_t,J_t)\in \Pi_d([K])\times \Pi_d([L])$. It then observes all the values from the matrix $M_{t}(I_t,J_t)$ for all $i_t\in I_t$ and $j_t \in J_t$. The \emph{reward} for the agent for choosing arms $(I_t,J_t)$ at time $t$ is denoted by $r_t(i^\ast(I_t,J_t),j^\ast(I_t,J_t))$ such that,
 \begin{align}
   (i^\ast(I,J),j^\ast(I,J)) = \argmax_{(i,j) \in (I\times J)} M_{t}(i,j)
   \label{eq:reward}
