@@ -87,20 +87,16 @@ Finally, $\latentranker$ observes the individual rewards of $M(i,j)$ for all $(i
      \EndFor
   \end{algorithmic}
 \end{algorithm}
-\vspace*{-2em}
+\vspace*{-0.8em}
 %\todob{Simplify the presentation of the update below. To start with, break it into row and column components.}
 
 \subsection{Practical Considerations}
 \label{sec:practical considerations}
-
 %The proposed $\latentranker$ algorithm only has to update/look through $(Kd + d)$ items for each of the $d$ $\colalg$ and the i-th $\rowalg$ at every timestep $t$. This is in stark contrast to some of the existing matrix completion algorithms which has to reconstruct a $K\times L$ matrix \citep{sen2016contextual} or calculate second or third order tensors \citep{gopalan2016low}. 
 %\todob{Discuss time and space complexities of $\latentranker$.}
-
-
 %\todob{Say how we hack $\rowalg$. 
 %We do not have one row Exp3 for each user and any combination of columns, right? %This is how LRA is proposed. This needs to be said.}
 %$\latentranker$-rank$2$
-
 We leave the implementation of the $\colalg$ and $\rowalg$ to the users.  Motivated by rank-$1$ we use non-stochastic algorithm $\expthree$ as $\colalg$ and $\rowalg$ respectively. For experimental purposes, stochastic algorithms like $\ucb$ or Thompson Sampling can also be used to improve the performance of $\latentranker$. This has also been explored in \citet{radlinski2008learning} where $\RBA$ uses $\ucb$ for ranking items. The proposed $\latentranker$ algorithm only has to update through $(K + L)d$ entries for the $d$ $\colalg$ and the $\rowalg$ respectively at every round $t$. This is in stark contrast to some of the existing matrix completion algorithms which has to reconstruct a $K\times L$ matrix \citep{sen2016contextual} or calculate second or third order tensors \citep{gopalan2016low}. 
 %and showed how the regret scales for the rank-$1$ setting
 %For theoretical guarantees \todob{What guarantees? We have none. Say that this is motivated by rank $1$.}
