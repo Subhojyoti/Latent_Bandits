@@ -6,12 +6,12 @@
 %\todob{The previous sentence does not make any sense. What is the set of size $m \times n$?}
 %\todoan{We don't index the rows and columns by vectors, but define what it means to use vector indexing. You can just remove this sentence.}
 
-\textbf{Rank-$1$ Setting:} We study the online learning problem of finding the maximum entry of a family of non-stochastic, low-rank and non-negative matrices  which we call as the \emph{non-stochastic low-rank bandit problem}. We first analyze the simple rank-$1$ setup and propose our solution for this setting. Many of the key aspects of our design principle are captured in this rank-$1$ setting. Let $U_t\in [0,1]^{K\times 1}$ be the row preference over a single topic and $V_t \in [0,1]^{L\times 1}$ be the column preference over a single topic. The row-column \emph{preference matrix} $M_t = U_tV_t^{\intercal}$ is non-negative, non-stochastic, and rank $1$. We assume that
+\textbf{Rank-$1$ Setting:} We study the online learning problem of finding the maximum entry of a family of non-stochastic, low-rank and non-negative matrices  which we call as the \emph{non-stochastic low-rank bandit problem}. We first analyze the simple rank-$1$ setup and propose our solution for this setting. Many of the key aspects of our design principle are captured in this rank-$1$ setting. Let $U_t\in [0,1]^{K\times 1}$ be the latent row vector over a single topic and $V_t \in [0,1]^{L\times 1}$ be the latent column vector over a single topic. The \emph{reward matrix} $M_t = U_tV_t^{\intercal}$ is non-negative, non-stochastic, and rank $1$. We assume that
 \begin{align}
   i^\ast = \argmax_{i \in [K]} U_t(i), \hspace{1.5em}
   j^\ast = \argmax_{j \in [L]} V_t(j) \label{eq:rank1ij}.
 \end{align}
-for all $t \in [n]$, and some fixed $i^\ast \in [K]$ and $j^\ast \in [L]$. This assumption makes sure that the row and column preferences can change over time $t$, but the best row $i^*$ and column $j^*$ does not change. At every round $t$, the learner chooses one pair of row and column indices $i_t$ and $j_t$, respectively, and observes their product $U_t(i_t)V_t(i_t)$ as its feedback.
+for all $t \in [n]$, and some fixed $i^\ast \in [K]$ and $j^\ast \in [L]$. This assumption makes sure that the row and column latent vectors can change over time $t$, but the best row $i^*$ and column $j^*$ does not change. At every round $t$, the learner chooses one pair of row and column indices $i_t$ and $j_t$, respectively, and observes their product $U_t(i_t)V_t(i_t)$ as its feedback.
 
 \textbf{Regret Definition (Rank-$1$):} The goal of the learner is to minimize the expected $n$-step regret with respect to the optimal solution in the hindsight as follows,
 \begin{align}
