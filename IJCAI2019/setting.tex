@@ -24,13 +24,13 @@ I^\ast = \argmax_{I\in[K]^d, t\in [n]}U_{t}(I,:), \hspace*{1em} J^\ast = \argmax
 \end{align}
 We also assume that for all rounds $t\in [n]$, the rows of $U_t$ can be written as a convex combination of the rows of $U_t(I^\ast, :)$ and the rows of $V_t$ can be written as a convex combination of the rows of $V_t(J^\ast, :)$ as defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. Hence, assumption \eqref{eq:rankd} on row-column preference matrices $M_t$ ensures that for any row $i \in [K]$, any column $j \in [L]$ and for all round $t$,
 \begin{align}
-  \argmax_{(i, j) \in [K] \times [L]} M_t(i, j) \in (I^\ast, J^\ast) \label{eq:rewardProp},
+  \argmax_{(i, j) \in [K] \times [L], t\in [n]} M_t(i, j) \in (I^\ast, J^\ast) \label{eq:rewardProp},
 \end{align}
 where $I^\ast$ and $J^\ast$ is defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. The hott-topics assumption makes it possible to learn the maximum entry of $M_t$ statistically efficiently at any round $t\in[n]$ because the maximum entry $M_t(i^*,j^*)$ will be in $M_t(I^*,J^*)$. Note that even though different entries of $U_t$ and $V_t$ can attain high rewards at different times but the $I^*$ and $J^*$ remain fixed for all round $t\in[n]$ (eq \ref{eq:rankd}). 
 %, for some fixed $I^\ast \in [K]^d$ and $J^\ast \in [L]^d$
 %. where $U$ and $V$ are defined as in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. 
 %Again, note that at time $t$, the preferences of rows over columns are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V_t\transpose$. We further assume (similar to \eqref{eq:rank1ij}) that for all rounds $t\in [n]$, the rows of $U_t$ can be written as a convex combination of the rows of $U_t(I^\ast, :)$ and the rows of $V_t$ can be written as a convex combination of the rows of $V_t(J^\ast, :)$, for some fixed $I^\ast \in [K]^d$ and $J^\ast \in [L]^d$. where $U$ and $V$ are defined as in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. 
-At every round $t$, the learner chooses $d$-pairs of rows and columns from $M_t$ denoted by $(I_t,J_t)\in \Pi_d([K])\times \Pi_d([L])$. It then observes all the values from the matrix $M_{t}(I_t,J_t)$ for all $i_t\in I_t$ and $j_t \in J_t$. The \emph{reward} for the agent for choosing arms $(I_t,J_t)$ at round $t$ is denoted by $M_t(i^\ast(I_t,J_t),j^\ast(I_t,J_t))$ such that,
+At every round $t$, the learner chooses $d$-tuples of rows and columns from $M_t$ denoted by $(I_t,J_t)\in \Pi_d([K])\times \Pi_d([L])$. It then observes all the values from the matrix $M_{t}(I_t,J_t)$ for all $i_t\in I_t$ and $j_t \in J_t$. The \emph{reward} for the agent for choosing arms $(I_t,J_t)$ at round $t$ is denoted by $M_t(i^\ast(I_t,J_t),j^\ast(I_t,J_t))$ such that,
 \begin{align}
   (i^\ast(I,J),j^\ast(I,J)) = \argmax_{(i,j) \in (I\times J)} M_{t}(i,j)
   \label{eq:reward}
