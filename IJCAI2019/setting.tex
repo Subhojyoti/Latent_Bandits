@@ -22,7 +22,11 @@ where $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$. One way to conceptual
 \begin{align}
 I^\ast = \argmax_{I\in[K]^d, t\in [n]}U_{t}(I,:), \hspace*{1em} J^\ast = \argmax_{J\in[L]^d, t\in [n]}V_{t}(J,:) \label{eq:rankd}
 \end{align}
-We also assume that for all rounds $t\in [n]$, the rows of $U_t$ can be written as a convex combination of the rows of $U_t(I^\ast, :)$ and the rows of $V_t$ can be written as a convex combination of the rows of $V_t(J^\ast, :)$ as defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics} .
+We also assume that for all rounds $t\in [n]$, the rows of $U_t$ can be written as a convex combination of the rows of $U_t(I^\ast, :)$ and the rows of $V_t$ can be written as a convex combination of the rows of $V_t(J^\ast, :)$ as defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. Hence, assumption \eqref{eq:rankd} on row-column preference matrices $M_t$ ensures that for any row $i \in [K]$, any column $j \in [L]$ and for all round $t$,
+\begin{align}
+  \argmax_{(i, j) \in [K] \times [L]} M_t(i, j) \in (I^\ast, J^\ast) \label{eq:rewardProp},
+\end{align}
+where $I^\ast$ and $J^\ast$ is defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. The hott-topics assumption makes it possible to learn the maximum entry of $M_t$ statistically efficiently at any round $t\in[n]$ because the maximum entry $M_t(i^*,j^*)$ will be in $M_t(I^*,J^*)$. Note that even though different entries of $U_t$ and $V_t$ can attain high rewards at different times but the $I^*$ and $J^*$ remain fixed for all round $t\in[n]$ (eq \ref{eq:rankd}). 
 %, for some fixed $I^\ast \in [K]^d$ and $J^\ast \in [L]^d$
 %. where $U$ and $V$ are defined as in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. 
 %Again, note that at time $t$, the preferences of rows over columns are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V_t\transpose$. We further assume (similar to \eqref{eq:rank1ij}) that for all rounds $t\in [n]$, the rows of $U_t$ can be written as a convex combination of the rows of $U_t(I^\ast, :)$ and the rows of $V_t$ can be written as a convex combination of the rows of $V_t(J^\ast, :)$, for some fixed $I^\ast \in [K]^d$ and $J^\ast \in [L]^d$. where $U$ and $V$ are defined as in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. 
@@ -32,11 +36,7 @@ At every round $t$, the learner chooses $d$-pairs of rows and columns from $M_t$
   \label{eq:reward}
 \end{align}
 %We also need to clearly say how this guarantees that \arg\max_i M_t(i, j) \in I^\ast for any j and t. This is a formal way of saying that the best row is in I^\ast for any column in any round. We also have that \arg\max_j M_t(i, j) \in J^\ast for any i and t.
-Hence, assumption \eqref{eq:rankd} on row-column preference matrices $M_t$ ensures that for any row $i \in [K]$, any column $j \in [L]$ and for all round $t$,
-\begin{align}
-  \argmax_{(i, j) \in [K] \times [L]} M_t(i, j) \in (I^\ast, J^\ast) \label{eq:rewardProp},
-\end{align}
-where $I^\ast$ and $J^\ast$ is defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. The hott-topics assumption makes it possible to learn the maximum entry of $M_t$ statistically efficiently at any round $t\in[n]$ because the maximum entry $M_t(i^*,j^*)$ will be in $M_t(I^*,J^*)$. Note that even though different entries of $U_t$ and $V_t$ can attain high rewards at different times but the $I^*$ and $J^*$ remain fixed for all round $t\in[n]$ (eq \ref{eq:rankd}). 
+
 
 %hott-topics assumption makes sure that
 %\todoan{It is not hott topics structure that ensures this. This is an extra assumption we make.}
