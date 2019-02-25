@@ -19,13 +19,14 @@ $M(i, j)$ is the reward of row $i$ and column $j$. The rank $d$ of $M$ is the nu
 %\todob{This is a strange transition. You start talking about rows, columns, and topics like this is synonymous to hott topics. This is false. This is just an illustration of what hott topics can mean in practice, right?}
 
 
-\textbf{Rank-$d$ Setting:} Let for all rounds $t\in[n]$, $U_t \in [0,1]^{K\times d}$, $V_t \in [0,1]^{L\times d}$ and $M_t = U_t V_t^{\intercal}$. Similar to \eqref{eq:rank1ij} we assume that,
+\textbf{Rank-$d$ Setting:} Let for all rounds $t\in[n]$, $U_t \in [0,1]^{K\times d}$, $V_t \in [0,1]^{L\times d}$ and $M_t = U_t V_t^{\intercal}$. Similar to \eqref{eq:rank1ij} we assume that for all round $t\in [n]$,
 \begin{align}
-\argmax_{I\in[K], t\in [n]}U_{t}(I,:) \in I^\ast, \hspace*{1em}   \argmax_{J\in[L], t\in [n]}V_{t}(J,:)\in J^\ast \label{eq:rankd}
+& \argmax_{i\in[K]}M_{t}(i,j) \in I^\ast, \text{ for all $j \in [L]$} , \nonumber\\
+& \argmax_{j\in[L]}M_{t}(i,j)\in J^\ast , \text{ for all $i \in [K]$}\label{eq:rankd}
 \end{align}
-We also assume that for all rounds $t\in [n]$, the rows of $U_t$ can be written as a convex combination of the rows of $U_t(I^\ast, :)$ and the rows of $V_t$ can be written as a convex combination of the rows of $V_t(J^\ast, :)$. Hence, assumption \eqref{eq:rankd} on reward matrices $M_t$ ensures that for any row $i \in [K]$, any column $j \in [L]$ and for all round $t$,
+We also assume that for all rounds $t\in [n]$, the rows of $U_t$ can be written as a convex combination of the rows of $U_t(I^\ast, :)$ and the rows of $V_t$ can be written as a convex combination of the rows of $V_t(J^\ast, :)$. Hence, assumption \eqref{eq:rankd} on reward matrices $M_t$ ensures that for any row $i \in [K]$, any column $j \in [L]$ and for all round $t \in [n]$,
 \begin{align}
-  \argmax_{(i, j) \in [K] \times [L], t\in [n]} M_t(i, j) \in (I^\ast, J^\ast) \label{eq:rewardProp},
+  \argmax_{(i, j) \in [K] \times [L]} M_t(i, j) \in (I^\ast, J^\ast) \label{eq:rewardProp},
 \end{align}
 %\todoan{The above makes no sense. $U_{t}(I,:)$ is a matrix and not scalar. What do you mean by arg-max??}
 %as defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. \todoan{You have already defined what hott-topics is. Why are you repeating it here?}
