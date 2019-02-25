@@ -19,7 +19,7 @@ for any $\alpha > 0$ such that $U_{t}(i,1) \geq \alpha$ and $V_{t}(j,1) \geq \al
 
 \end{theorem}
 \begin{proof}
-Let, $(U_t V_t\transpose)_{t = 1}^n$ be a sequence of $n$ non-negative rank-$1$  matrices such that $U_t \in [0, 1]^{K \times 1}, V_t \in [0, 1]^{L \times 1}$, and the highest entry is $U_t(1) V_t(1)$. Let, $((i_t, j_t))_{t = 1}^n$
+Let, $(U_t V_t\transpose)_{t = 1}^n$ be a sequence of $n$ non-negative rank-$1$  matrices such that $U_t \in [0, 1]^{K \times 1}, V_t \in [0, 1]^{L \times 1}$, and the highest entry, without loss of generality,  is $U_t(1) V_t(1)$. Let, $((i_t, j_t))_{t = 1}^n$
 %\begin{align*}
 %((i_t, j_t))_{t = 1}^n
 %\end{align*}
@@ -32,7 +32,7 @@ be a sequence of $n$ row-column pairs chosen by a learning agent. Then the expec
 \begin{align*}
 R(n) = \sum_{t = 1}^n \E \left[{U_t(1) V_t(1) - U_t(i_t) V_t(j_t)}\right]
 \end{align*}
-where the expectation is over the randomness of the agent. Now note that for any $U$, $V$, $i$, and $j$ in our problem we can show that,
+where the expectation is over the randomness of the agent. For any two vectors $U$, $V$ and indices $i$, $j$ we have,
 \begin{align*}
 & 2 (U(1) V(1) - U(i) V(j)) \\
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -68,7 +68,7 @@ The $\colalg$ chooses the column $j_t$ at round $t$ and observes reward $U_t(i_t
 %\todob{What probability? We bound the expected regret due to learning the optimal column, for any sequence of rows. This goes back to the proof, which is written bla bla bla.}
 %\todob{What probability? We bound the expected regret due to learning the optimal row, for any sequence of columns.}
 %\begin{discussion}
-\textbf{Discussion:} The main idea in Theorem \ref{thm:upper bound} is to decompose the regret of $\latentranker$ into two parts, where $\colalg$ does not suggest $j^*$ and the $\rowalg$ does not suggest $i^*$. The first part is analyzed as follows. $\colalg$ has a sub-linear regret, as we use $\expthree$ as the $\colalg$. Thus, the upper bound on the expected regret that $\colalg$ suggests sub-optimal columns for \emph{any sequence} of rows is bounded. This regret scales as $O(\sqrt{L n})$ based on the analysis of \citet{auer2002nonstochastic}. Similarly, we analyze the regret for the $\rowalg$ as it also uses the exponentially weighted algorithm $\expthree$. The $\rowalg$ suffers a regret of $O(\sqrt{K n})$ for suggesting sub-optimal rows for \emph{any sequence} of columns . Hence, combining both the parts we get the regret of order $O\left(\frac{\left(\sqrt{L } + \sqrt{K }\right)\sqrt{n}}{\alpha}\right)$ in \cref{thm:upper bound}. We use non-stochastic algorithm $\expthree$ for $\colalg$ and $\rowalg$ because our environment is non-stationary. Finally, we can consider any matrix $M$ of dimension $K\times L$ as a $K$-bandit problem with each bandit having $L$ arms and the optimal columns are learned separately for each bandit. Such a trivial setting gives rise to the regret bound of order $O(\sqrt{K L n})$. Our regret bound also improves upon this trivial approach.
+\textbf{Discussion:} The main idea in Theorem \ref{thm:upper bound} is to decompose the regret of $\latentranker$ into two parts, where $\colalg$ does not suggest $j^*$ and the $\rowalg$ does not suggest $i^*$. The first part is analyzed as follows. $\colalg$ has a sub-linear regret, as we use $\expthree$ as the $\colalg$. Thus,  the expected regret that $\colalg$ suggests sub-optimal columns for \emph{any sequence} of rows is bounded. This regret scales as $O(\sqrt{L n})$ based on the analysis of \citet{auer2002nonstochastic}. Similarly, we analyze the regret for the $\rowalg$ as it also uses the exponentially weighted algorithm $\expthree$. The $\rowalg$ suffers a regret of $O(\sqrt{K n})$ for suggesting sub-optimal rows for \emph{any sequence} of columns. Hence, combining both the parts we get the regret of order $O\left(\frac{\left(\sqrt{L } + \sqrt{K }\right)\sqrt{n}}{\alpha}\right)$ in \cref{thm:upper bound}. We use non-stochastic algorithm $\expthree$ for $\colalg$ and $\rowalg$ because our environment is non-stationary. Finally, we can consider any matrix $M$ of dimension $K\times L$ as a $K$-bandit problem with each bandit having $L$ arms and the optimal columns are learned separately for each bandit. Such a trivial setting gives rise to the regret bound of order $O(\sqrt{K L n})$. The regret bound for our algorithm is much better than this for certain parameter ranges of the problem.
 
 %is due to learning the optimal column and the second part, which is $O(\sqrt{K n})$, is the regret due to learning the optimal row.
 %consists of two main parts. \todob{We keep repeating ourselves. You already said that the regret decomposes in two parts and that each part can be bounded independently.} The first part, which is $O(\sqrt{L n})$,
