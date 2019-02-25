@@ -19,16 +19,14 @@ for any $\alpha > 0$ such that $U_{t}(i,1) \geq \alpha$ and $V_{t}(j,1) \geq \al
 
 \end{theorem}
 \begin{proof}
-Let, $(U_t V_t\transpose)_{t = 1}^n$ be a sequence of $n$ non-negative rank-$1$  matrices such that $U_t \in [0, 1]^{K \times 1}, V_t \in [0, 1]^{L \times 1}$, and the highest entry, without loss of generality,  is $U_t(1) V_t(1)$. Let, $((i_t, j_t))_{t = 1}^n$
+Let, $(U_t V_t\transpose)_{t = 1}^n$ be a sequence of $n$ non-negative rank-$1$  matrices such that $U_t \in [0, 1]^{K \times 1}, V_t \in [0, 1]^{L \times 1}$, and the highest entry, without loss of generality, is $U_t(1) V_t(1)$. Let, $((i_t, j_t))_{t = 1}^n$
 %\begin{align*}
 %((i_t, j_t))_{t = 1}^n
 %\end{align*}
-be a sequence of $n$ row-column pairs chosen by a learning agent. Then the expected $n$-step regret of the agent is,
-
+be a sequence of $n$ row-column pairs chosen by a learning agent. Then the expected $n$-step regret is,
 %\todob{All $U$ and $V$ should be capitalized, no? At least consistent with the notation in the setting.} 
 %\todob{Properly write numbers and symbols. This should be ``$n$ non-negative rank-$1$''.}
 %\todob{Properly bracket expectations. Lack of brackets repeats throughout the proof.}
-
 \begin{align*}
 R(n) = \sum_{t = 1}^n \E \left[{U_t(1) V_t(1) - U_t(i_t) V_t(j_t)}\right]
 \end{align*}

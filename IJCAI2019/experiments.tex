@@ -79,10 +79,8 @@ In this section, we compare $\latentranker$ to several bandit algorithms in thre
     \vspace*{-1.2em}
 \end{figure}
 %\subsection{Real World Experiment $3$}
-\textbf{Real-world Experiment $3$:} We conduct the third experiment to test the performance of $\latentranker$ when our modeling assumptions are violated. 
+\textbf{Real-world Experiment $3$:} We conduct the third experiment to test the performance of $\latentranker$ when our modeling assumptions are violated. We use the Jester dataset \citep{goldberg2001eigentaste} which consist of over 4.1 million continuous ratings of 100 jokes from 73,421 users collected over 5 years. In this dataset there are many users who rated all jokes and we work with these users. 
 \begin{wrapfigure}{l}{0.18\textwidth}
- %\subfigure[0.2\textwidth][Expt-$3$: $10$ Users, $100$ columns, Rank $2$, Jester Dataset]
-    %with $r_{i_{{i}\neq {*}}}=0.07$ and $r^{*}=0.1$
     {
             \includegraphics[trim={1cm 1cm 1cm 1cm},clip,width=3.7cm]{img/Figure_L4.png}
    }
@@ -90,7 +88,7 @@ In this section, we compare $\latentranker$ to several bandit algorithms in thre
  \label{fig:6}
  \vspace{-1.4em}
 \end{wrapfigure}
-We use the Jester dataset \citep{goldberg2001eigentaste} which consist of over 4.1 million continuous ratings of 100 jokes from 73,421 users collected over 5 years. In this dataset there are many users who rated all jokes and we work with these users. We sample randomly $20$ users (who have rated all jokes) from this dataset and use singular value decomposition (SVD) to obtain a rank $2$ approximation of this user-joke rating matrix $M$. In the resultant matrix $M$, most of the rows belong to the two classes preferring jokes $98$, and $28$, while a very small percentage of users prefer some other jokes. Note that this condition results from the fact that this real-life dataset does not have the hott-topics structure. Furthermore, in this experiment, we assume that the noise is independent Bernoulli over the entries of $M$ and hence this experiment deviates from our modeling assumptions. In Figure \ref{fig:6} we see that $\latentranker$-rank$2$ outperform other algorithms. Finally, $\latentranker$-rank$1$ again fails to perform well in this setting.
+We sample randomly $20$ users (who have rated all jokes) from this dataset and use singular value decomposition (SVD) to obtain a rank $2$ approximation of this user-joke rating matrix $M$. In the resultant matrix $M$, most of the rows belong to the two classes preferring jokes $98$, and $28$, while a very small percentage of users prefer some other jokes. Note that this condition results from the fact that this real-life dataset does not have the hott-topics structure. Furthermore, in this experiment, we assume that the noise is independent Bernoulli over the entries of $M$ and hence this experiment deviates from our modeling assumptions. In Figure \ref{fig:6} we see that $\latentranker$-rank$2$ outperform other algorithms. Finally, $\latentranker$-rank$1$ again fails to perform well in this setting.
 %Hence the row-item preference matrix is fully observed and we will not have to complete it using \todoan{You don't have to mention matrix completion here} matrix completion techniques. Hence, this approach is very real world.
 
 
