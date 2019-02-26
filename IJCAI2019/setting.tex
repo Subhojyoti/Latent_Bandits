@@ -14,26 +14,24 @@ We also assume that there exist $d$ rows in $V$ whose indices are $J^\ast$ such 
   %\label{eq:hott topics}
 %\end{align}
 %where $A = \{a \in [0, 1]^{d \times 1}: \|a\|_1 \leq 1\}$.
-
-\todob{The text below should be an illustrative example. You write this as if hott topics were synonymous to latent topics. They are not. This is just to show the reviewer that what we have can be used to model something.} $M(i, j)$ is the reward of row $i$ and column $j$. The rank $d$ of $M$ is the number of latent topics. The matrix $U$ are latent vectors of $K$ rows over $d$ topics, where $U(i, :)$ are the coordinates of row $i \in [K]$. The matrix $V$ are latent vectors of $L$ columns in the space of $d$ topics, where $V(j, :)$ are the coordinates of column $j \in [L]$. \todob{End of the illustrative example.}
-
+As an illustrative example, we can consider that the matrix $M = UV^\intercal$ as a low-rank matrix of rank $d$. The rank $d$ of $M$ is the number of latent topics. $M(i, j)$ is the reward of row $i$ and column $j$. $U$ are latent vectors of $K$ rows over $d$ topics, where $U(i, :)$ are the coordinates of row $i \in [K]$. The matrix $V$ are latent vectors of $L$ columns in the space of $d$ topics, where $V(j, :)$ are the coordinates of column $j \in [L]$. 
+%\todob{The text below should be an illustrative example. You write this as if hott topics were synonymous to latent topics. They are not. This is just to show the reviewer that what we have can be used to model something.} $M(i, j)$ is the reward of row $i$ and column $j$. The rank $d$ of $M$ is the number of latent topics.  \todob{End of the illustrative example.}
 Without loss of generality, we assume that $U \in [0, 1]^{K \times d}$ and $V \in [0, 1]^{L \times d}$.
-
-\todob{We do not need the next assumptions. This was for determinants in the stochastic setting.} We assume that the coordinates are points in a simplex, that is $\|U(i, :)\|_1 !\leq \!1$ for all $i \in [K]$ and $\|V(j, :)\|_1 \!\leq\! 1$ for all $j \in [L]$. So, our assumptions imply that $\!M(i, j) \!\geq\! 0$ for any $i \!\in \![K]$ and $j \!\in\! [L]$.
+%\todob{We do not need the next assumptions. This was for determinants in the stochastic setting.} We assume that the coordinates are points in a simplex, that is $\|U(i, :)\|_1 \leq \!1$ for all $i \in [K]$ and $\|V(j, :)\|_1 \!\leq\! 1$ for all $j \in [L]$. So, our assumptions imply that $\!M(i, j) \!\geq\! 0$ for any $i \!\in \![K]$ and $j \!\in\! [L]$.
 %\todob{This is a strange transition. You start talking about rows, columns, and topics like this is synonymous to hott topics. This is false. This is just an illustration of what hott topics can mean in practice, right?}
 
-\textbf{Rank-$d$ Setting:} Let for all rounds $t\in[n]$, $U_t \in [0,1]^{K\times d}$, $V_t \in [0,1]^{L\times d}$ and $M_t = U_t V_t^{\intercal}$. Similarly to \eqref{eq:rank1ij} we assume that for all round $t\in [n]$,
+\textbf{Rank-$d$ Setting:} Let for all rounds $t\in[n]$, $U_t \in [0,1]^{K\times d}$, $V_t \in [0,1]^{L\times d}$ and $M_t = U_t V_t^{\intercal}$. We also assume that for all rounds $t\in [n]$, the rows of $U_t$ can be written as a convex combination of the rows of $U_t(I^\ast, :)$ and the rows of $V_t$ can be written as a convex combination of the rows of $V_t(J^\ast, :)$. This implies that for all round $t\in [n]$,
+%Similarly to \eqref{eq:rank1ij} we assume that for all round $t\in [n]$,
 \begin{align}
 & \argmax_{i\in[K]}M_{t}(i,j) \in I^\ast, \text{ for all $j \in [L]$} , \nonumber\\
 & \argmax_{j\in[L]}M_{t}(i,j)\in J^\ast , \text{ for all $i \in [K]$}\label{eq:rankd}
 \end{align}
-
-\todob{This argument should be flipped. We assume that all $M_t$ are hott topics, with the same $I^\ast$ and $J^\ast$. This implies the above.}
-
-We also assume that for all rounds $t\in [n]$, the rows of $U_t$ can be written as a convex combination of the rows of $U_t(I^\ast, :)$ and the rows of $V_t$ can be written as a convex combination of the rows of $V_t(J^\ast, :)$. Hence, assumption \eqref{eq:rankd} on reward matrices $M_t$ ensures that for any row $i \in [K]$, any column $j \in [L]$ \todob{$i$ and $j$ are in the max. Why do you say that this holds for any $i$ and $j$? Only $t$.} and for all round $t \in [n]$,
+%\todob{This argument should be flipped. We assume that all $M_t$ are hott topics, with the same $I^\ast$ and $J^\ast$. This implies the above.}
+Hence, assumption \eqref{eq:rankd} on reward matrices $M_t$ ensures that for all round $t \in [n]$,
 \begin{align}
   \argmax_{(i, j) \in [K] \times [L]} M_t(i, j) \in (I^\ast, J^\ast) \label{eq:rewardProp},
 \end{align}
+%for any row $i \in [K]$, any column $j \in [L]$ \todob{$i$ and $j$ are in the max. Why do you say that this holds for any $i$ and $j$? Only $t$.} and
 %\todoan{The above makes no sense. $U_{t}(I,:)$ is a matrix and not scalar. What do you mean by arg-max??}
 %as defined in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. \todoan{You have already defined what hott-topics is. Why are you repeating it here?}
 %and \eqref{eq:hott topics}
@@ -41,7 +39,8 @@ where $I^\ast$ and $J^\ast$ is defined in \eqref{eq:hott topics1}. The hott-topi
 %, for some fixed $I^\ast \in [K]^d$ and $J^\ast \in [L]^d$
 %. where $U$ and $V$ are defined as in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. 
 %Again, note that at time $t$, the preferences of rows over columns are encoded in a $K \times L$ \emph{preference matrix} $M_t = U_t V_t\transpose$. We further assume (similar to \eqref{eq:rank1ij}) that for all rounds $t\in [n]$, the rows of $U_t$ can be written as a convex combination of the rows of $U_t(I^\ast, :)$ and the rows of $V_t$ can be written as a convex combination of the rows of $V_t(J^\ast, :)$, for some fixed $I^\ast \in [K]^d$ and $J^\ast \in [L]^d$. where $U$ and $V$ are defined as in \eqref{eq:hott topics1} and \eqref{eq:hott topics}. 
-At every round $t$, the learner chooses $d$-tuples of rows and columns from $M_t$ denoted by $(I_t,J_t)\in \Pi_d([K])\times \Pi_d([L])$.  \todob{Have we defined $\Pi_d([K])$ before?} It then observes all the values from the matrix $M_{t}(I_t,J_t)$ for all $i_t\in I_t$ and $j_t \in J_t$. The \emph{reward} for the agent for choosing arms $(I_t,J_t)$ at round $t$ is denoted by $M_t(i^\ast(I_t,J_t),j^\ast(I_t,J_t))$ such that,
+At every round $t$, the learner chooses $d$-tuples of rows and columns from $M_t$ denoted by $(I_t,J_t)\in \Pi_d([K])\times \Pi_d([L])$, where $\Pi_{d}([K])$ and $\Pi_{d}([L])$ as defined in  \cref{sec:background}.  %\todob{Have we defined $\Pi_d([K])$ before?} 
+It then observes all the values from the matrix $M_{t}(I_t,J_t)$ for all $i_t\in I_t$ and $j_t \in J_t$. The \emph{reward} for the agent for choosing arms $(I_t,J_t)$ at round $t$ is denoted by $M_t(i^\ast(I_t,J_t),j^\ast(I_t,J_t))$ such that,
 \begin{align}
   (i^\ast(I,J),j^\ast(I,J)) = \argmax_{(i,j) \in (I\times J)} M_{t}(i,j)
   \label{eq:reward}
