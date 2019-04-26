@@ -1,0 +1,166 @@
+
+% For figures
+
+\usepackage{bm}
+%\usepackage{algorithm}
+%\usepackage[noend]{algpseudocode}
+%\usepackage{booktabs}
+%\usepackage{algorithmic}
+%\usepackage{algpseudocode}
+
+
+%\usepackage{hyperref}
+
+%\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+\usepackage{xcolor}
+\usepackage{paralist}
+%\usepackage{subfigure}
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{tikz}
+\usepackage{pgfplots}
+%\pgfplotsset{compat=1.12}
+\usetikzlibrary{positioning,shapes,calc,patterns,fit,decorations}
+%\usepgfplotslibrary{fillbetween}
+\usepackage{natbib}
+\usepackage{hyperref}
+
+
+\usepackage{xspace}
+\usepackage{todonotes}
+\newcommand{\todos}[2][]{\xspace\todo[color=red!20!white,size=\tiny,inline,#1]{#2}}
+
+\usepackage{subfigure}
+\usepackage{caption}
+
+\usepackage{makecell}
+\usepackage[capitalize]{cleveref}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+
+
+% \newcommand{\algorithmicinput}{\textbf{Input:} }
+% \newcommand{\INPUT}{\item[\algorithmicinput]}
+% \newcommand{\algorithmicoutput}{\textbf{Output:} }
+% \newcommand{\OUTPUT}{\item[\algorithmicoutput]}
+% \newcounter{algostep}
+% \newcommand{\Step}[1][\STATE]{#1\textbf{\refstepcounter{algostep}\thealgostep}. }
+
+\newcommand{\tabl}[2]{\begin{tabular}{#1} #2 \end{tabular}}
+\newcommand{\ith}[2][th]{$#2^{\text{#1}}$}
+
+\newcommand{\tr}{^\mathsf{\scriptscriptstyle T}}
+\newcommand{\indic}[1]{\mathbb{I}\{#1\}}
+%\newcommand{\UCBLCPD}{\textcolor{red!60!black}{UCBL-CPD }}
+%\newcommand{\ImpCPD}{\textcolor{red!60!black}{ImpCPD }}
+
+
+%\newenvironment{nonfloatalgorithm}[1]{\vspace{1ex}\hrule\vspace{0.5ex} \refstepcounter{algorithm}\textbf{Algorithm \thealgorithm}\hspace{1em} #1 \vspace{0.5ex}\hrule\addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}{\ignorespaces #1}}}{\hrule\vspace{1.5ex}\setcounter{algostep}{0}}
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{theorem}{Theorem}
+\newtheorem{remark}{Remark}
+\newtheorem{assumption}{Assumption}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{fact}{Fact}
+\newtheorem{discussion}{Discussion}
+
+
+\newtheorem{innercustomtheorem}{Theorem}
+\newenvironment{customtheorem}[1]
+  {\renewcommand\theinnercustomtheorem{#1}\innercustomtheorem}
+  {\endinnercustomtheorem}
+
+
+\newtheorem{innercustomlemma}{Lemma}
+\newenvironment{customlemma}[1]
+  {\renewcommand\theinnercustomlemma{#1}\innercustomlemma}
+  {\endinnercustomlemma}
+  
+\newtheorem{innercustomcorollary}{Corollary}
+\newenvironment{customcorollary}[1]
+  {\renewcommand\theinnercustomcorollary{#1}\innercustomcorollary}
+  {\endinnercustomcorollary}
+  
+\newtheorem{innercustomproof}{Proof}
+\newenvironment{customproof}[1]
+  {\renewcommand\theinnercustomproof{#1}\innercustomproof}
+  {\endinnercustomproof}
+  
+  \newtheorem{innercustomproposition}{Proposition}
+\newenvironment{customproposition}[1]
+  {\renewcommand\theinnercustomproposition{#1}\innercustomproposition}
+  {\endinnercustomproposition}
+
+
+
+
+\newenvironment{prooff}[1]{\par\noindent {\em Proof.} {\bf #1}}{\hfill$\blacksquare$\par}
+%\newenvironment{proof}{\noindent{\it Proof.}\begingroup\rm }{\hfill$\blacksquare$\endgroup\par\vspace{1ex}}
+% 
+% \newcommand{\alert}[1]{\textcolor{red}{#1}}
+% 
+
+
+\def\argmax{\mathop{\rm arg\,max}}
+\def\argmin{\mathop{\rm arg\,min}}
+\def\Var{{\bf Var}}
+
+%\DeclareMathOperator*{\argmin}{arg\,min}
+%\DeclareMathOperator*{\argmax}{arg\,max}
+
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\R}{\mathbb{R}}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\supr}{\textit{sup}}
+\newcommand{\Pb}{\mathbb{P}}
+
+% \newcommand{\defn}{\stackrel{\triangle}{=}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\M}{\mathcal{M}}
+\renewcommand{\S}{\mathcal{S}}
+\newcommand{\A}{\mathcal{A}}
+\renewcommand{\L}{\mathcal{L}}
+\renewcommand{\M}{\mathcal{M}}
+\newcommand{\K}{\mathcal{K}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\X}{\mathcal{X}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\G}{\mathcal{G}}
+% \newcommand{\T}{\mathcal{T}}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\Z}{\mathcal{Z}}
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\D}{\mathcal{D}}
+% \newcommand{\I}{\mathcal{I}}
+% \renewcommand{\H}{\mathcal{H}}
+% \newcommand{\keywords}[1]{{\bf Keywords: } #1\par}
+% 
+% 
+% \def\thanks#1{
+%     \protected@xdef\@thanks{\@thanks
+%         \protect\footnotetext[\the\c@footnote]{#1}}%
+% }
+
+\newcommand{\fn}{\hat{F_n}(x)}
+\newcommand{\wfn}{w^+(1-{\hat F_n}^+(x))}
+\newcommand{\intinfinity}{\int_0^{+\infty}}
+\definecolor{bleu2}{RGB}{28,50,114} % bleu S
+\newcommand{\wfnn}{w^{-}(1-{\hat F_n}^-(x))}
+
+\newcommand{\holder}{H\"{o}lder }
+\newcommand{\onenminus}{_{i=1}^{n-1}}
+\newcommand{\nalpha}{n^{(1-\alpha)} }
+\newcommand{\ncalpha} {\left \lceil{\nalpha} \right \rceil }
+
+\xdefinecolor{darkgreen}{rgb}{0,0.35,0}
+
+
+
