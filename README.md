@@ -1,2 +1,2 @@
 # Latent_Bandits
-Stochastic Low Rank Latent Bandits
+Non-stochastic Low Rank Latent Bandits
