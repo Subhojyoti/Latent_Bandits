@@ -1,0 +1,34 @@
+%!TEX root = paper.tex
+
+%\begin{theorem}
+%\label{thm:upper bound} Let $\colalg$ and $\rowalg$ in $\latentranker$ be $\expthree$ and the weighted majority algorithm, respectively. Then the expected $n$-step regret of $\latentranker$ is bounded as
+%\begin{align*}
+%  R(n) =
+%  O\left(\frac{d \sqrt{L n}}{\Delta} + K \log n + K d \log d\right)\,,
+%\end{align*}
+%where $\Delta = \min_{t \in [n]} \min_{J:\, J \neq J_\ast} \E\left[\tilde{r}_t(i, J_\ast)\right] - \E\left[\tilde{r}_t(i, J)\right]$ is an instance-specific lower bound on the gap in the unweighted expected rewards of the optimal and best suboptimal columns at any time $t \in [n]$, averaged over all users at that time.  
+%
+%%\todob{We need to define the unweighted reward.}
+%
+%\end{theorem}
+%\begin{proof}
+%The complete proof is in \cref{sec:proof}. 
+We sketch the main components of the regret decomposition here and argue that the regret should be bounded. The crucial idea is to decompose the regret of $\latentranker$ into two parts, where $\colalg$ does not suggest $J_\ast$ and the rest. The first part can be analyzed as follows. $\colalg$ has a sublinear regret, based on a similar analysis to \citet{radlinski2008learning}. Therefore, our upper bound on the probability that $\colalg$ suggests suboptimal columns, is bounded, and decreases with time horizon $n$.
+%which is $O(d \sqrt{L n} / \Delta)$
+
+The second part is analyzed as follows. Conditioned on $J_t = J_\ast$, the only remaining regret at time $t$ is due to the fact that columns $J_t$ are not ordered optimally for user $i_t$. Since this is a full-information problem where $\rowalg$ is the weighted majority algorithm \citep{littlestone1994weighted}, the regret due to learning to order $d$ columns for $K$ users is $K$ times that of the weighted majority algorithm with $d!$ arms.
+%\end{proof}
+Hence, the regret should consists of two main parts. The first part is the regret due to learning the $d$ optimal hott-topics columns with a high probability. The second part, which is due to learning the most rewarding permutations of the $d$ optimal columns for all users.
+% $O(K \log n + K d \log d)$, is
+%which is $O(d \sqrt{L n} / \Delta)$,
+
+%Our regret bound also improves upon a trivial approach where the optimal columns are learned separately for each user. 
+
+A key challenge in proving the regret is to handle certain special cases. One particular case might occur in the rank-$1$ setting, which is a trivial case as every user $i \in [K]$ prefers a single best item $j^\ast \in [L]$ and there is no ranking of items present. Yet, if the matrix $M(i,j)$ is $0$ everywhere except at the $i,j^\ast$ position for all $i\in [K]$, then regret might scale as $O(\sqrt{KLn})$. Hence, deriving a regret bound for this setting requires more careful analysis and possibly further assumptions on $U$ or $V$.
+
+Another challenge in this setting stems from the fact that rows (or users) are being revealed by nature, and the learner cannot choose them. This makes the regret decomposition and subsequent analysis more difficult. Note, that this setting is in contrast to \citet{katariya2017bernoulli}, \citet{katariya2016stochastic}, and  \citet{kveton2017stochastic} settings where the rows are also being selected by the learner.
+
+
+Note, that if this problem was solved by RBA \citep{radlinski2008learning}, the regret would be $O(\sqrt{K L n})$. Similarly, the trivial approach where the optimal columns are learned separately for each user bby separate bandit algorithms will also result in a regret of $O(\sqrt{K L n})$.
+
+Finally, we use non-stochastic algorithms for $\colalg$ and $\rowalg$ because our environment is non-stationary. In particular, we assume that user preferences $U_t$, and thus rewards, can change over time $t$. In addition, the rewards in $\colalg(k)$ are non-stationary due to chosen columns at higher positions $1, \dots, k - 1$.
