@@ -29,6 +29,6 @@ A key challenge in proving the regret is to handle certain special cases. One pa
 Another challenge in this setting stems from the fact that rows (or users) are being revealed by nature, and the learner cannot choose them. This makes the regret decomposition and subsequent analysis more difficult. Note, that this setting is in contrast to \citet{katariya2017bernoulli}, \citet{katariya2016stochastic}, and  \citet{kveton2017stochastic} settings where the rows are also being selected by the learner.
 
 
-Note, that if this problem was solved by RBA \citep{radlinski2008learning}, the regret would be $O(\sqrt{K L n})$. Similarly, the trivial approach where the optimal columns are learned separately for each user bby separate bandit algorithms will also result in a regret of $O(\sqrt{K L n})$.
+Note, that if this problem was solved by RBA \citep{radlinski2008learning}, the regret would be $O(\sqrt{K L n})$. Similarly, the trivial approach where the optimal columns are learned separately for each user by separate bandit algorithms will also result in a regret of $O(\sqrt{K L n})$.
 
 Finally, we use non-stochastic algorithms for $\colalg$ and $\rowalg$ because our environment is non-stationary. In particular, we assume that user preferences $U_t$, and thus rewards, can change over time $t$. In addition, the rewards in $\colalg(k)$ are non-stationary due to chosen columns at higher positions $1, \dots, k - 1$.
